@@ -46,8 +46,11 @@ CMario *mario;
 
 
 CBrick *brick;
+//CGameObject** bricks = new CGameObject * [20];
 #define BRICK_X 10.0f
 #define BRICK_Y 120.0f
+#define BRICK_START_VX 0.1f
+#define BRICK_START_VY 0.1f
 
 LPTEXTURE texMario = NULL;
 LPTEXTURE texBrick = NULL;
@@ -81,10 +84,44 @@ void LoadResources()
 	// Load a sprite sheet as a texture to try drawing a portion of a texture. See function Render 
 	//texMisc = game->LoadTexture(MISC_TEXTURE_PATH);
 
-	mario = new CMario(MARIO_START_X, MARIO_START_Y, MARIO_START_VX, MARIO_START_VY, texMario);
-	brick = new CBrick(BRICK_X, BRICK_Y, texBrick);
+	/******************* MARIO WITH BRICKS *******************/
 
-	
+	//mario = new CMario(MARIO_START_X + 15, MARIO_START_Y, MARIO_START_VX, MARIO_START_VY, texMario);
+	////brick = new CBrick(BRICK_X, BRICK_Y, MARIO_START_VX, MARIO_START_VY, texBrick);
+
+	//for (int i = 0; i < 3; i++)
+	//{
+	//	bricks[i] = new CBrick(BRICK_X + i * 15, BRICK_Y, BRICK_START_VX, BRICK_START_VY, texBrick);
+	//}
+
+	/******************* MARIO ON BRICKS *******************/
+
+	//mario = new CMario(MARIO_START_X + 15, MARIO_START_Y, MARIO_START_VX, MARIO_START_VY, texMario);
+
+	//for (int i = 0; i < 20; i++)
+	//{
+	//	bricks[i] = new CBrick(BRICK_X + i * 15, BRICK_Y, 0, 0, texBrick);
+	//}
+
+	/******************* 100 BALLS ********************/
+
+	////CGameObject** bricks = new CGameObject*[100];
+
+	//for (int i = 0; i < 100; i++)
+	//{
+	//	int randomx = 1 + (std::rand() % (100 - 1 + 1));
+	//	int randomy = 1 + (std::rand() % (100 - 1 + 1));
+	//	float randombx = 1 + (std::rand() % (5 - 1 + 1));
+	//	randombx /= 100;
+	//	bricks[i] = new CBrick(randomx, randomy, BRICK_START_VX + randombx, BRICK_START_VY + randombx, texBrick);
+	//}
+
+	/******************* DESTROY BRICKS *******************/
+
+	brick = new CBrick(BRICK_X, BRICK_Y, MARIO_START_VX, MARIO_START_VY, texBrick);
+
+	/**************************************************/
+
 	// objects.push_back(mario);
 	// for(i)		 
 	//		objects.push_back(new CGameObject(BRICK_X+i*BRICK_WIDTH,....);
@@ -108,8 +145,15 @@ void Update(DWORD dt)
 		objects[i]->Update(dt);
 	*/
 
-	mario->Update(dt);
+	//mario->Update(dt);
 	brick->Update(dt);
+	//for (int i = 0; i < 20; i++)
+	//{
+	//	if (bricks[i])
+	//	{
+	//		bricks[i]->Update(dt);
+	//	}
+	//}
 
 	//DebugOutTitle(L"01 - Skeleton %0.1f, %0.1f", mario->GetX(), mario->GetY());
 }
@@ -137,8 +181,16 @@ void Render()
 		FLOAT NewBlendFactor[4] = { 0,0,0,0 };
 		pD3DDevice->OMSetBlendState(g->GetAlphaBlending(), NewBlendFactor, 0xffffffff);
 
+		//mario->Render();
 		brick->Render();
-		mario->Render();
+
+		//for (int i = 0; i < 20; i++)
+		//{
+		//	if (bricks[i])
+		//	{
+		//		bricks[i]->Render();
+		//	}
+		//}
 
 		// Uncomment this line to see how to draw a porttion of a texture  
 		//g->Draw(10, 10, texMisc, 300, 117, 317, 134);

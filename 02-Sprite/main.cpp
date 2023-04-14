@@ -263,6 +263,8 @@ int WINAPI WinMain(
 ) {
 	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
 
+	// Hello World
+
 	CGame *game = CGame::GetInstance();
 	game->Init(hWnd);
 
