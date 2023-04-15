@@ -52,6 +52,7 @@ CMario *mario;
 
 CBrick* brick;
 CGlassBrick *glassbrick;
+CCoin* coin;
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -125,7 +126,7 @@ void LoadResources()
 	ani->Add(20004);
 	animations->Add(510, ani);
 
-	//LPTEXTURE texMisc = textures->Get(ID_TEX_MISC);
+	//Adding sprites animation of glassbrick
 	sprites->Add(20011, 300, 135, 317, 150, texMisc);
 	sprites->Add(20012, 318, 135, 335, 150, texMisc);
 	sprites->Add(20013, 336, 135, 353, 150, texMisc);
@@ -137,11 +138,23 @@ void LoadResources()
 	ani->Add(20013);
 	ani->Add(20014);
 	animations->Add(520, ani);
+
+	//Adding sprites animation of coin
+	sprites->Add(20021, 303, 99, 313, 114, texMisc);
+	sprites->Add(20022, 322, 99, 330, 114, texMisc);
+	sprites->Add(20023, 342, 99, 346, 114, texMisc);
+
+	ani = new CAnimation(100);
+	ani->Add(20021);
+	ani->Add(20022);
+	ani->Add(20023);
+	animations->Add(530, ani);
 	
 	
 	mario = new CMario(MARIO_START_X, MARIO_START_Y, MARIO_START_VX);
 	brick = new CBrick(100.0f, 100.0f);
 	glassbrick = new CGlassBrick(150.0f, 100.0f);
+	coin = new CCoin(125.0f, 130.0f);
 
 	//note to future self: dau tien sprites->Add se them tung sprite texture vao thong qua coordinate (left, top, right, bottom)
 	// va cho no 1 cai id, sau do ani->Add se lay id cua tung sprite de dua vao animation.
@@ -178,6 +191,7 @@ void Render()
 
 		brick->Render();
 		glassbrick->Render();
+		coin->Render();
 		mario->Render();
 
 		// Uncomment this line to see how to draw a porttion of a texture  

@@ -31,4 +31,9 @@ public:
 	void Update(DWORD dt) {}
 };
 
-
+class CCoin : public CGameObject {
+public:
+	CCoin(float x, float y) : CGameObject(x, y) {}
+	void Render();
+	void Update(DWORD dt) {}
+};
