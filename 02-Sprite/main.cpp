@@ -38,17 +38,24 @@
 
 #define ID_TEX_MARIO 0
 #define ID_TEX_ENEMY 10
+#define ID_TEX_ENEMY2 11
 #define ID_TEX_MISC 20
 
 #define TEXTURES_DIR L"textures"
 #define TEXTURE_PATH_MARIO TEXTURES_DIR "\\mario.png"
 #define TEXTURE_PATH_MISC TEXTURES_DIR "\\misc_transparent.png"
 #define TEXTURE_PATH_ENEMIES TEXTURES_DIR "\\enemies.png"
+#define TEXTURE_PATH_ENEMIES2 TEXTURES_DIR "\\enemies2.png"
 
 CMario *mario;
 #define MARIO_START_X 10.0f
 #define MARIO_START_Y 130.0f
 #define MARIO_START_VX 0.1f
+
+CKoopa* koopa;
+#define KOOPA_START_X 50.0f
+#define KOOPA_START_Y 130.0f
+#define KOOPA_START_VX 0.1f
 
 CBrick* brick;
 CGlassBrick *glassbrick;
@@ -77,11 +84,16 @@ void LoadResources()
 
 	textures->Add(ID_TEX_MARIO, TEXTURE_PATH_MARIO);
 	//textures->Add(ID_ENEMY_TEXTURE, TEXTURE_PATH_ENEMIES, D3DCOLOR_XRGB(156, 219, 239));
+	textures->Add(ID_TEX_ENEMY, TEXTURE_PATH_ENEMIES);
+	textures->Add(ID_TEX_ENEMY2, TEXTURE_PATH_ENEMIES2);
 	textures->Add(ID_TEX_MISC, TEXTURE_PATH_MISC);
 
 
 	CSprites * sprites = CSprites::GetInstance();
 	
+	/******************************************************/
+	// sprites of mario running
+
 	LPTEXTURE texMario = textures->Get(ID_TEX_MARIO);
 
 	// readline => id, left, top, right 
@@ -111,8 +123,38 @@ void LoadResources()
 	ani->Add(10013);
 	animations->Add(501, ani);
 
+	/******************************************************/
+	// sprites of koopa moving
+
+	//LPTEXTURE texKoopa[2];
+	//texKoopa[0] = textures->Get(ID_TEX_ENEMY);
+	//texKoopa[1] = textures->Get(ID_TEX_ENEMY2);
+
+	LPTEXTURE texKoopa = textures->Get(ID_TEX_ENEMY);
+	LPTEXTURE texKoopa2 = textures->Get(ID_TEX_ENEMY2);
+
+	// readline => id, left, top, right 
+
+	sprites->Add(10101, 436, 129, 451, 155, texKoopa2);
+	sprites->Add(10102, 458, 129, 473, 155, texKoopa2);
+
+	sprites->Add(10111, 28, 129, 43, 155, texKoopa);
+	sprites->Add(10112, 6, 129, 22, 155, texKoopa);
+
+	ani = new CAnimation(100);
+	ani->Add(10101);
+	ani->Add(10102);
+	animations->Add(502, ani);
 
 
+
+	ani = new CAnimation(100);
+	ani->Add(10111);
+	ani->Add(10112);
+	animations->Add(503, ani);
+
+	/******************************************************/
+	// sprites of brick object
 	LPTEXTURE texMisc = textures->Get(ID_TEX_MISC);
 	sprites->Add(20001, 300, 117, 317, 133, texMisc);
 	sprites->Add(20002, 318, 117, 335, 133, texMisc);
@@ -126,6 +168,7 @@ void LoadResources()
 	ani->Add(20004);
 	animations->Add(510, ani);
 
+	/******************************************************/
 	//Adding sprites animation of glassbrick
 	sprites->Add(20011, 300, 135, 317, 150, texMisc);
 	sprites->Add(20012, 318, 135, 335, 150, texMisc);
@@ -139,6 +182,7 @@ void LoadResources()
 	ani->Add(20014);
 	animations->Add(520, ani);
 
+	/******************************************************/
 	//Adding sprites animation of coin
 	sprites->Add(20021, 303, 99, 313, 114, texMisc);
 	sprites->Add(20022, 322, 99, 330, 114, texMisc);
@@ -152,6 +196,7 @@ void LoadResources()
 	
 	
 	mario = new CMario(MARIO_START_X, MARIO_START_Y, MARIO_START_VX);
+	koopa = new CKoopa(KOOPA_START_X, KOOPA_START_Y, KOOPA_START_VX);
 	brick = new CBrick(100.0f, 100.0f);
 	glassbrick = new CGlassBrick(150.0f, 100.0f);
 	coin = new CCoin(125.0f, 130.0f);
@@ -167,6 +212,7 @@ void LoadResources()
 void Update(DWORD dt)
 {
 	mario->Update(dt); // luu y la se khong co update cua brick va glassbrick, vi coordinate x va y cua no khong thay doi
+	koopa->Update(dt);
 }
 
 void Render()
@@ -193,6 +239,7 @@ void Render()
 		glassbrick->Render();
 		coin->Render();
 		mario->Render();
+		koopa->Render();
 
 		// Uncomment this line to see how to draw a porttion of a texture  
 		//g->Draw(10, 10, texMisc, 300, 117, 316, 133);

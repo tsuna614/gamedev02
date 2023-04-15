@@ -6,6 +6,8 @@
 #include "Animations.h"
 
 #define MARIO_WIDTH 14
+#define KOOPA_WIDTH 16
+
 
 class CBrick : public CGameObject {
 public: 
@@ -20,6 +22,16 @@ protected:
 	float vx;
 public:
 	CMario(float x, float y, float vx);
+	void Update(DWORD dt);
+	void Render();
+};
+
+class CKoopa : public CGameObject
+{
+protected:
+	float vx;
+public:
+	CKoopa(float x, float y, float vx);
 	void Update(DWORD dt);
 	void Render();
 };
