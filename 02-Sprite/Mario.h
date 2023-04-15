@@ -24,4 +24,11 @@ public:
 	void Render();
 };
 
+class CGlassBrick : public CGameObject {
+public:
+	CGlassBrick(float x, float y) : CGameObject(x, y) {}
+	void Render();
+	void Update(DWORD dt) {}
+};
+
 

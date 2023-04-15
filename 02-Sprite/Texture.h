@@ -45,4 +45,4 @@ public:
 	}
 };
 
-typedef CTexture * LPTEXTURE;
+typedef CTexture * LPTEXTURE; //LPTEXTURE is a pointer to CTexture

@@ -32,7 +32,7 @@ void CMario::Render()
 
 	//[RED FLAG][TODO]: Student needs to think about how to associate this animation/asset to Mario!!
 	if (vx>0) ani = CAnimations::GetInstance()->Get(500);
-	else ani = CAnimations::GetInstance()->Get(501);
+	else ani = CAnimations::GetInstance()->Get(501); // if mario is going from left to right, get sprite with id 500, if otherwise get id 501
 
 	ani->Render(x, y);
 }
@@ -40,6 +40,14 @@ void CMario::Render()
 void CBrick::Render() {
 
 	LPANIMATION ani = CAnimations::GetInstance()->Get(510);
+
+	ani->Render(x, y);
+
+}
+
+void CGlassBrick::Render() {
+
+	LPANIMATION ani = CAnimations::GetInstance()->Get(520);
 
 	ani->Render(x, y);
 

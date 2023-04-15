@@ -50,7 +50,8 @@ CMario *mario;
 #define MARIO_START_Y 130.0f
 #define MARIO_START_VX 0.1f
 
-CBrick *brick;
+CBrick* brick;
+CGlassBrick *glassbrick;
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -123,10 +124,27 @@ void LoadResources()
 	ani->Add(20003);
 	ani->Add(20004);
 	animations->Add(510, ani);
+
+	//LPTEXTURE texMisc = textures->Get(ID_TEX_MISC);
+	sprites->Add(20011, 300, 135, 317, 150, texMisc);
+	sprites->Add(20012, 318, 135, 335, 150, texMisc);
+	sprites->Add(20013, 336, 135, 353, 150, texMisc);
+	sprites->Add(20014, 354, 135, 371, 150, texMisc);
+
+	ani = new CAnimation(200);
+	ani->Add(20011,1000);
+	ani->Add(20012);
+	ani->Add(20013);
+	ani->Add(20014);
+	animations->Add(520, ani);
 	
 	
 	mario = new CMario(MARIO_START_X, MARIO_START_Y, MARIO_START_VX);
 	brick = new CBrick(100.0f, 100.0f);
+	glassbrick = new CGlassBrick(150.0f, 100.0f);
+
+	//note to future self: dau tien sprites->Add se them tung sprite texture vao thong qua coordinate (left, top, right, bottom)
+	// va cho no 1 cai id, sau do ani->Add se lay id cua tung sprite de dua vao animation.
 }
 
 /*
@@ -135,7 +153,7 @@ void LoadResources()
 */
 void Update(DWORD dt)
 {
-	mario->Update(dt);
+	mario->Update(dt); // luu y la se khong co update cua brick va glassbrick, vi coordinate x va y cua no khong thay doi
 }
 
 void Render()
@@ -159,6 +177,7 @@ void Render()
 		pD3DDevice->OMSetBlendState(g->GetAlphaBlending(), NewBlendFactor, 0xffffffff);
 
 		brick->Render();
+		glassbrick->Render();
 		mario->Render();
 
 		// Uncomment this line to see how to draw a porttion of a texture  
