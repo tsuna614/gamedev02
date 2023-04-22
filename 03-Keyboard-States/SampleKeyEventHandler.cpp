@@ -6,6 +6,9 @@
 #include "Mario.h"
 
 extern CMario* mario;
+//extern vector<LPGAMEOBJECT> objects;
+//extern means the variable is declared somewhere else
+// LPGAMEOBJECT is CGameObject*
 
 void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {

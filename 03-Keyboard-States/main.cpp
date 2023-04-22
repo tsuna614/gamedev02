@@ -42,6 +42,9 @@
 
 #define ID_SPRITE_BRICK 20001
 
+#define ID_SPRITE_FIREBALL1 20011
+#define ID_SPRITE_FIREBALL2 20012
+
 #define TEXTURES_DIR L"textures"
 #define TEXTURE_PATH_MARIO TEXTURES_DIR "\\mario.png"
 #define TEXTURE_PATH_MISC TEXTURES_DIR "\\misc.png"
@@ -79,6 +82,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 void LoadResources()
 {
 	CTextures * textures = CTextures::GetInstance();
+	// or CTextures* textures = new CTextures();
 
 	textures->Add(ID_TEX_MARIO, TEXTURE_PATH_MARIO);
 	textures->Add(ID_TEX_MISC, TEXTURE_PATH_MISC);
@@ -88,15 +92,15 @@ void LoadResources()
 	
 	LPTEXTURE texMario = textures->Get(ID_TEX_MARIO);
 
-	sprites->Add(10001, 246, 154, 260, 181, texMario);
+	sprites->Add(10001, 246, 154, 260, 181, texMario); // idle right
 
-	sprites->Add(10002, 275, 154, 290, 181, texMario);
-	sprites->Add(10003, 304, 154, 321, 181, texMario);
+	sprites->Add(10002, 275, 154, 290, 181, texMario); // walking right
+	sprites->Add(10003, 304, 154, 321, 181, texMario); // accelerating right
 
-	sprites->Add(10011, 186, 154, 200, 181, texMario);
+	sprites->Add(10011, 186, 154, 200, 181, texMario); // idle left
 
-	sprites->Add(10012, 155, 154, 170, 181, texMario);
-	sprites->Add(10013, 125, 154, 140, 181, texMario);
+	sprites->Add(10012, 155, 154, 170, 181, texMario); // walking left
+	sprites->Add(10013, 125, 154, 140, 181, texMario); // accelerating left
 
 	// RUNNING RIGHT 
 	sprites->Add(10021, 335, 154, 335 + 18, 154 +26, texMario);
@@ -201,11 +205,23 @@ void LoadResources()
 	ani->Add(ID_SPRITE_BRICK);
 	animations->Add(ID_ANI_BRICK,ani);
 
-	for (int i=0;i<NUM_BRICKS;i++) 
+	for (int i=0;i<50;i++) 
 	{
 		CBrick* b = new CBrick(BRICK_X + i * BRICK_WIDTH, BRICK_Y);
-		objects.push_back(b);
+		objects.push_back(b); // kinda like destructor? ok maybe not
 	}
+
+	// Fireball objects
+	sprites->Add(ID_SPRITE_FIREBALL1, 569-1, 120-1, 577+1, 127+1, texMisc);
+	sprites->Add(ID_SPRITE_FIREBALL2, 582-1, 119-1, 589+1, 127+1, texMisc);
+
+	ani = new CAnimation(100);
+	ani->Add(ID_SPRITE_FIREBALL1);
+	ani->Add(ID_SPRITE_FIREBALL2);
+	animations->Add(ID_ANI_FIREBALL, ani);
+
+	CFireball* f = new CFireball(20.0f, 20.0f);
+	objects.push_back(f);
 }
 
 /*
@@ -217,7 +233,7 @@ void Update(DWORD dt)
 	for (int i = 0; i < (int)objects.size(); i++)
 	{
 		objects[i]->Update(dt);
-	}
+	} // update tat ca objects
 }
 
 void Render()
