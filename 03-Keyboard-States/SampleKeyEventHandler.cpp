@@ -4,11 +4,13 @@
 #include "Game.h"
 
 #include "Mario.h"
+#include "Brick.h"
 
 extern CMario* mario;
 //extern vector<LPGAMEOBJECT> objects;
 //extern means the variable is declared somewhere else
 // LPGAMEOBJECT is CGameObject*
+extern vector<LPGAMEOBJECT> objects;
 
 void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
@@ -18,6 +20,10 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_S:
 		mario->SetState(MARIO_STATE_JUMP);
 		break;
+	case DIK_D:
+		CFireball* f = new CFireball(mario->GetPositionX(), mario->GetPositionY());
+		f->SetSpeed(0.1, 0);
+		objects.push_back(f);
 	}
 }
 

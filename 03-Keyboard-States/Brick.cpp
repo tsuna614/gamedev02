@@ -1,4 +1,6 @@
 #include "Brick.h"
+#include "debug.h"
+
 
 void CBrick::Render()
 {

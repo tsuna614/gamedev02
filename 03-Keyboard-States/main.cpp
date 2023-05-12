@@ -211,6 +211,12 @@ void LoadResources()
 		objects.push_back(b); // kinda like destructor? ok maybe not
 	}
 
+	/**test**/
+	//CBrick* b = new CBrick(BRICK_X, BRICK_Y);
+	//b->SetSpeed(0.1, 0);
+	//objects.push_back(b);
+	/**test**/
+
 	// Fireball objects
 	sprites->Add(ID_SPRITE_FIREBALL1, 569-1, 120-1, 577+1, 127+1, texMisc);
 	sprites->Add(ID_SPRITE_FIREBALL2, 582-1, 119-1, 589+1, 127+1, texMisc);
@@ -220,7 +226,8 @@ void LoadResources()
 	ani->Add(ID_SPRITE_FIREBALL2);
 	animations->Add(ID_ANI_FIREBALL, ani);
 
-	CFireball* f = new CFireball(20.0f, 20.0f);
+	CFireball* f = new CFireball(100.0f, 100.0f);
+	f->SetSpeed(0.1, 0);
 	objects.push_back(f);
 }
 

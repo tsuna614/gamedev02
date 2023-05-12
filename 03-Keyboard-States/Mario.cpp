@@ -1,5 +1,7 @@
 #include "Mario.h"
 
+
+
 void CMario::Update(DWORD dt)
 {
 	x += vx * dt;
