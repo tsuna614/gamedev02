@@ -8,6 +8,9 @@
 #define ID_ANI_FIREBALL 10010
 #define BRICK_WIDTH 16
 
+#define OBJECT_GRAVITY 0.002f
+#define GROUND_Y 160.0f
+
 class CBrick : public CGameObject {
 public:
 	CBrick(float x, float y) : CGameObject(x, y) {}

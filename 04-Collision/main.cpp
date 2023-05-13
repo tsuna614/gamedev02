@@ -319,6 +319,21 @@ void LoadAssetsBrick()
 	LPANIMATION ani = new CAnimation(100);
 	ani->Add(ID_SPRITE_BRICK + 1);
 	animations->Add(ID_ANI_BRICK, ani);
+
+	// sprites and animations for glass brick
+	sprites->Add(ID_SPRITE_BRICK + 2, 300, 135, 300 + 15, 135 + 15, texMisc);
+	sprites->Add(ID_SPRITE_BRICK + 3, 318, 135, 318 + 15, 135 + 15, texMisc);
+	sprites->Add(ID_SPRITE_BRICK + 4, 336, 135, 336 + 15, 135 + 15, texMisc);
+	sprites->Add(ID_SPRITE_BRICK + 5, 354, 135, 354 + 15, 135 + 15, texMisc);
+	sprites->Add(ID_SPRITE_BRICK + 6, 372, 135, 372 + 15, 135 + 15, texMisc);
+
+	ani = new CAnimation(150);
+	ani->Add(ID_SPRITE_BRICK + 2);
+	ani->Add(ID_SPRITE_BRICK + 3);
+	ani->Add(ID_SPRITE_BRICK + 4);
+	ani->Add(ID_SPRITE_BRICK + 5);
+	ani->Add(ID_SPRITE_BRICK + 6);
+	animations->Add(ID_ANI_GLASSBRICK, ani);
 }
 void LoadAssetsCoin()
 {
@@ -400,6 +415,11 @@ void ClearScene()
 void Reload()
 {
 	ClearScene();
+
+	// Glass bricks row
+	CGlassBrick* gb = new CGlassBrick(1 * BRICK_WIDTH, 90.0f);
+	objects.push_back(gb);
+
 
 	// Main ground
 	for (int i = 0; i < NUM_BRICKS; i++)

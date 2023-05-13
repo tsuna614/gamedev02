@@ -22,7 +22,13 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		break;
 	case DIK_D:
 		CFireball* f = new CFireball(mario->GetPositionX(), mario->GetPositionY());
-		f->SetSpeed(0.1, 0);
+		if (mario->GetFacingDirection() > 0)
+		{
+			f->SetSpeed(0.1, 0);
+		}
+		else {
+			f->SetSpeed(-0.1, 0);
+		}
 		objects.push_back(f);
 	}
 }

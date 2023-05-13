@@ -47,17 +47,19 @@ class CCollision
 {
 	static CCollision* __instance;
 public: 
-	static void SweptAABB(
+	static void SweptAABB( // * AABB algorithm does not work if the static object and the moving object already intersect
+		// * moving object
 		float ml,			// move left 
 		float mt,			// move top
 		float mr,			// move right 
 		float mb,			// move bottom
-		float dx,			// 
-		float dy,			// 
+		float dx,			// * distance travel in x
+		float dy,			// * distance travel in y
+		// * static object
 		float sl,			// static left
-		float st,
-		float sr,
-		float sb,
+		float st,			// static top
+		float sr,			// static right
+		float sb,			// static bottom
 		float& t,
 		float& nx,
 		float& ny);

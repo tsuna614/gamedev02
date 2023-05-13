@@ -24,6 +24,7 @@ public:
 
 	float GetPositionX() { return this->x; }
 	float GetPositionY() { return this->y; }
+	int GetFacingDirection() { return nx; }
 
 
 	void SetState(int state) { this->state = state; }
