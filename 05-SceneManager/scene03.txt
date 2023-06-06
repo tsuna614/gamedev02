@@ -5,6 +5,7 @@ glassbrick.txt
 coin.txt
 goomba.txt
 cloud.txt
+mushroom.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -13,6 +14,10 @@ cloud.txt
 
 # MARIO
 0	20	10
+
+# mushroom
+
+6	100	10
 
 # BRICKS
 1	0	148

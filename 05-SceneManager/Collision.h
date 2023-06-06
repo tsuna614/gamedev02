@@ -17,7 +17,7 @@ struct CCollisionEvent
 	LPGAMEOBJECT src_obj;		// source object : the object from which to calculate collision
 	LPGAMEOBJECT obj;			// the target object
 	
-	float t, nx, ny;
+	float t, nx, ny;	// nx, ny is the direction of the obj which the src_obj collided
 
 	float dx, dy;				// *RELATIVE* movement distance between this object and obj
 	bool isDeleted;		
@@ -35,8 +35,8 @@ struct CCollisionEvent
 		this->isDeleted = false;
 	}
 
-	int WasCollided() { return t >= 0.0f && t <= 1.0f; }
-	//int WasCollided();
+	//int WasCollided() { return (t >= 0.0f && t <= 1.0f && obj->IsDirectionCollidable(nx, ny) == 1); } // this is wrong
+	int WasCollided();
 
 	static bool compare(const LPCOLLISIONEVENT& a, LPCOLLISIONEVENT& b)
 	{
