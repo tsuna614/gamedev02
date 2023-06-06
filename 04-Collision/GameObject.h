@@ -13,6 +13,8 @@ using namespace std;
 
 #define ID_TEX_BBOX -100		// special texture to draw object bounding box
 
+typedef CGameObject* LPGAMEOBJECT;
+
 class CGameObject
 {
 protected:
@@ -64,6 +66,9 @@ public:
 	// Is this object blocking other object? If YES, collision framework will automatically push the other object
 	virtual int IsBlocking() { return 1; } // * for example coin object does not block other objects and will return 0
 	// * if mario dies mario cannot have collision
+
+	// Is this object collide with other object at certain direction ( like ColorBox )
+	virtual int IsDirectionColliable(float nx, float ny) { return 1; }
 
 	~CGameObject();
 

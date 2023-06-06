@@ -36,6 +36,7 @@ struct CCollisionEvent
 	}
 
 	int WasCollided() { return t >= 0.0f && t <= 1.0f; }
+	//int WasCollided();
 
 	static bool compare(const LPCOLLISIONEVENT& a, LPCOLLISIONEVENT& b)
 	{

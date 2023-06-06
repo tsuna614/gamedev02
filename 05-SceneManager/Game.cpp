@@ -387,6 +387,7 @@ void CGame::ProcessKeyboard()
 
 	// Collect all key states first
 	hr = didv->GetDeviceState(sizeof(keyStates), keyStates);
+	//DebugOut(L"----------\n");
 	if (FAILED(hr))
 	{
 		// If the keyboard lost focus or was not acquired then try to get control back.
@@ -454,8 +455,12 @@ void CGame::_ParseSection_SCENES(string line)
 	vector<string> tokens = split(line);
 
 	if (tokens.size() < 2) return;
-	int id = atoi(tokens[0].c_str());
+	int id = atoi(tokens[0].c_str()); // * probably to convert first character from string to int for id?
+
 	LPCWSTR path = ToLPCWSTR(tokens[1]);   // file: ASCII format (single-byte char) => Wide Char
+
+	DebugOut(L"%s\n", tokens[0].c_str());
+	DebugOut(L"%s\n", path);
 
 	LPSCENE scene = new CPlayScene(id, path);
 	scenes[id] = scene;
@@ -510,9 +515,10 @@ void CGame::Load(LPCWSTR gameFile)
 
 void CGame::SwitchScene()
 {
+	//DebugOut(L"%d\n", current_scene);
 	if (next_scene < 0 || next_scene == current_scene) return; 
 
-	DebugOut(L"[INFO] Switching to scene %d\n", next_scene);
+	DebugOut(L"[INFO] Switching to scene %d\n", next_scene); // * next_scene = 0, 1, 2, 5
 
 	scenes[current_scene]->Unload();
 

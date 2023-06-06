@@ -5,6 +5,10 @@
 
 #define BLOCK_PUSH_FACTOR 0.4f
 
+//int CCollisionEvent::WasCollided() {
+//	return t >= 0.0f && t <= 1.0f && obj->IsDirectionColliable
+//}
+
 CCollision* CCollision::__instance = NULL;
 
 CCollision* CCollision::GetInstance()
@@ -16,6 +20,7 @@ CCollision* CCollision::GetInstance()
 /*
 	SweptAABB 
 */
+
 void CCollision::SweptAABB(
 	float ml, float mt, float mr, float mb,
 	float dx, float dy,

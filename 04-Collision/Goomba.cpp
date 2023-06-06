@@ -1,6 +1,7 @@
+#include "Mario.h"
 #include "Goomba.h"
-
 #include "Coin.h"
+#include "Mushroom.h"
 
 CGoomba::CGoomba(float x, float y):CGameObject(x, y)
 {
@@ -36,12 +37,15 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (dynamic_cast<CCoin*>(e->obj))
-		OnCollisionWithCoin(e);
+	/**** Goomba touches coin ****/
+	//if (dynamic_cast<CCoin*>(e->obj))
+	//	OnCollisionWithCoin(e);
 
 	/***********/
-	if (!e->obj->IsBlocking()) return; 
-	if (dynamic_cast<CGoomba*>(e->obj)) return; 
+	if (!e->obj->IsBlocking()) return; // * neu goomba collide voi non-collidable object -> return 
+	if (dynamic_cast<CMushroom*>(e->obj)) return;
+	if (dynamic_cast<CGoomba*>(e->obj)) return; // * neu goomba collide voi goomba khac -> return
+	if (dynamic_cast<CMario*>(e->obj)) return;
 
 	if (e->ny != 0 )
 	{
@@ -55,12 +59,6 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 
 }
 
-void CGoomba::OnCollisionWithCoin(LPCOLLISIONEVENT e)
-{
-	e->obj->Delete();
-	//coin++;
-}
-
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	vy += ay * dt;
@@ -69,6 +67,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if ( (state==GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT) )
 	{
 		isDeleted = true;
+		//this->Delete();
 		return;
 	}
 
@@ -95,7 +94,7 @@ void CGoomba::SetState(int state)
 	switch (state)
 	{
 		case GOOMBA_STATE_DIE:
-			die_start = GetTickCount64();
+			die_start = GetTickCount64(); // this to start death animation
 			y += (GOOMBA_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE)/2;
 			vx = 0;
 			vy = 0;

@@ -6,6 +6,8 @@
 
 #include "Goomba.h"
 #include "Coin.h"
+#include "Brick.h"
+#include "Mushroom.h"
 
 #include "Collision.h"
 
@@ -14,7 +16,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
-	if (abs(vx) > abs(maxVx)) vx = maxVx;
+	if (abs(vx) > abs(maxVx)) vx = maxVx; // * to stop Mario from accelerating surpass a certain speed
 
 	// reset untouchable timer if untouchable time has passed
 	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
@@ -51,6 +53,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithGoomba(e);
 	else if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
+	else if (dynamic_cast<CGlassBrick*>(e->obj))
+		OnCollisionWithGlassBrick(e);
+	else if (dynamic_cast<CMushroom*>(e->obj))
+		OnCollisionWithMushroom(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -86,10 +92,32 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	}
 }
 
+void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
+{
+	CMushroom* mushroom = dynamic_cast<CMushroom*>(e->obj);
+
+	mushroom->SetState(MUSHROOM_STATE_DIE);
+	e->obj->Delete();
+	if (level < MARIO_LEVEL_BIG)
+	{
+		level = MARIO_LEVEL_BIG;
+	}
+}
+
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
 	coin++;
+}
+
+void CMario::OnCollisionWithGlassBrick(LPCOLLISIONEVENT e)
+{
+	if (e->ny > 0)
+	{
+		e->obj->Delete();
+
+	}
+
 }
 
 //
@@ -305,7 +333,7 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_DIE:
-		vy = -MARIO_JUMP_DEFLECT_SPEED;
+		vy = -MARIO_JUMP_DEFLECT_SPEED; // this to make mario bounces up a bit when die
 		vx = 0;
 		ax = 0;
 		break;

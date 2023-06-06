@@ -1,7 +1,7 @@
 # list of object assets to load in this scene
 [ASSETS]
 mario.txt
-brick.txt
+glassbrick.txt
 coin.txt
 goomba.txt
 cloud.txt
@@ -45,19 +45,19 @@ cloud.txt
 1	352	148
 1	352	164
 
-# COIN
+#COIN
 4	100	120
 4	120	120
 4	140	120
 4	160	120
 4	180	120
 
-# Goomba
+#Goomba
 2	300	10
 
-# Platform
+#Platform
 5	90	136	16	15	16	51000	52000	53000
 5	120	90	16	16	8	20001	20001	20001
 
-# Portal 
+#Portal 
 50	300	110	316	140	2

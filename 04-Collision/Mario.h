@@ -118,6 +118,9 @@ class CMario : public CGameObject
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 
+	void OnCollisionWithGlassBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
+
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -142,7 +145,7 @@ public:
 
 	int IsCollidable()
 	{ 
-		return (state != MARIO_STATE_DIE); 
+		return (state != MARIO_STATE_DIE); // * mario is colliable when alive, not colliable when dead
 	}
 
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0); }

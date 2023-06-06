@@ -62,6 +62,8 @@ void CPlayScene::_ParseSection_ASSETS(string line)
 	if (tokens.size() < 1) return;
 
 	wstring path = ToWSTR(tokens[0]);
+
+	DebugOut(L"%s\n", path.c_str());
 	
 	LoadAssets(path.c_str());
 }

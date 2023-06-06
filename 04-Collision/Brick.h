@@ -18,9 +18,9 @@ public:
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 };
 
-class CGlassBrick : public CGameObject {
+class CGlassBrick : public CBrick {
 public:
-	CGlassBrick(float x, float y) : CGameObject(x, y) {}
+	CGlassBrick(float x, float y) : CBrick(x, y) {}
 	void Render();
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);

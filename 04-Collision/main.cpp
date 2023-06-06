@@ -36,6 +36,7 @@
 #include "Goomba.h"
 #include "Coin.h"
 #include "Platform.h"
+#include "Mushroom.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -354,6 +355,21 @@ void LoadAssetsCoin()
 	animations->Add(ID_ANI_COIN, ani);
 }
 
+void LoadAssetsMushroom()
+{
+	CTextures* textures = CTextures::GetInstance();
+	CSprites* sprites = CSprites::GetInstance();
+	CAnimations* animations = CAnimations::GetInstance();
+
+	LPTEXTURE texMisc = textures->Get(ID_TEX_MISC);
+
+	sprites->Add(ID_SPRITE_MUSHROOM, 300, 189, 300 + 15, 189 + 15, texMisc);
+
+	LPANIMATION ani = new CAnimation(100);
+	ani->Add(ID_SPRITE_MUSHROOM);
+	animations->Add(ID_ANI_MUSHROOM, ani);
+}
+
 void LoadAssetsOther()
 {
 	CTextures* textures = CTextures::GetInstance();
@@ -385,6 +401,7 @@ void LoadResources()
 	LoadAssetsGoomba();
 	LoadAssetsBrick();
 	LoadAssetsCoin();
+	LoadAssetsMushroom();
 	LoadAssetsOther();
 }
 
@@ -417,8 +434,10 @@ void Reload()
 	ClearScene();
 
 	// Glass bricks row
-	CGlassBrick* gb = new CGlassBrick(1 * BRICK_WIDTH, 90.0f);
-	objects.push_back(gb);
+	/*for (int i = 0; i < NUM_BRICKS; i++) {
+		CGlassBrick* gb = new CGlassBrick(i * BRICK_WIDTH, 90.0f);
+		objects.push_back(gb);
+	}*/
 
 
 	// Main ground
@@ -464,17 +483,23 @@ void Reload()
 	}
 
 	// Second cloud platform 
-	CPlatform* p = new CPlatform(90.0f, GROUND_Y - 74.0f,
+	CPlatform* p = new CPlatform(90.0f, GROUND_Y - 54.0f,
 		16, 15, 16, ID_SPRITE_CLOUD_BEGIN, ID_SPRITE_CLOUD_MIDDLE, ID_SPRITE_CLOUD_END);
 	objects.push_back(p);
 
 	mario = new CMario(MARIO_START_X, MARIO_START_Y);
 	objects.push_back(mario);
 
-	for (int j = 0; j < 4; j++)
+	//for (int j = 0; j < 4; j++)
+	//{
+	//	CGoomba* goomba = new CGoomba(GOOMBA_X + j * 60, GROUND_Y - 120.0f);
+	//	objects.push_back(goomba);
+	//}
+
+	for (int j = 0; j < 1; j++)
 	{
-		CGoomba* goomba = new CGoomba(GOOMBA_X + j * 60, GROUND_Y - 120.0f);
-		objects.push_back(goomba);
+		CMushroom* mushroom = new CMushroom(GOOMBA_X + 100, GROUND_Y - 120.0f);
+		objects.push_back(mushroom);
 	}
 
 	// COINS 
