@@ -22,7 +22,7 @@ mushroom.txt
 
 # GLASSBRICKS
 
-7	8	130
+7	40	130
 
 # BRICKS
 

@@ -9,6 +9,7 @@
 #include "Portal.h"
 
 #include "Mushroom.h"
+#include "Brick.h"
 
 #include "Collision.h"
 
@@ -58,6 +59,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
 		OnCollisionWithMushroom(e);
+	else if (dynamic_cast<CGlassBrick*>(e->obj) || dynamic_cast<CBrick*>(e->obj))
+		OnCollisionWithBrick(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -115,6 +118,14 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 	}
 	e->obj->SetState(MUSHROOM_STATE_DIE);
 	//e->obj->Delete();
+}
+
+void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
+{
+	if (e->ny > 0)
+	{
+		e->obj->Delete();
+	}
 }
 
 //
