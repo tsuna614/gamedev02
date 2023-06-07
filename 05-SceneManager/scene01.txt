@@ -4,7 +4,7 @@ mario.txt
 brick.txt
 coin.txt
 goomba.txt
-cloud.txt
+misc.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -57,7 +57,7 @@ cloud.txt
 
 # Platform
 5	90	136	16	15	16	51000	52000	53000
-5	120	90	16	16	8	20001	20001	20001
+5	120	90	16	16	8	20000	20000	20000
 
 # Portal 
 50	300	110	316	140	2

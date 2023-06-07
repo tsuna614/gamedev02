@@ -1,5 +1,5 @@
 [SETTINGS]
-start	4
+start	1
 width	320
 height	240
 
@@ -18,3 +18,4 @@ height	240
 0	textures\mario.png
 10	textures\enemies.png
 20	textures\misc.png
+40	textures\bg-1-1.png
