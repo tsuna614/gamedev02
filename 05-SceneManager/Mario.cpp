@@ -110,6 +110,7 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 {
 	if (level < MARIO_LEVEL_BIG)
 	{
+		this->y -= 10;
 		level = MARIO_LEVEL_BIG;
 	}
 	e->obj->SetState(MUSHROOM_STATE_DIE);

@@ -46,7 +46,7 @@ void CPlayScene::_ParseSection_SPRITES(string line)
 	int b = atoi(tokens[4].c_str());
 	int texID = atoi(tokens[5].c_str());
 
-	LPTEXTURE tex = CTextures::GetInstance()->Get(texID);
+	LPTEXTURE tex = CTextures::GetInstance()->Get(texID); // * texID = png ID
 	if (tex == NULL)
 	{
 		DebugOut(L"[ERROR] Texture ID %d not found!\n", texID);
@@ -121,8 +121,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
+	case OBJECT_TYPE_GLASSBRICK: obj = new CGlassBrick(x, y); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y); break;
+
 
 	case OBJECT_TYPE_PLATFORM:
 	{
