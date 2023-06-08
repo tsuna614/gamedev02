@@ -10,6 +10,7 @@
 
 #include "Mushroom.h"
 #include "Brick.h"
+#include "Pipe.h"
 
 #include "Collision.h"
 
@@ -42,13 +43,17 @@ void CMario::OnNoCollision(DWORD dt)
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (e->ny != 0 && e->obj->IsBlocking())
+	//if (dynamic_cast<CPipe*>(e->obj))
+	//{
+	//	return;
+	//}
+
+	if ((e->ny != 0 && e->obj->IsBlocking())/* || dynamic_cast<CPipe*>(e->obj)*/)
 	{
 		vy = 0;
 		if (e->ny < 0) isOnPlatform = true;
 	}
-	else 
-	if (e->nx != 0 && e->obj->IsBlocking())
+	else if ((e->nx != 0 && e->obj->IsBlocking())/* || dynamic_cast<CPipe*>(e->obj)*/)
 	{
 		vx = 0;
 	}
@@ -126,7 +131,7 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 {
-	if (e->ny > 0)
+	if (e->ny > 0 && level > MARIO_LEVEL_SMALL)
 	{
 		e->obj->Delete();
 	}

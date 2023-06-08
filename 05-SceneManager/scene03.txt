@@ -6,6 +6,7 @@ coin.txt
 goomba.txt
 misc.txt
 mushroom.txt
+pipe.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -27,8 +28,11 @@ mushroom.txt
 
 # mysteryblock
 
-9	140	100
+9	140	10
 
+# PIPE 
+
+10	100	165
 
 
 #COIN
@@ -41,15 +45,17 @@ mushroom.txt
 #Goomba
 2	300	10
 
+2	300	100
+
 #Platform
 
 # cloud
-5	90	146	16	15	16	51000	52000	53000
+5	90	80	16	15	16	51000	52000	53000
 
 
 # ground
 8	-100	205	15	32	50	54001	54002	54003
-8	300	190	15	32	50	54001	54002	54003
+8	600	190	15	32	50	54001	54002	54003
 
 #Portal 
-50	300	110	316	140	2
+#50	300	110	316	140	2
