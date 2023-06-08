@@ -3,7 +3,7 @@
 mario.txt
 brick.txt
 coin.txt
-goomba.txt
+enemy.txt
 misc.txt
 mushroom.txt
 pipe.txt
@@ -13,26 +13,39 @@ pipe.txt
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # See OBJECT_TYPE constants in AssetIDs.h
 
-# MARIO
+################ MARIO ################
 0	20	10
 
-# mushroom
 
+################ ENEMIES ################
+
+#Goomba
+2	300	10
+
+2	300	100
+
+#Piranha 
+11	500	160
+10	500	165
+
+################ MISC OBJECTS ################
+
+# mushroom
 6	100	10
 
-# GLASSBRICKS
+################ TILES / BLOCKS ################
 
+# GLASSBRICKS
 7	40	130
 
 # BRICKS
 
 # mysteryblock
+9	140	140
+12	156	140
 
-9	140	10
+# PIPE
 
-# PIPE 
-
-10	100	165
 
 
 #COIN
@@ -42,10 +55,6 @@ pipe.txt
 4	160	120
 4	180	120
 
-#Goomba
-2	300	10
-
-2	300	100
 
 #Platform
 

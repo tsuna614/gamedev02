@@ -11,6 +11,7 @@
 #include "Mushroom.h"
 #include "Brick.h"
 #include "Pipe.h"
+#include "Piranha.h"
 
 #include "Collision.h"
 
@@ -70,6 +71,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithBrick(e);
 	else if (dynamic_cast<CMysteryBlock*>(e->obj))
 		OnCollisionWithMysteryBlock(e);
+	else if (dynamic_cast<CPiranha*>(e->obj))
+		OnCollisionWithPiranha(e);
+	else if (dynamic_cast<CCoinBlock*>(e->obj))
+		OnCollisionWithCoinBlock(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -101,6 +106,27 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 					DebugOut(L">>> Mario DIE >>> \n");
 					SetState(MARIO_STATE_DIE);
 				}
+			}
+		}
+	}
+}
+
+void CMario::OnCollisionWithPiranha(LPCOLLISIONEVENT e)
+{
+	CPiranha* piranha = dynamic_cast<CPiranha*>(e->obj);
+	if (untouchable == 0)
+	{
+		if (piranha->GetState() != GOOMBA_STATE_DIE)
+		{
+			if (level > MARIO_LEVEL_SMALL)
+			{
+				level = MARIO_LEVEL_SMALL;
+				StartUntouchable();
+			}
+			else
+			{
+				DebugOut(L">>> Mario DIE >>> \n");
+				SetState(MARIO_STATE_DIE);
 			}
 		}
 	}
@@ -147,6 +173,22 @@ void CMario::OnCollisionWithMysteryBlock(LPCOLLISIONEVENT e)
 			e->obj->GetPosition(x, y);
 			CGameObject* obj = new CMushroom(x, y - 15);
 			objects.push_back(obj);
+			e->obj->SetState(MYSTERYBLOCK_STATE_ACTIVATED);
+		}
+	}
+}
+
+void CMario::OnCollisionWithCoinBlock(LPCOLLISIONEVENT e)
+{
+	if (e->ny > 0)
+	{
+		if (e->obj->GetState() != MYSTERYBLOCK_STATE_ACTIVATED)
+		{
+			//float x, y;
+			//e->obj->GetPosition(x, y);
+			//CGameObject* obj = new CMushroom(x, y - 15);
+			//objects.push_back(obj);
+			coin++;
 			e->obj->SetState(MYSTERYBLOCK_STATE_ACTIVATED);
 		}
 	}

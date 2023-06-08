@@ -3,7 +3,7 @@
 mario.txt
 brick.txt
 coin.txt
-goomba.txt
+enemy.txt
 misc.txt
 #
 [OBJECTS]
