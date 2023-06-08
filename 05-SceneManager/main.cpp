@@ -39,7 +39,7 @@ HOW TO INSTALL Microsoft.DXSDK.D3DX
 #include "Coin.h"
 #include "Platform.h"
 
-#include "SampleKeyEventHandler.h"
+#include "SampleKeyEventHandler.h"	
 
 #include "AssetIDs.h"
 
@@ -51,6 +51,8 @@ HOW TO INSTALL Microsoft.DXSDK.D3DX
 
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
+
+vector<LPGAMEOBJECT> objects;
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {

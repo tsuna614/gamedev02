@@ -13,6 +13,8 @@
 
 #include "Collision.h"
 
+extern vector<LPGAMEOBJECT> objects;
+
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	vy += ay * dt;
@@ -61,6 +63,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithMushroom(e);
 	else if (dynamic_cast<CGlassBrick*>(e->obj) || dynamic_cast<CBrick*>(e->obj))
 		OnCollisionWithBrick(e);
+	else if (dynamic_cast<CMysteryBlock*>(e->obj))
+		OnCollisionWithMysteryBlock(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -125,6 +129,21 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 	if (e->ny > 0)
 	{
 		e->obj->Delete();
+	}
+}
+
+void CMario::OnCollisionWithMysteryBlock(LPCOLLISIONEVENT e)
+{
+	if (e->ny > 0)
+	{
+		if (e->obj->GetState() != MYSTERYBLOCK_STATE_ACTIVATED)
+		{
+			float x, y;
+			e->obj->GetPosition(x, y);
+			CGameObject* obj = new CMushroom(x, y - 15);
+			objects.push_back(obj);
+			e->obj->SetState(MYSTERYBLOCK_STATE_ACTIVATED);
+		}
 	}
 }
 
