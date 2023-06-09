@@ -13,6 +13,7 @@
 #include "Ground.h"
 #include "Pipe.h"
 #include "Piranha.h"
+#include "ColorBox.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -165,6 +166,34 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			x, y,
 			cell_width, cell_height, length,
 			sprite_begin, sprite_middle, sprite_end
+		);
+
+		break;
+	}
+
+	case OBJECT_TYPE_COLORBOX:
+	{
+
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int length = atoi(tokens[5].c_str());
+		int height = atoi(tokens[6].c_str());
+		int sprite_top_begin = atoi(tokens[7].c_str());
+		int sprite_top_middle = atoi(tokens[8].c_str());
+		int sprite_top_end = atoi(tokens[9].c_str());
+		int sprite_mid_begin = atoi(tokens[10].c_str());
+		int sprite_mid_middle = atoi(tokens[11].c_str());
+		int sprite_mid_end = atoi(tokens[12].c_str());
+		int sprite_bot_begin = atoi(tokens[13].c_str());
+		int sprite_bot_middle = atoi(tokens[14].c_str());
+		int sprite_bot_end = atoi(tokens[15].c_str());
+
+		obj = new CColorBox(
+			x, y,
+			cell_width, cell_height, length, height,
+			sprite_top_begin, sprite_top_middle, sprite_top_end,
+			sprite_mid_begin, sprite_mid_middle, sprite_mid_end,
+			sprite_bot_begin, sprite_bot_middle, sprite_bot_end
 		);
 
 		break;
