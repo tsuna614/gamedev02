@@ -42,10 +42,38 @@ public:
 };
 
 class CCoinBlock : public CGameObject {
+//protected:
+//	float ax;
+//	float ay;
+//
+//	bool isMovingUp;
+//
+//	ULONGLONG die_start;
+//	ULONGLONG moving_start;
+//	ULONGLONG staying_start;
+//
+//	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+//	virtual void Render();
+//
+//	//virtual int IsCollidable() { return 0; };
+//	//virtual int IsBlocking() { return 0; }
 public:
-	CCoinBlock(float x, float y) : CGameObject(x, y) {}
+	CCoinBlock(float x, float y) : CGameObject(x, y) 
+	{
+		//this->ax = 0;
+		//this->ay = 0;
+		//this->isMovingUp = false;
+	}
+
 	void Render();
-	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
-	//virtual void SetState(int state);
+
+	//void Update(DWORD dt)
+	//{
+
+	//}
+	//virtual void SetState(int state)
+	//{
+
+	//}
 };
