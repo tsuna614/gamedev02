@@ -87,18 +87,19 @@ void CKoopa::Render()
 	{
 		aniId = ID_ANI_KOOPA_WALKING_RIGHT;
 	}
+	// koopa doesn't have a die animation yet
+	//if (state == KOOPA_STATE_DIE)
+	//{
+	//	aniId = ID_ANI_KOOPA_DIE;
+	//}
 
-	if (state == KOOPA_STATE_DIE)
+	if (state == KOOPA_STATE_SHELL)
 	{
-		aniId = ID_ANI_KOOPA_DIE;
-	}
-	else if (state == KOOPA_STATE_SHELL)
-	{
-		aniId = ID_ANI_KOOPA_DIE;
+		aniId = ID_ANI_KOOPA_SHELL;
 	}
 	else if (state == KOOPA_STATE_SHELL_MOVING)
 	{ 
-		aniId = ID_ANI_KOOPA_DIE;
+		aniId = ID_ANI_KOOPA_SHELL_MOVING;
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
