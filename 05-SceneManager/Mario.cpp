@@ -12,6 +12,7 @@
 #include "Brick.h"
 #include "Pipe.h"
 #include "Piranha.h"
+#include "Koopa.h"
 
 #include "Collision.h"
 
@@ -75,6 +76,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPiranha(e);
 	else if (dynamic_cast<CCoinBlock*>(e->obj))
 		OnCollisionWithCoinBlock(e);
+	else if (dynamic_cast<CKoopa*>(e->obj))
+		OnCollisionWithKoopa(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -106,6 +109,51 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 					DebugOut(L">>> Mario DIE >>> \n");
 					SetState(MARIO_STATE_DIE);
 				}
+			}
+		}
+	}
+}
+
+void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
+{
+	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+
+	// jump on top >> kill koopa and deflect a bit 
+	if (e->ny < 0)
+	{
+		if (koopa->GetState() != KOOPA_STATE_SHELL)
+		{
+			koopa->SetState(KOOPA_STATE_SHELL);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else if (koopa->GetState() == KOOPA_STATE_SHELL)
+		{
+			koopa->GetMarioPosition(this->x, this->y);
+			koopa->SetState(KOOPA_STATE_SHELL_MOVING);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+	}
+	else // collide with koopa by the side
+	{
+		if (untouchable == 0)
+		{
+			if (koopa->GetState() == KOOPA_STATE_WALKING || koopa->GetState() == KOOPA_STATE_SHELL_MOVING)
+			{
+				if (level > MARIO_LEVEL_SMALL)
+				{
+					level = MARIO_LEVEL_SMALL;
+					StartUntouchable();
+				}
+				else
+				{
+					DebugOut(L">>> Mario DIE >>> \n");
+					SetState(MARIO_STATE_DIE);
+				}
+			}
+			else if (koopa->GetState() == KOOPA_STATE_SHELL)
+			{
+				koopa->GetMarioPosition(this->x, this->y);
+				koopa->SetState(KOOPA_STATE_SHELL_MOVING);
 			}
 		}
 	}

@@ -20,3 +20,4 @@ height	240
 20	textures\misc.png
 30	textures\misc-2.png
 40	textures\bg-1-1.png
+50	textures\enemies-reversed.png
