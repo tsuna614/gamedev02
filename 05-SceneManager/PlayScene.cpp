@@ -15,6 +15,7 @@
 #include "Piranha.h"
 #include "ColorBox.h"
 #include "Koopa.h"
+#include "Background.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -134,6 +135,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_PIRANHA: obj = new CPiranha(x, y); break;
 	case OBJECT_TYPE_COINBLOCK: obj = new CCoinBlock(x, y); break;
 	case OBJECT_TYPE_KOOPA: obj = new CKoopa(x, y); break;
+	case OBJECT_TYPE_HILL: obj = new CHill(x, y); break;
 
 	case OBJECT_TYPE_PLATFORM:
 	{
