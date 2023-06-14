@@ -1,4 +1,4 @@
-#include "Piranha.h"
+#include "Fireball.h"
 #include "Mario.h"
 #include "Mushroom.h"
 #include "Pipe.h"
@@ -6,7 +6,7 @@
 
 extern vector<LPGAMEOBJECT> objects;
 
-CPiranha::CPiranha(float x, float y) :CGameObject(x, y)
+CFireball::CFireball(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
 	this->ay = 0;
@@ -15,7 +15,7 @@ CPiranha::CPiranha(float x, float y) :CGameObject(x, y)
 	SetState(PIRANHA_STATE_STAYING);
 }
 
-void CPiranha::GetBoundingBox(float& left, float& top, float& right, float& bottom)
+void CFireball::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	if (state == PIRANHA_STATE_DIE)
 	{
@@ -33,16 +33,16 @@ void CPiranha::GetBoundingBox(float& left, float& top, float& right, float& bott
 	}
 }
 
-void CPiranha::OnNoCollision(DWORD dt)
+void CFireball::OnNoCollision(DWORD dt)
 {
 	x += vx * dt;
 	y += vy * dt;
 };
 
-void CPiranha::OnCollisionWith(LPCOLLISIONEVENT e)
+void CFireball::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (!e->obj->IsBlocking()) return;
-	if (dynamic_cast<CPiranha*>(e->obj)) return;
+	if (dynamic_cast<CFireball*>(e->obj)) return;
 	if (dynamic_cast<CMario*>(e->obj)) return;
 	if (dynamic_cast<CMushroom*>(e->obj)) return;
 
@@ -56,7 +56,7 @@ void CPiranha::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 }
 
-void CPiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CFireball::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
@@ -84,7 +84,7 @@ void CPiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 }
 
 
-void CPiranha::Render()
+void CFireball::Render()
 {
 	int aniId;
 	CMario* mario = dynamic_cast<CMario*>(objects[0]);
@@ -100,29 +100,14 @@ void CPiranha::Render()
 	float mx, my;
 	mario->GetPosition(mx, my);
 
-	if (this->y > my) // Piranha is below Mario -> Piranha look up
+	if (this->x > mx)
 	{
-		if (this->x > mx)
-		{
-			aniId = ID_ANI_PIRANHA_TOP_LEFT;
-		}
-		else
-		{
-			aniId = ID_ANI_PIRANHA_TOP_RIGHT;
-		}
+		aniId = ID_ANI_PIRANHA_LEFT;
 	}
 	else
 	{
-		if (this->x > mx)
-		{
-			aniId = ID_ANI_PIRANHA_BOTTOM_LEFT;
-		}
-		else
-		{
-			aniId = ID_ANI_PIRANHA_BOTTOM_RIGHT;
-		}
+		aniId = ID_ANI_PIRANHA_RIGHT;
 	}
-
 	if (state == PIRANHA_STATE_DIE)
 	{
 		aniId = ID_ANI_PIRANHA_DIE;
@@ -132,7 +117,7 @@ void CPiranha::Render()
 	RenderBoundingBox();
 }
 
-void CPiranha::SetState(int state)
+void CFireball::SetState(int state)
 {
 	CGameObject::SetState(state);
 	switch (state)

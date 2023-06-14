@@ -7,24 +7,22 @@
 
 
 #define PIRANHA_BBOX_WIDTH 16
-#define PIRANHA_BBOX_HEIGHT 31
+#define PIRANHA_BBOX_HEIGHT 25
 #define PIRANHA_BBOX_HEIGHT_DIE 10
 
 #define PIRANHA_DIE_TIMEOUT 500
-#define PIRANHA_MOVING_TIMEOUT 1200
+#define PIRANHA_MOVING_TIMEOUT 1000
 #define PIRANHA_STAYING_TIMEOUT 1500
 
 #define PIRANHA_STATE_MOVING 100
 #define PIRANHA_STATE_STAYING 200
 #define PIRANHA_STATE_DIE 300
 
-#define ID_ANI_PIRANHA_TOP_LEFT 5010
-#define ID_ANI_PIRANHA_TOP_RIGHT 5011
-#define ID_ANI_PIRANHA_BOTTOM_LEFT 5012
-#define ID_ANI_PIRANHA_BOTTOM_RIGHT 5013
-#define ID_ANI_PIRANHA_DIE 5014
+#define ID_ANI_PIRANHA_LEFT 5010
+#define ID_ANI_PIRANHA_RIGHT 5011
+#define ID_ANI_PIRANHA_DIE 5012
 
-class CPiranha : public CGameObject
+class CFireball : public CGameObject
 {
 protected:
 	float ax;
@@ -47,6 +45,6 @@ protected:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public:
-	CPiranha(float x, float y);
+	CFireball(float x, float y);
 	virtual void SetState(int state);
 };
