@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "Mario.h"
 
 #define PIRANHA_GRAVITY 0.002f
 #define PIRANHA_MOVING_SPEED 0.03f
@@ -17,8 +18,9 @@
 #define PIRANHA_STATE_STAYING 200
 #define PIRANHA_STATE_DIE 300
 
-#define ID_ANI_PIRANHA_MOVING 5010
-#define ID_ANI_PIRANHA_DIE 5011
+#define ID_ANI_PIRANHA_LEFT 5010
+#define ID_ANI_PIRANHA_RIGHT 5011
+#define ID_ANI_PIRANHA_DIE 5012
 
 class CPiranha : public CGameObject
 {

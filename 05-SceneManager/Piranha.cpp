@@ -2,6 +2,9 @@
 #include "Mario.h"
 #include "Mushroom.h"
 #include "Pipe.h"
+#include "Collision.h"
+
+extern vector<LPGAMEOBJECT> objects;
 
 CPiranha::CPiranha(float x, float y) :CGameObject(x, y)
 {
@@ -58,6 +61,8 @@ void CPiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
+
+
 	if ((state == PIRANHA_STATE_DIE) && (GetTickCount64() - die_start > PIRANHA_DIE_TIMEOUT))
 	{
 		isDeleted = true;
@@ -81,7 +86,28 @@ void CPiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CPiranha::Render()
 {
-	int aniId = ID_ANI_PIRANHA_MOVING;
+	int aniId;
+	CMario* mario = dynamic_cast<CMario*>(objects[0]);
+
+	for (size_t i = 0; i < objects.size(); i++)
+	{
+		if (dynamic_cast<CMario*>(objects[i]))
+		{
+			mario = dynamic_cast<CMario*>(objects[i]);
+		}
+	} // look through objects to find Mario
+
+	float mx, my;
+	mario->GetPosition(mx, my);
+	DebugOut(L"%f", mx);
+	if (this->x > mx)
+	{
+		aniId = ID_ANI_PIRANHA_LEFT;
+	}
+	else
+	{
+		aniId = ID_ANI_PIRANHA_RIGHT;
+	}
 	if (state == PIRANHA_STATE_DIE)
 	{
 		aniId = ID_ANI_PIRANHA_DIE;

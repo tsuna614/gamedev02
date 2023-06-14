@@ -129,8 +129,12 @@ class CMario : public CGameObject
 	int GetAniIdSmall();
 
 public:
+	static CMario* __instance;
+
 	CMario(float x, float y) : CGameObject(x, y)
 	{
+		this->x = x;
+		this->y = y;
 		isSitting = false;
 		maxVx = 0.0f;
 		ax = 0.0f;

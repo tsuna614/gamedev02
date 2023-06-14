@@ -130,7 +130,6 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 		{
 			koopa->GetMarioPosition(this->x, this->y);
 			koopa->SetState(KOOPA_STATE_SHELL_MOVING);
-			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
 	else // collide with koopa by the side
