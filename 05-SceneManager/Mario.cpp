@@ -26,7 +26,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
 	// reset untouchable timer if untouchable time has passed
-	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
+	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
@@ -103,6 +103,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 				{
 					level = MARIO_LEVEL_SMALL;
 					StartUntouchable();
+					
 				}
 				else
 				{
@@ -142,6 +143,7 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 				{
 					level = MARIO_LEVEL_SMALL;
 					StartUntouchable();
+					
 				}
 				else
 				{
@@ -169,6 +171,7 @@ void CMario::OnCollisionWithPiranha(LPCOLLISIONEVENT e)
 			{
 				level = MARIO_LEVEL_SMALL;
 				StartUntouchable();
+				
 			}
 			else
 			{
@@ -197,6 +200,7 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 	{
 		this->y -= 10;
 		level = MARIO_LEVEL_BIG;
+		
 	}
 	e->obj->SetState(MUSHROOM_STATE_DIE);
 	//e->obj->Delete();
@@ -364,6 +368,67 @@ int CMario::GetAniIdBig()
 	return aniId;
 }
 
+//
+// Get animdation ID for tanooki Mario
+//
+int CMario::GetAniIdTanooki()
+{
+	int aniId = -1;
+	if (!isOnPlatform)
+	{
+		if (abs(ax) == MARIO_ACCEL_RUN_X)
+		{
+			if (nx >= 0)
+				aniId = ID_ANI_MARIO_TANOOKI_JUMP_RUN_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_TANOOKI_JUMP_RUN_LEFT;
+		}
+		else
+		{
+			if (nx >= 0)
+				aniId = ID_ANI_MARIO_TANOOKI_JUMP_WALK_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_TANOOKI_JUMP_WALK_LEFT;
+		}
+	}
+	else
+		if (isSitting)
+		{
+			if (nx > 0)
+				aniId = ID_ANI_MARIO_TANOOKI_SIT_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_TANOOKI_SIT_LEFT;
+		}
+		else
+			if (vx == 0)
+			{
+				if (nx > 0) aniId = ID_ANI_MARIO_TANOOKI_IDLE_RIGHT;
+				else aniId = ID_ANI_MARIO_TANOOKI_IDLE_LEFT;
+			}
+			else if (vx > 0)
+			{
+				if (ax < 0)
+					aniId = ID_ANI_MARIO_TANOOKI_BRACE_RIGHT;
+				else if (ax == MARIO_ACCEL_RUN_X)
+					aniId = ID_ANI_MARIO_TANOOKI_RUNNING_RIGHT;
+				else if (ax == MARIO_ACCEL_WALK_X)
+					aniId = ID_ANI_MARIO_TANOOKI_WALKING_RIGHT;
+			}
+			else // vx < 0
+			{
+				if (ax > 0)
+					aniId = ID_ANI_MARIO_TANOOKI_BRACE_LEFT;
+				else if (ax == -MARIO_ACCEL_RUN_X)
+					aniId = ID_ANI_MARIO_TANOOKI_RUNNING_LEFT;
+				else if (ax == -MARIO_ACCEL_WALK_X)
+					aniId = ID_ANI_MARIO_TANOOKI_WALKING_LEFT;
+			}
+
+	if (aniId == -1) aniId = ID_ANI_MARIO_TANOOKI_IDLE_RIGHT;
+
+	return aniId;
+}
+
 void CMario::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
@@ -375,6 +440,8 @@ void CMario::Render()
 		aniId = GetAniIdBig();
 	else if (level == MARIO_LEVEL_SMALL)
 		aniId = GetAniIdSmall();
+	else if (level == MARIO_LEVEL_TANOOKI)
+		aniId = GetAniIdTanooki();
 
 	animations->Get(aniId)->Render(x, y);
 
@@ -439,6 +506,13 @@ void CMario::SetState(int state)
 			else
 				vy = -MARIO_JUMP_SPEED_Y;
 		}
+		//if (level == MARIO_LEVEL_TANOOKI)
+		//{
+		//	if (!isOnPlatform)
+		//	{
+		//		ay = MARIO_GRAVITY - 0.0015;
+		//	}
+		//}
 		break;
 
 	case MARIO_STATE_RELEASE_JUMP:
@@ -481,7 +555,7 @@ void CMario::SetState(int state)
 
 void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
-	if (level==MARIO_LEVEL_BIG)
+	if (level == MARIO_LEVEL_BIG)
 	{
 		if (isSitting)
 		{
@@ -490,12 +564,36 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 			right = left + MARIO_BIG_SITTING_BBOX_WIDTH;
 			bottom = top + MARIO_BIG_SITTING_BBOX_HEIGHT;
 		}
-		else 
+		else
 		{
 			left = x - MARIO_BIG_BBOX_WIDTH/2;
 			top = y - MARIO_BIG_BBOX_HEIGHT/2;
 			right = left + MARIO_BIG_BBOX_WIDTH;
 			bottom = top + MARIO_BIG_BBOX_HEIGHT;
+		}
+	}
+	else if (level == MARIO_LEVEL_TANOOKI)
+	{
+		if (isSitting)
+		{
+			left = x - MARIO_BIG_SITTING_BBOX_WIDTH / 2;
+			top = y - MARIO_BIG_SITTING_BBOX_HEIGHT / 2;
+			right = left + MARIO_BIG_SITTING_BBOX_WIDTH;
+			bottom = top + MARIO_BIG_SITTING_BBOX_HEIGHT;
+		}
+		else if (nx < 0)
+		{
+			left = x - MARIO_TANOOKI_BBOX_WIDTH / 2 - 4;
+			top = y - MARIO_TANOOKI_BBOX_HEIGHT / 2;
+			right = left + MARIO_TANOOKI_BBOX_WIDTH + 4;
+			bottom = top + MARIO_TANOOKI_BBOX_HEIGHT;
+		}
+		else
+		{
+			left = x - MARIO_TANOOKI_BBOX_WIDTH / 2 - 4;
+			top = y - MARIO_TANOOKI_BBOX_HEIGHT / 2;
+			right = left + MARIO_TANOOKI_BBOX_WIDTH + 4;
+			bottom = top + MARIO_TANOOKI_BBOX_HEIGHT;
 		}
 	}
 	else

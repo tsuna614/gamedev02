@@ -200,5 +200,8 @@
     <ClInclude Include="Bush.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AliveGameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

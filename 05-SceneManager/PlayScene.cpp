@@ -326,12 +326,29 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		coObjects.push_back(objects[i]);
+		if (!dynamic_cast<CMario*>(objects[i]))
+		{
+			coObjects.push_back(objects[i]);
+		}
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		objects[i]->Update(dt, &coObjects);
+		//objects[i]->GetState() == 'Alive'
+
+		if (dynamic_cast<CAliveGameObject*>(objects[i]))
+		{
+			CAliveGameObject* isAliveObject = dynamic_cast<CAliveGameObject*>(objects[i]);
+			objects[i]->UpdateFreezeTime();
+			if (isAliveObject->freeze == 0)
+			{
+				objects[i]->Update(dt, &coObjects);
+			}
+		}
+		else
+		{
+			objects[i]->Update(dt, &coObjects);
+		}
 	}
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)

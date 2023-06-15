@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "AliveGameObject.h"
 
 #include "Animation.h"
 #include "Animations.h"
@@ -117,6 +118,11 @@
 #define MARIO_BIG_SITTING_BBOX_WIDTH  14
 #define MARIO_BIG_SITTING_BBOX_HEIGHT 16
 
+#define MARIO_TANOOKI_BBOX_WIDTH  14
+#define MARIO_TANOOKI_BBOX_HEIGHT 24
+#define MARIO_TANOOKI_SITTING_BBOX_WIDTH  14
+#define MARIO_TANOOKI_SITTING_BBOX_HEIGHT 16
+
 #define MARIO_SIT_HEIGHT_ADJUST ((MARIO_BIG_BBOX_HEIGHT-MARIO_BIG_SITTING_BBOX_HEIGHT)/2)
 
 #define MARIO_SMALL_BBOX_WIDTH  13
@@ -133,8 +139,12 @@ class CMario : public CGameObject
 	float ay;				// acceleration on y 
 
 	int level; 
+
 	int untouchable; 
 	ULONGLONG untouchable_start;
+
+	
+
 	BOOLEAN isOnPlatform;
 	int coin; 
 
@@ -149,6 +159,7 @@ class CMario : public CGameObject
 	void OnCollisionWithCoinBlock(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
 
+	int GetAniIdTanooki();
 	int GetAniIdBig();
 	int GetAniIdSmall();
 
@@ -162,9 +173,9 @@ public:
 		isSitting = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
-		ay = MARIO_GRAVITY; 
+		ay = MARIO_GRAVITY;
 
-		level = MARIO_LEVEL_BIG;
+		level = MARIO_LEVEL_TANOOKI;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;
@@ -186,6 +197,7 @@ public:
 
 	void SetLevel(int l);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
+	void StartLightGravity() {}
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };
