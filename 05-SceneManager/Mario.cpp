@@ -107,7 +107,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 			{
 				if (level > MARIO_LEVEL_SMALL)
 				{
-					level = MARIO_LEVEL_SMALL;
+					level -= 1;
 					StartUntouchable();
 					StartFreezing();
 					
@@ -187,7 +187,7 @@ void CMario::OnCollisionWithPiranha(LPCOLLISIONEVENT e)
 		{
 			if (level > MARIO_LEVEL_SMALL)
 			{
-				level = MARIO_LEVEL_SMALL;
+				level -= 1;
 				StartUntouchable();
 				StartFreezing();
 			}
@@ -240,7 +240,7 @@ void CMario::OnCollisionWithMysteryBlock(LPCOLLISIONEVENT e)
 		{
 			float x, y;
 			e->obj->GetPosition(x, y);
-			CGameObject* obj = new CMushroom(x, y - 15);
+			CGameObject* obj = new CMushroom(x, y);
 			objects.push_back(obj);
 			e->obj->SetState(MYSTERYBLOCK_STATE_MOVING_UP);
 		}

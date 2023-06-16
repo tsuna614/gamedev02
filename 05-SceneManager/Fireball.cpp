@@ -12,24 +12,24 @@ CFireball::CFireball(float x, float y) :CGameObject(x, y)
 	this->ay = 0;
 	this->isMovingUp = true;
 	die_start = -1;
-	SetState(PIRANHA_STATE_STAYING);
+	SetState(FIREBALL_STATE_STAYING);
 }
 
 void CFireball::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == PIRANHA_STATE_DIE)
+	if (state == FIREBALL_STATE_DIE)
 	{
-		left = x - PIRANHA_BBOX_WIDTH / 2;
-		top = y - PIRANHA_BBOX_HEIGHT_DIE / 2;
-		right = left + PIRANHA_BBOX_WIDTH;
-		bottom = top + PIRANHA_BBOX_HEIGHT_DIE;
+		left = x - FIREBALL_BBOX_WIDTH / 2;
+		top = y - FIREBALL_BBOX_HEIGHT_DIE / 2;
+		right = left + FIREBALL_BBOX_WIDTH;
+		bottom = top + FIREBALL_BBOX_HEIGHT_DIE;
 	}
 	else
 	{
-		left = x - PIRANHA_BBOX_WIDTH / 2;
-		top = y - PIRANHA_BBOX_HEIGHT / 2;
-		right = left + PIRANHA_BBOX_WIDTH;
-		bottom = top + PIRANHA_BBOX_HEIGHT;
+		left = x - FIREBALL_BBOX_WIDTH / 2;
+		top = y - FIREBALL_BBOX_HEIGHT / 2;
+		right = left + FIREBALL_BBOX_WIDTH;
+		bottom = top + FIREBALL_BBOX_HEIGHT;
 	}
 }
 
@@ -63,20 +63,20 @@ void CFireball::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 
 
-	if ((state == PIRANHA_STATE_DIE) && (GetTickCount64() - die_start > PIRANHA_DIE_TIMEOUT))
+	if ((state == FIREBALL_STATE_DIE) && (GetTickCount64() - die_start > FIREBALL_DIE_TIMEOUT))
 	{
 		isDeleted = true;
 		return;
 	}
 
-	if ((state == PIRANHA_STATE_MOVING) && GetTickCount64() - moving_start > PIRANHA_MOVING_TIMEOUT)
+	if ((state == FIREBALL_STATE_MOVING) && GetTickCount64() - moving_start > FIREBALL_MOVING_TIMEOUT)
 	{
-		this->SetState(PIRANHA_STATE_STAYING);
+		this->SetState(FIREBALL_STATE_STAYING);
 	}
 
-	if ((state == PIRANHA_STATE_STAYING) && GetTickCount64() - staying_start > PIRANHA_STAYING_TIMEOUT)
+	if ((state == FIREBALL_STATE_STAYING) && GetTickCount64() - staying_start > FIREBALL_STAYING_TIMEOUT)
 	{
-		this->SetState(PIRANHA_STATE_MOVING);
+		this->SetState(FIREBALL_STATE_MOVING);
 	}
 
 	CGameObject::Update(dt, coObjects);
@@ -102,15 +102,15 @@ void CFireball::Render()
 
 	if (this->x > mx)
 	{
-		aniId = ID_ANI_PIRANHA_LEFT;
+		aniId = ID_ANI_FIREBALL_LEFT;
 	}
 	else
 	{
-		aniId = ID_ANI_PIRANHA_RIGHT;
+		aniId = ID_ANI_FIREBALL_RIGHT;
 	}
-	if (state == PIRANHA_STATE_DIE)
+	if (state == FIREBALL_STATE_DIE)
 	{
-		aniId = ID_ANI_PIRANHA_DIE;
+		aniId = ID_ANI_FIREBALL_DIE;
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
@@ -122,26 +122,26 @@ void CFireball::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case PIRANHA_STATE_DIE:
+	case FIREBALL_STATE_DIE:
 		die_start = GetTickCount64();
-		y += (PIRANHA_BBOX_HEIGHT - PIRANHA_BBOX_HEIGHT_DIE) / 2;
+		y += (FIREBALL_BBOX_HEIGHT - FIREBALL_BBOX_HEIGHT_DIE) / 2;
 		vx = 0;
 		vy = 0;
 		ay = 0;
 		break;
-	case PIRANHA_STATE_MOVING:
+	case FIREBALL_STATE_MOVING:
 		moving_start = GetTickCount64();
 		if (isMovingUp)
 		{
-			vy = -PIRANHA_MOVING_SPEED;
+			vy = -FIREBALL_MOVING_SPEED;
 		}
 		else
 		{
-			vy = PIRANHA_MOVING_SPEED;
+			vy = FIREBALL_MOVING_SPEED;
 		}
 		isMovingUp = !isMovingUp;
 		break;
-	case PIRANHA_STATE_STAYING:
+	case FIREBALL_STATE_STAYING:
 		staying_start = GetTickCount64();
 		vy = 0;
 		break;
