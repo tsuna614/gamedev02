@@ -3,6 +3,7 @@
 #include "Mushroom.h"
 #include "Pipe.h"
 #include "Brick.h"
+#include "Goomba.h"
 
 extern vector<LPGAMEOBJECT> objects;
 
@@ -48,12 +49,20 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		vx = -vx;
 	}
+	if (dynamic_cast<CGoomba*>(e->obj))
+	{
+		CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+		if (GetState() == KOOPA_STATE_SHELL_MOVING)
+		{
+			goomba->SetState(GOOMBA_STATE_DIE);
+		}
+		else return;
+	}
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CKoopa*>(e->obj)) return;
 	if (dynamic_cast<CMario*>(e->obj)) return;
 	if (dynamic_cast<CMushroom*>(e->obj)) return;
-
-	if (dynamic_cast<CMysteryBlock*>(e->obj))
+	if (dynamic_cast<CMysteryBlock*>(e->obj) || dynamic_cast<CCoinBlock*>(e->obj))
 	{
 		if (e->nx != 0)
 		{
@@ -65,6 +74,13 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 				objects.push_back(obj);
 				e->obj->SetState(MYSTERYBLOCK_STATE_MOVING_UP);
 			}
+		}
+	}
+	if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CGlassBrick*>(e->obj))
+	{
+		if (GetState() == KOOPA_STATE_SHELL_MOVING && e->ny == 0)
+		{
+			e->obj->Delete();
 		}
 	}
 

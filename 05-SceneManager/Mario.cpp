@@ -33,7 +33,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable = 0;
 	}
 
-	if (GetTickCount64() - low_gravity_start > MARIO_LOW_GRAVITY_TIME)
+	if (GetTickCount64() - low_gravity_start > MARIO_LOW_GRAVITY_TIME && this->isPressingA != 1)
 	{
 		ay = MARIO_GRAVITY;
 		low_gravity_start = 0;
@@ -541,9 +541,19 @@ void CMario::SetState(int state)
 		{
 			if (!isOnPlatform)
 			{
-				vy = 0;
-				SetState(MARIO_STATE_GLIDE);
-				StartLowGravity();
+				if (isPressingA == 1)
+				{
+					vy = -0.2;
+					ay = 0;
+					//SetState(MARIO_STATE_GLIDE);
+					//StartLowGravity();
+				}
+				else
+				{
+					vy = 0;
+					SetState(MARIO_STATE_GLIDE);
+					StartLowGravity();
+				}
 			}
 		}
 		break;

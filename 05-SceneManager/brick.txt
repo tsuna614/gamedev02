@@ -4,6 +4,9 @@
 # brick
 20000	372	153	387	168	20
 
+# striped brick
+20016	1504	336	1519	351	40
+
 # glassbrick 
 20001	300	135	315	150	20
 20002	318	135	333	150	20
@@ -39,5 +42,8 @@
 
 # mysteryblock activated
 10003	20010	10
+
+# striped brick
+10004	20016	1000
 
 ### sprites id doesnt matter, animations id does ###

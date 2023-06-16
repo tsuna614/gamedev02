@@ -4,7 +4,7 @@
 #include "Animation.h"
 #include "Animations.h"
 
-#define ID_ANI_HILL 11000
+#define ID_ANI_HILL 11234
 
 #define HILL_WIDTH 127
 #define HILL_BBOX_WIDTH 127

@@ -18,6 +18,7 @@
 
 #define MARIO_GRAVITY			0.002f
 #define MARIO_LOW_GRAVITY			0.0005f
+#define MARIO_REVERSED_GRAVITY			0.0005f
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.4f
 
@@ -206,7 +207,20 @@ public:
 
 	void SetLevel(int l);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
-	void StartLowGravity() { ay = MARIO_LOW_GRAVITY; low_gravity_start = GetTickCount64(); }
+	void StartLowGravity() { 
+		if (isPressingA == 0)
+		{
+			ay = MARIO_LOW_GRAVITY; 
+		}
+		else
+		{
+			ay = -MARIO_REVERSED_GRAVITY;
+		}
+		low_gravity_start = GetTickCount64(); 
+	}
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+
+	int Getnx() { return this->nx; }
+	int GetLevel() { return this->level; }
 };

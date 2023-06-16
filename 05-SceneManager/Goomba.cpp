@@ -2,6 +2,7 @@
 #include "Mario.h"
 #include "Mushroom.h"
 #include "Pipe.h"
+#include "Brick.h"
 
 CGoomba::CGoomba(float x, float y) : CGameObject(x, y)
 {
@@ -39,6 +40,10 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (dynamic_cast<CInvisibleBarrier*>(e->obj))
+	{
+		vx = -vx;
+	}
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CGoomba*>(e->obj)) return; 
 	if (dynamic_cast<CMario*>(e->obj)) return;

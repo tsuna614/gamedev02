@@ -6,14 +6,32 @@
 #include "Mario.h"
 #include "PlayScene.h"
 
+#include "Tail.h"
+
+extern vector<LPGAMEOBJECT> objects;
+
 void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 	CMario* mario = (CMario *)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer(); 
+	CGameObject* tail = new CTail(-100, -100);
 
 	switch (KeyCode)
 	{
 	case DIK_A:
+		float mx, my;
+		mario->GetPosition(mx, my);
+		//tail->SetPosition(mx, my);
+		if (mario->GetLevel() == MARIO_LEVEL_TANOOKI)
+			if (mario->Getnx() > 0)
+			{
+				tail->SetPosition(mx, my + 5);
+			}
+			else
+			{
+				tail->SetPosition(mx, my + 5);
+			}
+			objects.push_back(tail);
 		mario->isPressingA = 1;
 		break;
 	case DIK_DOWN:
