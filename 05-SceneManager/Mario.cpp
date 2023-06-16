@@ -13,6 +13,7 @@
 #include "Pipe.h"
 #include "Piranha.h"
 #include "Koopa.h"
+#include "Fireball.h"
 
 #include "Collision.h"
 
@@ -84,6 +85,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithCoinBlock(e);
 	else if (dynamic_cast<CKoopa*>(e->obj))
 		OnCollisionWithKoopa(e);
+	else if (dynamic_cast<CFireball*>(e->obj))
+		OnCollisionWithFireball(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -197,6 +200,16 @@ void CMario::OnCollisionWithPiranha(LPCOLLISIONEVENT e)
 				SetState(MARIO_STATE_DIE);
 			}
 		}
+	}
+}
+
+void CMario::OnCollisionWithFireball(LPCOLLISIONEVENT e)
+{
+	if (level > MARIO_LEVEL_SMALL && untouchable == 0)
+	{
+		level -= 1;
+		StartUntouchable();
+		StartFreezing();
 	}
 }
 

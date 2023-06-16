@@ -8,29 +8,20 @@ extern vector<LPGAMEOBJECT> objects;
 
 CFireball::CFireball(float x, float y) :CGameObject(x, y)
 {
+	this->vx = 0;
+	this->vy = 0;
 	this->ax = 0;
 	this->ay = 0;
-	this->isMovingUp = true;
-	die_start = -1;
-	SetState(FIREBALL_STATE_STAYING);
+	this->isFreezable = 1;
+	SetState(FIREBALL_STATE_MOVING);
 }
 
 void CFireball::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == FIREBALL_STATE_DIE)
-	{
-		left = x - FIREBALL_BBOX_WIDTH / 2;
-		top = y - FIREBALL_BBOX_HEIGHT_DIE / 2;
-		right = left + FIREBALL_BBOX_WIDTH;
-		bottom = top + FIREBALL_BBOX_HEIGHT_DIE;
-	}
-	else
-	{
-		left = x - FIREBALL_BBOX_WIDTH / 2;
-		top = y - FIREBALL_BBOX_HEIGHT / 2;
-		right = left + FIREBALL_BBOX_WIDTH;
-		bottom = top + FIREBALL_BBOX_HEIGHT;
-	}
+	left = x - FIREBALL_BBOX_WIDTH / 2;
+	top = y - FIREBALL_BBOX_HEIGHT / 2;
+	right = left + FIREBALL_BBOX_WIDTH;
+	bottom = top + FIREBALL_BBOX_HEIGHT;
 }
 
 void CFireball::OnNoCollision(DWORD dt)
@@ -62,23 +53,6 @@ void CFireball::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vx += ax * dt;
 
 
-
-	if ((state == FIREBALL_STATE_DIE) && (GetTickCount64() - die_start > FIREBALL_DIE_TIMEOUT))
-	{
-		isDeleted = true;
-		return;
-	}
-
-	if ((state == FIREBALL_STATE_MOVING) && GetTickCount64() - moving_start > FIREBALL_MOVING_TIMEOUT)
-	{
-		this->SetState(FIREBALL_STATE_STAYING);
-	}
-
-	if ((state == FIREBALL_STATE_STAYING) && GetTickCount64() - staying_start > FIREBALL_STAYING_TIMEOUT)
-	{
-		this->SetState(FIREBALL_STATE_MOVING);
-	}
-
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -86,32 +60,7 @@ void CFireball::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CFireball::Render()
 {
-	int aniId;
-	CMario* mario = dynamic_cast<CMario*>(objects[0]);
-
-	for (size_t i = 0; i < objects.size(); i++)
-	{
-		if (dynamic_cast<CMario*>(objects[i]))
-		{
-			mario = dynamic_cast<CMario*>(objects[i]);
-		}
-	} // look through objects to find Mario
-
-	float mx, my;
-	mario->GetPosition(mx, my);
-
-	if (this->x > mx)
-	{
-		aniId = ID_ANI_FIREBALL_LEFT;
-	}
-	else
-	{
-		aniId = ID_ANI_FIREBALL_RIGHT;
-	}
-	if (state == FIREBALL_STATE_DIE)
-	{
-		aniId = ID_ANI_FIREBALL_DIE;
-	}
+	int aniId = ID_ANI_FIREBALL;
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
@@ -122,28 +71,46 @@ void CFireball::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case FIREBALL_STATE_DIE:
-		die_start = GetTickCount64();
-		y += (FIREBALL_BBOX_HEIGHT - FIREBALL_BBOX_HEIGHT_DIE) / 2;
-		vx = 0;
-		vy = 0;
-		ay = 0;
-		break;
 	case FIREBALL_STATE_MOVING:
-		moving_start = GetTickCount64();
-		if (isMovingUp)
 		{
-			vy = -FIREBALL_MOVING_SPEED;
+			CMario* mario = dynamic_cast<CMario*>(objects[0]);
+			for (size_t i = 0; i < objects.size(); i++)
+			{
+				if (dynamic_cast<CMario*>(objects[i]))
+				{
+					mario = dynamic_cast<CMario*>(objects[i]);
+				}
+			}
+			float mx, my;
+			mario->GetPosition(mx, my);
+
+			if (x > mx)
+			{
+				if (y > my)
+				{
+					vx = -FIREBALL_X_SPEED;
+					vy = -FIREBALL_Y_SPEED;
+				}
+				else
+				{
+					vx = -FIREBALL_X_SPEED;
+					vy = FIREBALL_Y_SPEED;
+				}
+			}
+			else
+			{
+				if (y > my)
+				{
+					vx = FIREBALL_X_SPEED;
+					vy = -FIREBALL_Y_SPEED;
+				}
+				else
+				{
+					vx = FIREBALL_X_SPEED;
+					vy = FIREBALL_Y_SPEED;
+				}
+			}
+			break;
 		}
-		else
-		{
-			vy = FIREBALL_MOVING_SPEED;
-		}
-		isMovingUp = !isMovingUp;
-		break;
-	case FIREBALL_STATE_STAYING:
-		staying_start = GetTickCount64();
-		vy = 0;
-		break;
 	}
 }

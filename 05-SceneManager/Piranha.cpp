@@ -3,6 +3,7 @@
 #include "Mushroom.h"
 #include "Pipe.h"
 #include "Collision.h"
+#include "Fireball.h"
 
 extern vector<LPGAMEOBJECT> objects;
 
@@ -154,6 +155,8 @@ void CPiranha::SetState(int state)
 		}
 		else
 		{
+			CGameObject* obj = new CFireball(x, y);
+			objects.push_back(obj);
 			vy = PIRANHA_MOVING_SPEED;
 		}
 		isMovingUp = !isMovingUp;
