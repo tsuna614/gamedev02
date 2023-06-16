@@ -170,6 +170,8 @@ class CMario : public CAliveGameObject
 public:
 	static CMario* __instance;
 
+	int isPressingA = 0;
+
 	CMario(float x, float y) : CAliveGameObject(x, y)
 	{
 		this->x = x;

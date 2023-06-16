@@ -2,6 +2,9 @@
 #include "Mario.h"
 #include "Mushroom.h"
 #include "Pipe.h"
+#include "Brick.h"
+
+extern vector<LPGAMEOBJECT> objects;
 
 CKoopa::CKoopa(float x, float y) : CGameObject(x, y)
 {
@@ -45,6 +48,21 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CKoopa*>(e->obj)) return;
 	if (dynamic_cast<CMario*>(e->obj)) return;
 	if (dynamic_cast<CMushroom*>(e->obj)) return;
+
+	if (dynamic_cast<CMysteryBlock*>(e->obj))
+	{
+		if (e->nx != 0)
+		{
+			if (e->obj->GetState() == MYSTERYBLOCK_STATE_NOT_ACTIVATED)
+			{
+				float x, y;
+				e->obj->GetPosition(x, y);
+				CGameObject* obj = new CMushroom(x, y);
+				objects.push_back(obj);
+				e->obj->SetState(MYSTERYBLOCK_STATE_MOVING_UP);
+			}
+		}
+	}
 
 	if (e->ny != 0)
 	{

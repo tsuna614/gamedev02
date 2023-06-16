@@ -13,6 +13,9 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 
 	switch (KeyCode)
 	{
+	case DIK_A:
+		mario->isPressingA = 1;
+		break;
 	case DIK_DOWN:
 		if (mario->GetState() != MARIO_STATE_IDLE)
 		{
@@ -48,6 +51,9 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	switch (KeyCode)
 	{
+	case DIK_A:
+		mario->isPressingA = 0;
+		break;
 	case DIK_S:
 		mario->SetState(MARIO_STATE_RELEASE_JUMP);
 		break;
