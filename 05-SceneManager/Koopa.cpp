@@ -44,6 +44,10 @@ void CKoopa::OnNoCollision(DWORD dt)
 
 void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (dynamic_cast<CInvisibleBarrier*>(e->obj) && this->GetState() == KOOPA_STATE_WALKING)
+	{
+		vx = -vx;
+	}
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CKoopa*>(e->obj)) return;
 	if (dynamic_cast<CMario*>(e->obj)) return;

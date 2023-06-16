@@ -29,6 +29,17 @@ public:
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 };
 
+class CInvisibleBarrier : public CGameObject {
+public:
+	CInvisibleBarrier(float x, float y) : CGameObject(x, y) {}
+	void Render();
+	void Update(DWORD dt) {}
+	void GetBoundingBox(float& l, float& t, float& r, float& b);
+
+	virtual int IsCollidable() { return 0; }
+	virtual int IsBlocking() { return 0; }
+};
+
 class CGlassBrick : public CGameObject {
 public:
 	CGlassBrick(float x, float y) : CGameObject(x, y) {}
