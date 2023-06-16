@@ -32,6 +32,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable = 0;
 	}
 
+	if (GetTickCount64() - low_gravity_start > MARIO_LOW_GRAVITY_TIME)
+	{
+		ay = MARIO_GRAVITY;
+		low_gravity_start = 0;
+	}
+
 	isOnPlatform = false;
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -103,6 +109,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 				{
 					level = MARIO_LEVEL_SMALL;
 					StartUntouchable();
+					StartFreezing();
 					
 				}
 				else
@@ -141,9 +148,9 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 			{
 				if (level > MARIO_LEVEL_SMALL)
 				{
-					level = MARIO_LEVEL_SMALL;
+					level -= 1;
 					StartUntouchable();
-					
+					StartFreezing();
 				}
 				else
 				{
@@ -153,8 +160,19 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 			}
 			else if (koopa->GetState() == KOOPA_STATE_SHELL)
 			{
-				koopa->GetMarioPosition(this->x, this->y);
-				koopa->SetState(KOOPA_STATE_SHELL_MOVING);
+				if (this->GetState() == MARIO_STATE_RUNNING_LEFT)
+				{
+					koopa->SetPosition(this->x - 15, this->y);
+				}
+				else if (this->GetState() == MARIO_STATE_RUNNING_RIGHT)
+				{
+					koopa->SetPosition(this->x + 15, this->y);
+				}
+				else
+				{
+					koopa->GetMarioPosition(this->x, this->y);
+					koopa->SetState(KOOPA_STATE_SHELL_MOVING);
+				}
 			}
 		}
 	}
@@ -171,7 +189,7 @@ void CMario::OnCollisionWithPiranha(LPCOLLISIONEVENT e)
 			{
 				level = MARIO_LEVEL_SMALL;
 				StartUntouchable();
-				
+				StartFreezing();
 			}
 			else
 			{
@@ -200,7 +218,7 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 	{
 		this->y -= 10;
 		level = MARIO_LEVEL_BIG;
-		
+		StartFreezing();
 	}
 	e->obj->SetState(MUSHROOM_STATE_DIE);
 	//e->obj->Delete();
@@ -218,13 +236,13 @@ void CMario::OnCollisionWithMysteryBlock(LPCOLLISIONEVENT e)
 {
 	if (e->ny > 0)
 	{
-		if (e->obj->GetState() != MYSTERYBLOCK_STATE_ACTIVATED)
+		if (e->obj->GetState() == MYSTERYBLOCK_STATE_NOT_ACTIVATED)
 		{
 			float x, y;
 			e->obj->GetPosition(x, y);
 			CGameObject* obj = new CMushroom(x, y - 15);
 			objects.push_back(obj);
-			e->obj->SetState(MYSTERYBLOCK_STATE_ACTIVATED);
+			e->obj->SetState(MYSTERYBLOCK_STATE_MOVING_UP);
 		}
 	}
 }
@@ -233,14 +251,14 @@ void CMario::OnCollisionWithCoinBlock(LPCOLLISIONEVENT e)
 {
 	if (e->ny > 0)
 	{
-		if (e->obj->GetState() != MYSTERYBLOCK_STATE_ACTIVATED)
+		if (e->obj->GetState() == MYSTERYBLOCK_STATE_NOT_ACTIVATED)
 		{
 			//float x, y;
 			//e->obj->GetPosition(x, y);
 			//CGameObject* obj = new CMushroom(x, y - 15);
 			//objects.push_back(obj);
 			coin++;
-			e->obj->SetState(MYSTERYBLOCK_STATE_ACTIVATED);
+			e->obj->SetState(MYSTERYBLOCK_STATE_MOVING_UP);
 		}
 	}
 }
@@ -506,13 +524,15 @@ void CMario::SetState(int state)
 			else
 				vy = -MARIO_JUMP_SPEED_Y;
 		}
-		//if (level == MARIO_LEVEL_TANOOKI)
-		//{
-		//	if (!isOnPlatform)
-		//	{
-		//		ay = MARIO_GRAVITY - 0.0015;
-		//	}
-		//}
+		if (level == MARIO_LEVEL_TANOOKI)
+		{
+			if (!isOnPlatform)
+			{
+				vy = 0;
+				SetState(MARIO_STATE_GLIDE);
+				StartLowGravity();
+			}
+		}
 		break;
 
 	case MARIO_STATE_RELEASE_JUMP:

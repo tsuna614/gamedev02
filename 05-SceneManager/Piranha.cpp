@@ -13,6 +13,8 @@ CPiranha::CPiranha(float x, float y) :CGameObject(x, y)
 	this->isMovingUp = true;
 	die_start = -1;
 	SetState(PIRANHA_STATE_STAYING);
+
+	//this->isFreezable = 1;
 }
 
 void CPiranha::GetBoundingBox(float& left, float& top, float& right, float& bottom)

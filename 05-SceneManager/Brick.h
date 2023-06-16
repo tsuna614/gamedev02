@@ -4,6 +4,8 @@
 #include "Animation.h"
 #include "Animations.h"
 
+#define BRICK_MOVING_SPEED 0.1f
+
 #define ID_ANI_BRICK 10000
 
 #define ID_ANI_GLASSBRICK 10001
@@ -11,6 +13,9 @@
 #define ID_ANI_MYSTERYBLOCK 10002
 #define ID_ANI_MYSTERYBLOCK_ACTIVATED 10003
 #define MYSTERYBLOCK_STATE_ACTIVATED 100
+#define MYSTERYBLOCK_STATE_MOVING_UP 200
+#define MYSTERYBLOCK_STATE_MOVING_DOWN 300
+#define MYSTERYBLOCK_STATE_NOT_ACTIVATED 400
 
 #define BRICK_WIDTH 16
 #define BRICK_BBOX_WIDTH 16
@@ -33,47 +38,33 @@ public:
 };
 
 class CMysteryBlock : public CGameObject {
+	ULONGLONG timer_start;
 public:
-	CMysteryBlock(float x, float y) : CGameObject(x, y) {}
+	CMysteryBlock(float x, float y) : CGameObject(x, y) 
+	{
+		timer_start = -1;
+		this->SetState(MYSTERYBLOCK_STATE_NOT_ACTIVATED);
+	}
 	void Render();
-	void Update(DWORD dt) {}
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	//virtual void SetState(int state);
+	virtual void SetState(int state);
+	void StartTimer() { timer_start = GetTickCount64(); }
 };
 
 class CCoinBlock : public CGameObject {
-//protected:
-//	float ax;
-//	float ay;
-//
-//	bool isMovingUp;
-//
-//	ULONGLONG die_start;
-//	ULONGLONG moving_start;
-//	ULONGLONG staying_start;
-//
-//	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-//	virtual void Render();
-//
-//	//virtual int IsCollidable() { return 0; };
-//	//virtual int IsBlocking() { return 0; }
+	ULONGLONG timer_start;
 public:
-	CCoinBlock(float x, float y) : CGameObject(x, y) 
+	CCoinBlock(float x, float y) : CGameObject(x, y)
 	{
-		//this->ax = 0;
-		//this->ay = 0;
-		//this->isMovingUp = false;
+		timer_start = -1;
+		this->SetState(MYSTERYBLOCK_STATE_NOT_ACTIVATED);
 	}
-
 	void Render();
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
-
-	//void Update(DWORD dt)
-	//{
-
-	//}
-	//virtual void SetState(int state)
-	//{
-
-	//}
+	//virtual void SetState(int state);
+	virtual void SetState(int state);
+	void StartTimer() { timer_start = GetTickCount64(); }
 };

@@ -324,31 +324,51 @@ void CPlayScene::Update(DWORD dt)
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
 	vector<LPGAMEOBJECT> coObjects;
+
+	int freezeState = 0;
+
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		if (!dynamic_cast<CMario*>(objects[i]))
 		{
 			coObjects.push_back(objects[i]);
 		}
-	}
-
-	for (size_t i = 0; i < objects.size(); i++)
-	{
-		//objects[i]->GetState() == 'Alive'
 
 		if (dynamic_cast<CAliveGameObject*>(objects[i]))
 		{
 			CAliveGameObject* isAliveObject = dynamic_cast<CAliveGameObject*>(objects[i]);
 			objects[i]->UpdateFreezeTime();
-			if (isAliveObject->freeze == 0)
+			freezeState = isAliveObject->freeze;
+		}
+	}
+
+	for (size_t i = 0; i < objects.size(); i++)
+	{
+		if (objects[i]->GetIsFreezable() == 0)
+		{
+			objects[i]->Update(dt, &coObjects);
+		}
+		else
+		{
+			if (freezeState == 0)
 			{
 				objects[i]->Update(dt, &coObjects);
 			}
 		}
-		else
-		{
-			objects[i]->Update(dt, &coObjects);
-		}
+
+		//if (dynamic_cast<CAliveGameObject*>(objects[i]))
+		//{
+		//	CAliveGameObject* isAliveObject = dynamic_cast<CAliveGameObject*>(objects[i]);
+		//	objects[i]->UpdateFreezeTime();
+		//	if (isAliveObject->freeze == 0)
+		//	{
+		//		objects[i]->Update(dt, &coObjects);
+		//	}
+		//}
+		//else
+		//{
+		//	objects[i]->Update(dt, &coObjects);
+		//}
 	}
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)

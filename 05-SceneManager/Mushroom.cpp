@@ -8,6 +8,8 @@ CMushroom::CMushroom(float x, float y) :CGameObject(x, y)
 	this->ay = MUSHROOM_GRAVITY;
 	die_start = -1;
 	SetState(MUSHROOM_STATE_WALKING);
+
+	this->isFreezable = 1;
 }
 
 void CMushroom::GetBoundingBox(float& left, float& top, float& right, float& bottom)

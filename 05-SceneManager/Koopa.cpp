@@ -3,13 +3,14 @@
 #include "Mushroom.h"
 #include "Pipe.h"
 
-CKoopa::CKoopa(float x, float y) :CGameObject(x, y)
+CKoopa::CKoopa(float x, float y) : CGameObject(x, y)
 {
 	this->ax = 0;
 	this->ay = KOOPA_GRAVITY;
 	this->px = -1;
 	this->mx = -1;
 	this->my = -1;
+	this->isFreezable = 1;
 	die_start = -1;
 	SetState(KOOPA_STATE_WALKING);
 }

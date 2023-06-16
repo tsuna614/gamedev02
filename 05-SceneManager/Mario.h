@@ -17,6 +17,7 @@
 #define MARIO_JUMP_RUN_SPEED_Y	0.6f
 
 #define MARIO_GRAVITY			0.002f
+#define MARIO_LOW_GRAVITY			0.0005f
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.4f
 
@@ -27,6 +28,7 @@
 
 #define MARIO_STATE_JUMP			300
 #define MARIO_STATE_RELEASE_JUMP    301
+#define MARIO_STATE_GLIDE			302
 
 #define MARIO_STATE_RUNNING_RIGHT	400
 #define MARIO_STATE_RUNNING_LEFT	500
@@ -130,8 +132,9 @@
 
 
 #define MARIO_UNTOUCHABLE_TIME 2500
+#define MARIO_LOW_GRAVITY_TIME 400
 
-class CMario : public CGameObject
+class CMario : public CAliveGameObject
 {
 	BOOLEAN isSitting;
 	float maxVx;
@@ -143,7 +146,7 @@ class CMario : public CGameObject
 	int untouchable; 
 	ULONGLONG untouchable_start;
 
-	
+	ULONGLONG low_gravity_start;
 
 	BOOLEAN isOnPlatform;
 	int coin; 
@@ -166,7 +169,7 @@ class CMario : public CGameObject
 public:
 	static CMario* __instance;
 
-	CMario(float x, float y) : CGameObject(x, y)
+	CMario(float x, float y) : CAliveGameObject(x, y)
 	{
 		this->x = x;
 		this->y = y;
@@ -178,8 +181,11 @@ public:
 		level = MARIO_LEVEL_TANOOKI;
 		untouchable = 0;
 		untouchable_start = -1;
+		low_gravity_start = -1;
 		isOnPlatform = false;
 		coin = 0;
+
+		this->isFreezable = 1;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -197,7 +203,7 @@ public:
 
 	void SetLevel(int l);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
-	void StartLightGravity() {}
+	void StartLowGravity() { ay = MARIO_LOW_GRAVITY; low_gravity_start = GetTickCount64(); }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };

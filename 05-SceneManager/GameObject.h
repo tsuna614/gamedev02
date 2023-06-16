@@ -30,6 +30,8 @@ protected:
 
 	bool isDeleted; 
 
+	int isFreezable = 0; // every object if you want to make freeze when mario taking damage initiate this by 1
+
 public: 
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
@@ -39,6 +41,8 @@ public:
 	int GetState() { return this->state; }
 	virtual void Delete() { isDeleted = true;  }
 	bool IsDeleted() { return isDeleted; }
+
+	int GetIsFreezable() { return this->isFreezable; }
 
 	void RenderBoundingBox();
 

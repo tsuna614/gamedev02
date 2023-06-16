@@ -56,6 +56,39 @@ void CMysteryBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
 	b = t + BRICK_BBOX_HEIGHT;
 }
 
+void CMysteryBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	x += vx * dt;
+	y += vy * dt;
+
+	if (GetTickCount64() - timer_start >= 100 && this->GetState() == MYSTERYBLOCK_STATE_MOVING_UP)
+	{
+		this->SetState(MYSTERYBLOCK_STATE_MOVING_DOWN);
+	}
+	else if (GetTickCount64() - timer_start >= 120 && this->GetState() == MYSTERYBLOCK_STATE_MOVING_DOWN)
+	{
+		vy = 0;
+		this->SetState(MYSTERYBLOCK_STATE_ACTIVATED);
+	}
+
+}
+
+void CMysteryBlock::SetState(int state)
+{
+	CGameObject::SetState(state);
+	switch (state)
+	{
+	case MYSTERYBLOCK_STATE_MOVING_UP:
+		vy = -BRICK_MOVING_SPEED;
+		StartTimer();
+		break;
+	case MYSTERYBLOCK_STATE_MOVING_DOWN:
+		vy = BRICK_MOVING_SPEED;
+		StartTimer();
+		break;
+	}
+}
+
 /***************** CLASS COIN BLOCK *******************/
 
 void CCoinBlock::Render()
@@ -78,11 +111,35 @@ void CCoinBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
 	b = t + BRICK_BBOX_HEIGHT;
 }
 
-//void CMysteryBlock::SetState(int state)
-//{
-//	switch (state)
-//	{
-//	case MYSTERYBLOCK_STATE_ACTIVATED:
-//
-//	}
-//}
+void CCoinBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	x += vx * dt;
+	y += vy * dt;
+
+	if (GetTickCount64() - timer_start >= 100 && this->GetState() == MYSTERYBLOCK_STATE_MOVING_UP)
+	{
+		this->SetState(MYSTERYBLOCK_STATE_MOVING_DOWN);
+	}
+	else if (GetTickCount64() - timer_start >= 120 && this->GetState() == MYSTERYBLOCK_STATE_MOVING_DOWN)
+	{
+		vy = 0;
+		this->SetState(MYSTERYBLOCK_STATE_ACTIVATED);
+	}
+
+}
+
+void CCoinBlock::SetState(int state)
+{
+	CGameObject::SetState(state);
+	switch (state)
+	{
+	case MYSTERYBLOCK_STATE_MOVING_UP:
+		vy = -BRICK_MOVING_SPEED;
+		StartTimer();
+		break;
+	case MYSTERYBLOCK_STATE_MOVING_DOWN:
+		vy = BRICK_MOVING_SPEED;
+		StartTimer();
+		break;
+	}
+}
