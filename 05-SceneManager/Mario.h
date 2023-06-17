@@ -157,6 +157,7 @@ class CMario : public CAliveGameObject
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 
 	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
+	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithMysteryBlock(LPCOLLISIONEVENT e);
 	void OnCollisionWithPiranha(LPCOLLISIONEVENT e);

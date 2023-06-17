@@ -19,6 +19,9 @@
 #define MUSHROOM_STATE_MOVING_UP 300
 
 #define ID_ANI_MUSHROOM 6000
+#define ID_ANI_LEAF 6001
+
+/************* MUSHROOM *****************/
 
 class CMushroom : public CGameObject
 {
@@ -41,6 +44,33 @@ protected:
 
 public:
 	CMushroom(float x, float y);
+	virtual void SetState(int state);
+	void StartTimer() { timer_start = GetTickCount64(); }
+};
+
+/************* LEAF *****************/
+
+class CLeaf : public CGameObject
+{
+protected:
+	float ax;
+	float ay;
+
+	ULONGLONG die_start;
+	ULONGLONG timer_start;
+
+	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	virtual void Render();
+
+	virtual int IsCollidable() { return 1; };
+	virtual int IsBlocking() { return 0; }
+	virtual void OnNoCollision(DWORD dt);
+
+	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
+
+public:
+	CLeaf(float x, float y);
 	virtual void SetState(int state);
 	void StartTimer() { timer_start = GetTickCount64(); }
 };

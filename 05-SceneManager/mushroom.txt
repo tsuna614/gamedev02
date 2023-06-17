@@ -2,7 +2,12 @@
 [SPRITES]
 #WALK
 33000	300	189	315	204	20
+33001	300	208	315	221	20
+
+### LEAF ###
+
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 6000	33000	100
+6001	33001	100

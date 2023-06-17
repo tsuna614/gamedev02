@@ -75,6 +75,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
 		OnCollisionWithMushroom(e);
+	else if (dynamic_cast<CLeaf*>(e->obj))
+		OnCollisionWithLeaf(e);
 	else if (dynamic_cast<CGlassBrick*>(e->obj) || dynamic_cast<CBrick*>(e->obj))
 		OnCollisionWithBrick(e);
 	else if (dynamic_cast<CMysteryBlock*>(e->obj))
@@ -237,6 +239,23 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 	//e->obj->Delete();
 }
 
+void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
+{
+	if (level < MARIO_LEVEL_BIG)
+	{
+		this->y -= 10;
+		level = MARIO_LEVEL_BIG;
+		StartFreezing();
+	}
+	else if (level == MARIO_LEVEL_BIG)
+	{
+		level = MARIO_LEVEL_TANOOKI;
+		StartFreezing();
+	}
+	e->obj->SetState(MUSHROOM_STATE_DIE);
+	//e->obj->Delete();
+}
+
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 {
 	if (e->ny > 0 && level > MARIO_LEVEL_SMALL)
@@ -253,8 +272,16 @@ void CMario::OnCollisionWithMysteryBlock(LPCOLLISIONEVENT e)
 		{
 			float x, y;
 			e->obj->GetPosition(x, y);
-			CGameObject* obj = new CMushroom(x, y);
-			objects.push_back(obj);
+			if (level == MARIO_LEVEL_SMALL)
+			{
+				CGameObject* obj = new CMushroom(x, y);
+				objects.push_back(obj);
+			}
+			else if (level == MARIO_LEVEL_BIG || level == MARIO_LEVEL_TANOOKI)
+			{
+				CGameObject* obj = new CLeaf(x, y);
+				objects.push_back(obj);
+			}
 			e->obj->SetState(MYSTERYBLOCK_STATE_MOVING_UP);
 		}
 	}

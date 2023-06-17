@@ -4,6 +4,7 @@
 #include "Pipe.h"
 #include "Brick.h"
 #include "Goomba.h"
+#include "PlayScene.h"
 
 extern vector<LPGAMEOBJECT> objects;
 
@@ -70,8 +71,17 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 			{
 				float x, y;
 				e->obj->GetPosition(x, y);
-				CGameObject* obj = new CMushroom(x, y);
-				objects.push_back(obj);
+				CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+				if (mario->GetLevel() == MARIO_LEVEL_SMALL)
+				{
+					CGameObject* obj = new CMushroom(x, y);
+					objects.push_back(obj);
+				}
+				else if (mario->GetLevel() == MARIO_LEVEL_BIG || mario->GetLevel() == MARIO_LEVEL_TANOOKI)
+				{
+					CGameObject* obj = new CLeaf(x, y);
+					objects.push_back(obj);
+				}
 				e->obj->SetState(MYSTERYBLOCK_STATE_MOVING_UP);
 			}
 		}
