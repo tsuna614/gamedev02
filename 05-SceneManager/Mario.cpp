@@ -14,6 +14,7 @@
 #include "Piranha.h"
 #include "Koopa.h"
 #include "Fireball.h"
+#include "Paragoomba.h"
 
 #include "Collision.h"
 
@@ -89,6 +90,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithKoopa(e);
 	else if (dynamic_cast<CFireball*>(e->obj))
 		OnCollisionWithFireball(e);
+	else if (dynamic_cast<CParaGoomba*>(e->obj))
+		OnCollisionWithParaGoomba(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -116,6 +119,47 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 					StartUntouchable();
 					StartFreezing();
 					
+				}
+				else
+				{
+					DebugOut(L">>> Mario DIE >>> \n");
+					SetState(MARIO_STATE_DIE);
+				}
+			}
+		}
+	}
+}
+
+void CMario::OnCollisionWithParaGoomba(LPCOLLISIONEVENT e)
+{
+	CParaGoomba* goomba = dynamic_cast<CParaGoomba*>(e->obj);
+
+	// jump on top >> kill Goomba and deflect a bit 
+	if (e->ny < 0)
+	{
+		if (goomba->GetGoombaLevel() == PARAGOOMBA_LEVEL_BIG)
+		{
+			goomba->SetGoombaLevelToSmall();
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else if (goomba->GetState() != PARAGOOMBA_STATE_DIE)
+		{
+			goomba->SetState(PARAGOOMBA_STATE_DIE);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+	}
+	else // hit by Goomba
+	{
+		if (untouchable == 0)
+		{
+			if (goomba->GetState() != PARAGOOMBA_STATE_DIE)
+			{
+				if (level > MARIO_LEVEL_SMALL)
+				{
+					level -= 1;
+					StartUntouchable();
+					StartFreezing();
+
 				}
 				else
 				{
