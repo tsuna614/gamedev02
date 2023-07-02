@@ -26,7 +26,7 @@ void CColorBox::RenderBoundingBox()
 	float xx = x - this->cellWidth / 2 + rect.right / 2;
 
 	// * this line draw ugly red box for some reason?
-	//CGame::GetInstance()->Draw(xx - cx, y - cy, bbox, nullptr, BBOX_ALPHA, rect.right - 1, rect.bottom - 1);
+	CGame::GetInstance()->Draw(xx - cx, y - cy, bbox, nullptr, BBOX_ALPHA, rect.right - 1, rect.bottom - 1);
 }
 
 void CColorBox::Render()
@@ -86,7 +86,7 @@ void CColorBox::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	float cellWidth_div_2 = this->cellWidth / 2;
 	l = x - cellWidth_div_2;
-	t = y - this->cellHeight / 2;
+	t = y - this->cellHeight / 2 - 1;
 	r = l + this->cellWidth * this->length;
 	b = t + this->cellHeight;
 }
