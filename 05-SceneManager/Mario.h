@@ -165,6 +165,7 @@ class CMario : public CAliveGameObject
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithFireball(LPCOLLISIONEVENT e);
 	void OnCollisionWithParaGoomba(LPCOLLISIONEVENT e);
+	void OnCollisionWithWingKoopa(LPCOLLISIONEVENT e);
 
 	int GetAniIdTanooki();
 	int GetAniIdBig();

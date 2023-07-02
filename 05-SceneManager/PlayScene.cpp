@@ -18,6 +18,7 @@
 #include "Background.h"
 #include "Bush.h"
 #include "Paragoomba.h"
+#include "WingKoopa.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -141,7 +142,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BARRIER: obj = new CInvisibleBarrier(x, y); break;
 	case OBJECT_TYPE_STRIPED_BRICK: obj = new CStripedBrick(x, y); break;
 	case OBJECT_TYPE_PARAGOOMBA: obj = new CParaGoomba(x, y); break;
-
+	case OBJECT_TYPE_WINGKOOPA: obj = new CWingKoopa(x, y); break;
 
 	case OBJECT_TYPE_BUSH:
 	{

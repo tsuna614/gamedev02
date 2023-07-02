@@ -15,6 +15,7 @@
 #include "Koopa.h"
 #include "Fireball.h"
 #include "Paragoomba.h"
+#include "WingKoopa.h"
 
 #include "Collision.h"
 
@@ -92,6 +93,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithFireball(e);
 	else if (dynamic_cast<CParaGoomba*>(e->obj))
 		OnCollisionWithParaGoomba(e);
+	else if (dynamic_cast<CWingKoopa*>(e->obj))
+		OnCollisionWithWingKoopa(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -187,6 +190,70 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 		{
 			koopa->GetMarioPosition(this->x, this->y);
 			koopa->SetState(KOOPA_STATE_SHELL_MOVING);
+		}
+	}
+	else // collide with koopa by the side
+	{
+		if (untouchable == 0)
+		{
+			if (koopa->GetState() == KOOPA_STATE_WALKING || koopa->GetState() == KOOPA_STATE_SHELL_MOVING)
+			{
+				if (level > MARIO_LEVEL_SMALL)
+				{
+					level -= 1;
+					StartUntouchable();
+					StartFreezing();
+				}
+				else
+				{
+					DebugOut(L">>> Mario DIE >>> \n");
+					SetState(MARIO_STATE_DIE);
+				}
+			}
+			else if (koopa->GetState() == KOOPA_STATE_SHELL)
+			{
+				if (this->GetState() == MARIO_STATE_RUNNING_LEFT)
+				{
+					koopa->SetPosition(this->x - 15, this->y);
+				}
+				else if (this->GetState() == MARIO_STATE_RUNNING_RIGHT)
+				{
+					koopa->SetPosition(this->x + 15, this->y);
+				}
+				else
+				{
+					koopa->GetMarioPosition(this->x, this->y);
+					koopa->SetState(KOOPA_STATE_SHELL_MOVING);
+				}
+			}
+		}
+	}
+}
+
+void CMario::OnCollisionWithWingKoopa(LPCOLLISIONEVENT e)
+{
+	CWingKoopa* koopa = dynamic_cast<CWingKoopa*>(e->obj);
+
+	// jump on top >> kill koopa and deflect a bit 
+	if (e->ny < 0)
+	{
+		if (koopa->GetLevel() == KOOPA_LEVEL_BIG)
+		{
+			koopa->SetLevelSmall();
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else
+		{
+			if (koopa->GetState() != KOOPA_STATE_SHELL)
+			{
+				koopa->SetState(KOOPA_STATE_SHELL);
+				vy = -MARIO_JUMP_DEFLECT_SPEED;
+			}
+			else if (koopa->GetState() == KOOPA_STATE_SHELL)
+			{
+				koopa->GetMarioPosition(this->x, this->y);
+				koopa->SetState(KOOPA_STATE_SHELL_MOVING);
+			}
 		}
 	}
 	else // collide with koopa by the side

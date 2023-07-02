@@ -17,6 +17,7 @@ CWingKoopa::CWingKoopa(float x, float y) : CGameObject(x, y)
 	this->my = -1;
 	this->isFreezable = 1;
 	die_start = -1;
+	this->koopaLevel = 2;
 	SetState(KOOPA_STATE_WALKING);
 }
 
@@ -63,7 +64,7 @@ void CWingKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CWingKoopa*>(e->obj)) return;
 	if (dynamic_cast<CMario*>(e->obj)) return;
 	if (dynamic_cast<CMushroom*>(e->obj)) return;
-	if (dynamic_cast<CMysteryBlock*>(e->obj) || dynamic_cast<CCoinBlock*>(e->obj))
+	if ((dynamic_cast<CMysteryBlock*>(e->obj) || dynamic_cast<CCoinBlock*>(e->obj)) && GetState() == KOOPA_STATE_SHELL_MOVING)
 	{
 		if (e->nx != 0)
 		{
@@ -96,7 +97,15 @@ void CWingKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	if (e->ny != 0)
 	{
-		vy = 0;
+		if (koopaLevel == KOOPA_LEVEL_BIG)
+		{
+
+			vy = -KOOPA_JUMP_SPEED;
+		}
+		else
+		{
+			vy = 0;
+		}
 	}
 	else if (e->nx != 0)
 	{
@@ -108,6 +117,32 @@ void CWingKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
+
+	// follows mario if level == big
+	if (koopaLevel == KOOPA_LEVEL_BIG)
+	{
+		CMario* mario = dynamic_cast<CMario*>(objects[0]);
+
+		for (size_t i = 0; i < objects.size(); i++)
+		{
+			if (dynamic_cast<CMario*>(objects[i]))
+			{
+				mario = dynamic_cast<CMario*>(objects[i]);
+			}
+		} // look through objects to find Mario
+
+		float mx, my;
+		mario->GetPosition(mx, my);
+
+		if (this->x > mx)
+		{
+			vx = -abs(vx);
+		}
+		else
+		{
+			vx = abs(vx);
+		}
+	}
 
 	if ((state == KOOPA_STATE_DIE) && (GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT))
 	{
@@ -128,13 +163,27 @@ void CWingKoopa::Render()
 {
 	int aniId;
 
-	if (vx < 0)
+	if (koopaLevel == KOOPA_LEVEL_BIG)
 	{
-		aniId = ID_ANI_KOOPA_WALKING_LEFT;
+		if (vx < 0)
+		{
+			aniId = ID_ANI_KOOPA_WING_LEFT;
+		}
+		else
+		{
+			aniId = ID_ANI_KOOPA_WING_RIGHT;
+		}
 	}
 	else
 	{
-		aniId = ID_ANI_KOOPA_WALKING_RIGHT;
+		if (vx < 0)
+		{
+			aniId = ID_ANI_KOOPA_WALKING_LEFT;
+		}
+		else
+		{
+			aniId = ID_ANI_KOOPA_WALKING_RIGHT;
+		}
 	}
 	// koopa doesn't have a die animation yet
 	//if (state == KOOPA_STATE_DIE)
