@@ -115,6 +115,7 @@ void CWingKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CWingKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -136,12 +137,17 @@ void CWingKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		if (this->x > mx)
 		{
-			vx = -abs(vx);
+			vx = -KOOPA_WALKING_SPEED;
 		}
 		else
 		{
-			vx = abs(vx);
+			vx = KOOPA_WALKING_SPEED;
 		}
+
+		if (this->x - mx > 300)
+		{
+			vx = 0;
+		} // koopa only moves when mario is close
 	}
 
 	if ((state == KOOPA_STATE_DIE) && (GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT))

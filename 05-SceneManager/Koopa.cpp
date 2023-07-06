@@ -18,6 +18,9 @@ CKoopa::CKoopa(float x, float y) : CGameObject(x, y)
 	this->isFreezable = 1;
 	die_start = -1;
 	SetState(KOOPA_STATE_WALKING);
+
+	this->isBeingHeld = false;
+	this->mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 }
 
 void CKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -71,7 +74,7 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 			{
 				float x, y;
 				e->obj->GetPosition(x, y);
-				CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+				//CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 				if (mario->GetLevel() == MARIO_LEVEL_SMALL)
 				{
 					CGameObject* obj = new CMushroom(x, y);
@@ -109,6 +112,60 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
+	if (mario->isPressingA == 0)
+	{
+		// check again if mario is still pressing A, if not, is not being held anymore
+		isBeingHeld = false;
+		ay = KOOPA_GRAVITY;
+	}
+	else if (mario->isPressingA && isBeingHeld)
+	{
+		// if is still pressing A AND being held, set ay = 0;
+		ay = 0;
+	}
+
+	mario->GetPosition(mx, my);
+
+	float mvx, mvy; // mario vx and vy
+	mario->GetSpeed(mvx, mvy);
+
+	if (state == KOOPA_STATE_SHELL && isBeingHeld == true)
+	{
+		if (mvx < 0)
+		{
+			if (mario->GetLevel() == MARIO_LEVEL_SMALL)
+			{
+				x = mx - 15;
+			}
+			else if (mario->GetLevel() == MARIO_LEVEL_BIG)
+			{
+				x = mx - 15;
+			}
+			else if (mario->GetLevel() == MARIO_LEVEL_TANOOKI)
+			{
+				x = mx - 15;
+			}
+		}
+		else if (mvx > 0)
+		{
+			if (mario->GetLevel() == MARIO_LEVEL_SMALL)
+			{
+				x = mx + 15;
+			}
+			else if (mario->GetLevel() == MARIO_LEVEL_BIG)
+			{
+				x = mx + 15;
+			}
+			else if (mario->GetLevel() == MARIO_LEVEL_TANOOKI)
+			{
+				x = mx + 15;
+			}
+		}
+
+		//x = mx;
+		y = my;
+	}
+
 	if ((state == KOOPA_STATE_DIE) && (GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT))
 	{
 		isDeleted = true;
@@ -117,6 +174,8 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else if ((state == KOOPA_STATE_SHELL) && (GetTickCount64() - shell_start > KOOPA_SHELL_TIMEOUT))
 	{
 		this->SetState(KOOPA_STATE_WALKING);
+		ay = KOOPA_GRAVITY;
+		isBeingHeld = false;
 	}
 
 	CGameObject::Update(dt, coObjects);

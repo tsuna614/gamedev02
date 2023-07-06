@@ -188,16 +188,17 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 		}
 		else if (koopa->GetState() == KOOPA_STATE_SHELL)
 		{
-			koopa->GetMarioPosition(this->x, this->y);
+			//koopa->GetMarioPosition(this->x, this->y);
 			koopa->SetState(KOOPA_STATE_SHELL_MOVING);
 		}
 	}
-	else // collide with koopa by the side
+	else // collision with koopa by the side
 	{
 		if (untouchable == 0)
 		{
 			if (koopa->GetState() == KOOPA_STATE_WALKING || koopa->GetState() == KOOPA_STATE_SHELL_MOVING)
 			{
+				// if koopa shell is moving, kills mario when touches
 				if (level > MARIO_LEVEL_SMALL)
 				{
 					level -= 1;
@@ -212,17 +213,26 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 			}
 			else if (koopa->GetState() == KOOPA_STATE_SHELL)
 			{
-				if (this->GetState() == MARIO_STATE_RUNNING_LEFT)
+				// if koopa shell is not moving, either kicks it or pick it up when pressing A
+
+				//if (this->GetState() == MARIO_STATE_RUNNING_LEFT)
+				//{
+				//	//koopa->SetPosition(this->x - 15, this->y);
+				//	koopa->isBeingHeld = true;
+				//}
+				//else if (this->GetState() == MARIO_STATE_RUNNING_RIGHT)
+				//{
+				//	//koopa->SetPosition(this->x + 15, this->y);
+				//	koopa->isBeingHeld = true;
+				//}
+
+				if (this->isPressingA == 1)
 				{
-					koopa->SetPosition(this->x - 15, this->y);
-				}
-				else if (this->GetState() == MARIO_STATE_RUNNING_RIGHT)
-				{
-					koopa->SetPosition(this->x + 15, this->y);
+					koopa->isBeingHeld = true;
 				}
 				else
 				{
-					koopa->GetMarioPosition(this->x, this->y);
+					//koopa->GetMarioPosition(this->x, this->y);
 					koopa->SetState(KOOPA_STATE_SHELL_MOVING);
 				}
 			}

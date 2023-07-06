@@ -26,7 +26,8 @@ void CColorBox::RenderBoundingBox()
 	float xx = x - this->cellWidth / 2 + rect.right / 2;
 
 	// * this line draw ugly red box for some reason?
-	CGame::GetInstance()->Draw(xx - cx, y - cy, bbox, nullptr, BBOX_ALPHA, rect.right - 1, rect.bottom - 1);
+	// * message from the future. The red box is for debugging. It shows hitboxes
+	//CGame::GetInstance()->Draw(xx - cx, y - cy, bbox, nullptr, BBOX_ALPHA, rect.right - 1, rect.bottom - 1);
 }
 
 void CColorBox::Render()
