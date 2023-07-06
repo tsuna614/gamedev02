@@ -68,7 +68,7 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CMushroom*>(e->obj)) return;
 	if (dynamic_cast<CMysteryBlock*>(e->obj) || dynamic_cast<CCoinBlock*>(e->obj))
 	{
-		if (e->nx != 0)
+		if (e->nx != 0 && GetState() == KOOPA_STATE_SHELL_MOVING)
 		{
 			if (e->obj->GetState() == MYSTERYBLOCK_STATE_NOT_ACTIVATED)
 			{
