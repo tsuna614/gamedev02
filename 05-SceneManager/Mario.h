@@ -37,6 +37,8 @@
 #define MARIO_STATE_SIT				600
 #define MARIO_STATE_SIT_RELEASE		601
 
+#define MARIO_STATE_ATTACK			700
+
 
 #pragma region ANIMATION_ID
 
@@ -105,6 +107,39 @@
 #define ID_ANI_MARIO_TANOOKI_BRACE_RIGHT 2300
 #define ID_ANI_MARIO_TANOOKI_BRACE_LEFT 2301
 
+#define ID_ANI_MARIO_TANOOKI_ATTACK_RIGHT 2400
+#define ID_ANI_MARIO_TANOOKI_ATTACK_LEFT 2401
+
+#define ID_ANI_MARIO_TANOOKI_TAIL_IDLE_RIGHT 1710
+#define ID_ANI_MARIO_TANOOKI_TAIL_IDLE_LEFT 1711
+
+#define ID_ANI_MARIO_TANOOKI_TAIL_WALKING_RIGHT 1810
+#define ID_ANI_MARIO_TANOOKI_TAIL_WALKING_LEFT 1811
+
+#define ID_ANI_MARIO_TANOOKI_TAIL_RUNNING_RIGHT 1910
+#define ID_ANI_MARIO_TANOOKI_TAIL_RUNNING_LEFT 1911
+
+#define ID_ANI_MARIO_TANOOKI_TAIL_JUMP_WALK_RIGHT 2010
+#define ID_ANI_MARIO_TANOOKI_TAIL_JUMP_WALK_LEFT 2011
+
+#define ID_ANI_MARIO_TANOOKI_TAIL_JUMP_RUN_RIGHT 2110
+#define ID_ANI_MARIO_TANOOKI_TAIL_JUMP_RUN_LEFT 2111
+
+#define ID_ANI_MARIO_TANOOKI_TAIL_SIT_RIGHT 2210
+#define ID_ANI_MARIO_TANOOKI_TAIL_SIT_LEFT 2211
+
+#define ID_ANI_MARIO_TANOOKI_TAIL_BRACE_RIGHT 2310
+#define ID_ANI_MARIO_TANOOKI_TAIL_BRACE_LEFT 2311
+
+#define ID_ANI_MARIO_SMALL_KICK_LEFT 2411
+#define ID_ANI_MARIO_SMALL_KICK_RIGHT 2412
+
+#define ID_ANI_MARIO_BIG_KICK_LEFT 2413
+#define ID_ANI_MARIO_BIG_KICK_RIGHT 2414
+
+#define ID_ANI_MARIO_TANOOKI_KICK_LEFT 2415
+#define ID_ANI_MARIO_TANOOKI_KICK_RIGHT 2416
+
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -135,6 +170,8 @@
 #define MARIO_UNTOUCHABLE_TIME 2500
 #define MARIO_LOW_GRAVITY_TIME 400
 
+#define MARIO_ATTACKING_TIME 500
+
 class CMario : public CAliveGameObject
 {
 	BOOLEAN isSitting;
@@ -144,10 +181,16 @@ class CMario : public CAliveGameObject
 
 	int level; 
 
-	int untouchable; 
+	int untouchable;
 	ULONGLONG untouchable_start;
 
 	ULONGLONG low_gravity_start;
+
+	int isAttacking;
+	ULONGLONG attacking_start;
+
+	int isKicking;
+	ULONGLONG kicking_start;
 
 	BOOLEAN isOnPlatform;
 	int coin; 
@@ -168,6 +211,7 @@ class CMario : public CAliveGameObject
 	void OnCollisionWithWingKoopa(LPCOLLISIONEVENT e);
 
 	int GetAniIdTanooki();
+	int GetAniIdTanookiTail();
 	int GetAniIdBig();
 	int GetAniIdSmall();
 
@@ -186,9 +230,18 @@ public:
 		ay = MARIO_GRAVITY;
 
 		level = MARIO_LEVEL_SMALL;
+
 		untouchable = 0;
 		untouchable_start = -1;
+
 		low_gravity_start = -1;
+
+		isAttacking = 0;
+		attacking_start = -1;
+
+		isKicking = 0;
+		kicking_start = -1;
+
 		isOnPlatform = false;
 		coin = 0;
 
@@ -221,9 +274,19 @@ public:
 		}
 		low_gravity_start = GetTickCount64(); 
 	}
+	void StartAttacking() {
+		isAttacking = 1;
+		attacking_start = GetTickCount64();
+	}
+	void StartKicking() {
+		isKicking = 1;
+		kicking_start = GetTickCount64();
+	}
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 
 	int Getnx() { return this->nx; }
 	int GetLevel() { return this->level; }
+
+	int IsMarioAttacking() { return isAttacking; }
 };

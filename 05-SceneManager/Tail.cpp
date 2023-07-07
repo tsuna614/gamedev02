@@ -26,10 +26,10 @@ CTail::CTail(float x, float y) :CGameObject(x, y)
 
 void CTail::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x - FIREBALL_BBOX_WIDTH / 2;
-	top = y - FIREBALL_BBOX_HEIGHT / 2;
-	right = left + FIREBALL_BBOX_WIDTH;
-	bottom = top + FIREBALL_BBOX_HEIGHT;
+	left = x - TAIL_BBOX_WIDTH / 2;
+	top = y - TAIL_BBOX_HEIGHT / 2;
+	right = left + TAIL_BBOX_WIDTH;
+	bottom = top + TAIL_BBOX_HEIGHT;
 }
 
 void CTail::OnNoCollision(DWORD dt)
@@ -107,7 +107,7 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//vx += ax * dt;
 
 
-	if (GetTickCount64() - this->timer_start > 300)
+	if (GetTickCount64() - this->timer_start > TAIL_MOVING_TIMEOUT)
 	{
 		this->Delete();
 	}
@@ -119,19 +119,19 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CTail::Render()
 {
-	int aniId = ID_ANI_TAIL_LEFT;
+	//int aniId = ID_ANI_TAIL_LEFT;
 
-	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-	if (mario->Getnx() > 0)
-	{
-		aniId = ID_ANI_TAIL_RIGHT;
-	}
-	else
-	{
-		aniId = ID_ANI_TAIL_LEFT;
-	}
+	//CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	//if (mario->Getnx() > 0)
+	//{
+	//	aniId = ID_ANI_TAIL_RIGHT;
+	//}
+	//else
+	//{
+	//	aniId = ID_ANI_TAIL_LEFT;
+	//}
 
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	//CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
 }
 
@@ -145,11 +145,11 @@ void CTail::SetState(int state)
 			CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 			if (mario->Getnx() > 0)
 			{
-				vx = 0.05f;
+				vx = TAIL_VX_SPEED;
 			}
 			else
 			{
-				vx = -0.05f;
+				vx = -TAIL_VX_SPEED;
 			}
 			StartTimer();
 			break;

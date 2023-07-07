@@ -41,6 +41,20 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		low_gravity_start = 0;
 	}
 
+	// reset attacking timer
+	if (GetTickCount64() - attacking_start > MARIO_ATTACKING_TIME && this->attacking_start != -1)
+	{
+		isAttacking = 0;
+		attacking_start = -1;
+	}
+
+	// reset kicking timer
+	if (GetTickCount64() - kicking_start > 100 && this->kicking_start != -1)
+	{
+		isKicking = 0;
+		kicking_start = -1;
+	}
+
 	isOnPlatform = false;
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -233,6 +247,7 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 				else
 				{
 					//koopa->GetMarioPosition(this->x, this->y);
+					StartKicking();
 					koopa->SetState(KOOPA_STATE_SHELL_MOVING);
 				}
 			}
@@ -297,6 +312,7 @@ void CMario::OnCollisionWithWingKoopa(LPCOLLISIONEVENT e)
 				else
 				{
 					koopa->GetMarioPosition(this->x, this->y);
+					StartKicking();
 					koopa->SetState(KOOPA_STATE_SHELL_MOVING);
 				}
 			}
@@ -591,7 +607,9 @@ int CMario::GetAniIdTanooki()
 				else if (ax == MARIO_ACCEL_RUN_X)
 					aniId = ID_ANI_MARIO_TANOOKI_RUNNING_RIGHT;
 				else if (ax == MARIO_ACCEL_WALK_X)
+				{
 					aniId = ID_ANI_MARIO_TANOOKI_WALKING_RIGHT;
+				}
 			}
 			else // vx < 0
 			{
@@ -608,13 +626,123 @@ int CMario::GetAniIdTanooki()
 	return aniId;
 }
 
+int CMario::GetAniIdTanookiTail()
+{
+	int aniId = -1;
+	if (!isOnPlatform)
+	{
+		if (abs(ax) == MARIO_ACCEL_RUN_X)
+		{
+			if (nx >= 0)
+				aniId = ID_ANI_MARIO_TANOOKI_TAIL_JUMP_RUN_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_TANOOKI_TAIL_JUMP_RUN_LEFT;
+		}
+		else
+		{
+			if (nx >= 0)
+				aniId = ID_ANI_MARIO_TANOOKI_TAIL_JUMP_WALK_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_TANOOKI_TAIL_JUMP_WALK_LEFT;
+		}
+	}
+	else
+		if (isSitting)
+		{
+			if (nx > 0)
+				aniId = ID_ANI_MARIO_TANOOKI_TAIL_SIT_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_TANOOKI_TAIL_SIT_LEFT;
+		}
+		else
+			if (vx == 0)
+			{
+				if (nx > 0) aniId = ID_ANI_MARIO_TANOOKI_TAIL_IDLE_RIGHT;
+				else aniId = ID_ANI_MARIO_TANOOKI_TAIL_IDLE_LEFT;
+			}
+			else if (vx > 0)
+			{
+				if (ax < 0)
+					aniId = 0;
+				else if (ax == MARIO_ACCEL_RUN_X)
+					aniId = ID_ANI_MARIO_TANOOKI_TAIL_RUNNING_RIGHT;
+				else if (ax == MARIO_ACCEL_WALK_X)
+				{
+					aniId = ID_ANI_MARIO_TANOOKI_TAIL_WALKING_RIGHT;
+				}
+			}
+			else // vx < 0
+			{
+				if (ax > 0)
+					aniId = 0;
+				else if (ax == -MARIO_ACCEL_RUN_X)
+					aniId = ID_ANI_MARIO_TANOOKI_TAIL_RUNNING_LEFT;
+				else if (ax == -MARIO_ACCEL_WALK_X)
+					aniId = ID_ANI_MARIO_TANOOKI_TAIL_WALKING_LEFT;
+			}
+
+	if (aniId == -1) aniId = ID_ANI_MARIO_TANOOKI_TAIL_IDLE_RIGHT;
+
+	return aniId;
+}
+
 void CMario::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = -1;
 
+
+
 	if (state == MARIO_STATE_DIE)
 		aniId = ID_ANI_MARIO_DIE;
+	else if (isAttacking == 1)
+	{
+		if (nx < 0)
+		{
+			aniId = ID_ANI_MARIO_TANOOKI_ATTACK_LEFT;
+		}
+		else if (nx > 0)
+		{
+			aniId = ID_ANI_MARIO_TANOOKI_ATTACK_RIGHT;
+		}
+	}
+	else if (isKicking == 1)
+	{
+		if (level == MARIO_LEVEL_SMALL)
+		{
+			if (nx > 0)
+			{
+				aniId = ID_ANI_MARIO_SMALL_KICK_RIGHT;
+			}
+			else if (nx < 0)
+			{
+				aniId = ID_ANI_MARIO_SMALL_KICK_LEFT;
+			}
+		}
+		else if (level == MARIO_LEVEL_BIG)
+		{
+			if (nx > 0)
+			{
+				aniId = ID_ANI_MARIO_BIG_KICK_RIGHT;
+			}
+			else if (nx < 0)
+			{
+				aniId = ID_ANI_MARIO_BIG_KICK_LEFT;
+			}
+		}
+		else if (level == MARIO_LEVEL_TANOOKI)
+		{
+			if (nx > 0)
+			{
+				aniId = ID_ANI_MARIO_TANOOKI_KICK_RIGHT;
+			}
+			else if (nx < 0)
+			{
+				aniId = ID_ANI_MARIO_TANOOKI_KICK_LEFT;
+			}
+		}
+
+	}
 	else if (level == MARIO_LEVEL_BIG)
 		aniId = GetAniIdBig();
 	else if (level == MARIO_LEVEL_SMALL)
@@ -623,6 +751,31 @@ void CMario::Render()
 		aniId = GetAniIdTanooki();
 
 	animations->Get(aniId)->Render(x, y);
+	if (level == MARIO_LEVEL_TANOOKI && isAttacking == 0)
+	{
+		aniId = GetAniIdTanookiTail();
+		
+		if (aniId != 0)
+		{
+			if (aniId == ID_ANI_MARIO_TANOOKI_TAIL_SIT_RIGHT)
+			{
+				animations->Get(aniId)->Render(x - 10, y);
+			}
+			else if (aniId == ID_ANI_MARIO_TANOOKI_TAIL_SIT_LEFT)
+			{
+				animations->Get(aniId)->Render(x + 10, y);
+			}
+			if (nx > 0)
+			{
+				animations->Get(aniId)->Render(x - 12, y);
+			}
+			else
+			{
+				animations->Get(aniId)->Render(x + 12, y);
+			}
+		}
+	}
+	//animations->Get(aniId)->Render(x - 10, y);
 
 	//RenderBoundingBox();
 	
@@ -739,6 +892,13 @@ void CMario::SetState(int state)
 		vx = 0;
 		ax = 0;
 		break;
+
+	//case MARIO_STATE_ATTACK:
+	//	if (!isAttacking)
+	//	{
+	//		StartAttacking();
+	//	}
+	//	break;
 	}
 
 	CGameObject::SetState(state);
@@ -774,16 +934,16 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 		}
 		else if (nx < 0)
 		{
-			left = x - MARIO_TANOOKI_BBOX_WIDTH / 2 - 4;
+			left = x - MARIO_TANOOKI_BBOX_WIDTH / 2;
 			top = y - MARIO_TANOOKI_BBOX_HEIGHT / 2;
-			right = left + MARIO_TANOOKI_BBOX_WIDTH + 4;
+			right = left + MARIO_TANOOKI_BBOX_WIDTH;
 			bottom = top + MARIO_TANOOKI_BBOX_HEIGHT;
 		}
 		else
 		{
-			left = x - MARIO_TANOOKI_BBOX_WIDTH / 2 - 4;
+			left = x - MARIO_TANOOKI_BBOX_WIDTH / 2;
 			top = y - MARIO_TANOOKI_BBOX_HEIGHT / 2;
-			right = left + MARIO_TANOOKI_BBOX_WIDTH + 4;
+			right = left + MARIO_TANOOKI_BBOX_WIDTH;
 			bottom = top + MARIO_TANOOKI_BBOX_HEIGHT;
 		}
 	}

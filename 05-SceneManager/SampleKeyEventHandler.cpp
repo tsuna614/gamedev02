@@ -23,6 +23,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		mario->GetPosition(mx, my);
 		//tail->SetPosition(mx, my);
 		if (mario->GetLevel() == MARIO_LEVEL_TANOOKI)
+		{
 			if (mario->Getnx() > 0)
 			{
 				tail->SetPosition(mx, my + 5);
@@ -32,6 +33,12 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 				tail->SetPosition(mx, my + 5);
 			}
 			objects.push_back(tail);
+
+			if (mario->IsMarioAttacking() != 1)
+			{
+				mario->StartAttacking();
+			}
+		}
 		mario->isPressingA = 1;
 		break;
 	case DIK_DOWN:
@@ -116,6 +123,15 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 		else
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
 	}
+	//else if (game->IsKeyDown(DIK_A))
+	//{
+	//	mario->SetState(MARIO_STATE_ATTACK);
+	//}
 	else
-		mario->SetState(MARIO_STATE_IDLE);
+	{
+		if (mario->IsMarioAttacking() != 1)
+		{
+			mario->SetState(MARIO_STATE_IDLE);
+		}
+	}
 }
