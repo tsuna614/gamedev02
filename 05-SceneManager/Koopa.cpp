@@ -139,7 +139,7 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else if (mario->GetLevel() == MARIO_LEVEL_BIG)
 			{
-				x = mx - 15;
+				x = mx - 12;
 			}
 			else if (mario->GetLevel() == MARIO_LEVEL_TANOOKI)
 			{
@@ -154,7 +154,7 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else if (mario->GetLevel() == MARIO_LEVEL_BIG)
 			{
-				x = mx + 15;
+				x = mx + 12;
 			}
 			else if (mario->GetLevel() == MARIO_LEVEL_TANOOKI)
 			{

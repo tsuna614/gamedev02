@@ -42,7 +42,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		mario->isPressingA = 1;
 		break;
 	case DIK_DOWN:
-		if (mario->GetState() != MARIO_STATE_IDLE)
+		if (mario->GetState() != MARIO_STATE_IDLE || mario->isHoldingKoopa == 1)
 		{
 			break;
 		}
@@ -78,6 +78,7 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	{
 	case DIK_A:
 		mario->isPressingA = 0;
+		mario->isHoldingKoopa = 0;
 		break;
 	case DIK_S:
 		mario->SetState(MARIO_STATE_RELEASE_JUMP);
@@ -129,9 +130,10 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	//}
 	else
 	{
-		if (mario->IsMarioAttacking() != 1)
+		/*if (mario->IsMarioAttacking() != 1)
 		{
 			mario->SetState(MARIO_STATE_IDLE);
-		}
+		}*/
+		mario->SetState(MARIO_STATE_IDLE);
 	}
 }
