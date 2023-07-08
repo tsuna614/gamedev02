@@ -163,7 +163,10 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 
 		//x = mx;
-		y = my;
+		if (mario->GetLevel() == MARIO_LEVEL_SMALL)
+			y = my - 1;
+		else
+			y = my;
 	}
 
 	if ((state == KOOPA_STATE_DIE) && (GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT))
