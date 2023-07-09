@@ -986,6 +986,19 @@ void CMario::Render()
 			}
 		}
 	}
+	else if (level == MARIO_LEVEL_TANOOKI && isAttacking == 1)
+	{
+		if (nx > 0)
+		{
+			aniId = ID_ANI_MARIO_TANOOKI_TAIL_ATTACK_RIGHT;
+			animations->Get(aniId)->Render(x - 12, y);
+		}
+		else
+		{
+			aniId = ID_ANI_MARIO_TANOOKI_TAIL_ATTACK_LEFT;
+			animations->Get(aniId)->Render(x + 12, y);
+		}
+	}
 	//animations->Get(aniId)->Render(x - 10, y);
 
 	//RenderBoundingBox();
