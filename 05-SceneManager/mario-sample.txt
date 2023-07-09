@@ -24,4 +24,4 @@ height	240
 60	textures\enemies-3.png
 70	textures\enemies-3-reversed.png
 80	textures\enemies-2.png
-90	textures\temp.png
+90	textures\enemies-2-reversed.png
