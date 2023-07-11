@@ -3,7 +3,7 @@
 #include "Mario.h"
 #include "Brick.h"
 
-#define TAIL_VX_SPEED 0.5f
+#define TAIL_VX_SPEED 0.2f
 
 #define TAIL_BBOX_WIDTH 10
 #define TAIL_BBOX_HEIGHT 10

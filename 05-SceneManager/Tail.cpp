@@ -9,6 +9,8 @@
 #include "PlayScene.h"
 #include "Koopa.h"
 #include "Piranha.h"
+#include "Paragoomba.h"
+#include "WingKoopa.h"
 
 extern vector<LPGAMEOBJECT> objects;
 
@@ -48,13 +50,24 @@ void CTail::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CGoomba*>(e->obj))
 	{
 		CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-		goomba->SetState(GOOMBA_STATE_DIE);
+		goomba->SetState(GOOMBA_STATE_DIE_2);
+	}
+	if (dynamic_cast<CParaGoomba*>(e->obj))
+	{
+		CParaGoomba* goomba = dynamic_cast<CParaGoomba*>(e->obj);
+		goomba->SetState(GOOMBA_STATE_DIE_2);
 	}
 	if (dynamic_cast<CKoopa*>(e->obj))
 	{
 		CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
 		koopa->SetState(KOOPA_STATE_SHELL);
 	}
+	if (dynamic_cast<CWingKoopa*>(e->obj))
+	{
+		CWingKoopa* koopa = dynamic_cast<CWingKoopa*>(e->obj);
+		koopa->SetState(KOOPA_STATE_SHELL);
+	}
+
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CTail*>(e->obj)) return;
 	if (dynamic_cast<CMario*>(e->obj)) return;
