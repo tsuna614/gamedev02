@@ -64,6 +64,8 @@ void CMario::OnNoCollision(DWORD dt)
 {
 	x += vx * dt;
 	y += vy * dt;
+
+	if (y > 200) SetState(MARIO_STATE_DIE);
 }
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
@@ -120,7 +122,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	{
 		if (goomba->GetState() != GOOMBA_STATE_DIE && goomba->GetState() != GOOMBA_STATE_DIE_2)
 		{
-			goomba->SetState(GOOMBA_STATE_DIE_2);
+			goomba->SetState(GOOMBA_STATE_DIE);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
@@ -128,7 +130,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	{
 		if (untouchable == 0)
 		{
-			if (goomba->GetState() != GOOMBA_STATE_DIE)
+			if (goomba->GetState() != GOOMBA_STATE_DIE && goomba->GetState() != GOOMBA_STATE_DIE_2)
 			{
 				if (level > MARIO_LEVEL_SMALL)
 				{
@@ -169,7 +171,7 @@ void CMario::OnCollisionWithParaGoomba(LPCOLLISIONEVENT e)
 	{
 		if (untouchable == 0)
 		{
-			if (goomba->GetState() != PARAGOOMBA_STATE_DIE)
+			if (goomba->GetState() != PARAGOOMBA_STATE_DIE && goomba->GetState() != GOOMBA_STATE_DIE_2)
 			{
 				if (level > MARIO_LEVEL_SMALL)
 				{
@@ -950,7 +952,7 @@ void CMario::Render()
 		aniId = GetAniIdTanooki();
 
 	animations->Get(aniId)->Render(x, y);
-	if (level == MARIO_LEVEL_TANOOKI && isAttacking == 0)
+	if (level == MARIO_LEVEL_TANOOKI && isAttacking == 0 && state != MARIO_STATE_DIE)
 	{
 		aniId = GetAniIdTanookiTail();
 		

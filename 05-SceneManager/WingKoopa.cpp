@@ -4,6 +4,9 @@
 #include "Pipe.h"
 #include "Brick.h"
 #include "Goomba.h"
+#include "Koopa.h"
+#include "Paragoomba.h"
+#include "Piranha.h"
 #include "PlayScene.h"
 
 extern vector<LPGAMEOBJECT> objects;
@@ -61,7 +64,27 @@ void CWingKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 		if (dynamic_cast<CGoomba*>(e->obj))
 		{
 			CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-			goomba->SetState(GOOMBA_STATE_DIE);
+			goomba->SetState(GOOMBA_STATE_DIE_2);
+		}
+		if (dynamic_cast<CParaGoomba*>(e->obj))
+		{
+			CParaGoomba* goomba = dynamic_cast<CParaGoomba*>(e->obj);
+			goomba->SetState(GOOMBA_STATE_DIE_2);
+		}
+		if (dynamic_cast<CWingKoopa*>(e->obj))
+		{
+			CWingKoopa* koopa = dynamic_cast<CWingKoopa*>(e->obj);
+			koopa->SetState(KOOPA_STATE_DIE);
+		}
+		if (dynamic_cast<CKoopa*>(e->obj))
+		{
+			CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+			koopa->SetState(KOOPA_STATE_DIE);
+		}
+		if (dynamic_cast<CPiranha*>(e->obj))
+		{
+			CPiranha* piranha = dynamic_cast<CPiranha*>(e->obj);
+			piranha->SetState(PIRANHA_STATE_DIE);
 		}
 		if ((dynamic_cast<CMysteryBlock*>(e->obj) || dynamic_cast<CCoinBlock*>(e->obj)))
 		{
@@ -71,7 +94,6 @@ void CWingKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 				{
 					float x, y;
 					e->obj->GetPosition(x, y);
-					CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 					if (mario->GetLevel() == MARIO_LEVEL_SMALL)
 					{
 						CGameObject* obj = new CMushroom(x, y);
@@ -219,42 +241,49 @@ void CWingKoopa::Render()
 {
 	int aniId;
 
-	if (koopaLevel == KOOPA_LEVEL_BIG)
+	if (state == KOOPA_STATE_DIE)
 	{
-		if (vx < 0)
-		{
-			aniId = ID_ANI_KOOPA_WING_LEFT;
-		}
-		else
-		{
-			aniId = ID_ANI_KOOPA_WING_RIGHT;
-		}
+		aniId = ID_ANI_KOOPA_WING_DIE;
+	}
+	else if (state == KOOPA_STATE_SHELL)
+	{
+		aniId = ID_ANI_KOOPA_WING_SHELL;
+	}
+	else if (state == KOOPA_STATE_SHELL_MOVING)
+	{
+		aniId = ID_ANI_KOOPA_WING_SHELL_MOVING;
 	}
 	else
 	{
-		if (vx < 0)
+		if (koopaLevel == KOOPA_LEVEL_BIG)
 		{
-			aniId = ID_ANI_KOOPA_WALKING_LEFT;
+			if (vx < 0)
+			{
+				aniId = ID_ANI_KOOPA_WING_LEFT;
+			}
+			else
+			{
+				aniId = ID_ANI_KOOPA_WING_RIGHT;
+			}
 		}
 		else
 		{
-			aniId = ID_ANI_KOOPA_WALKING_RIGHT;
+			if (vx < 0)
+			{
+				aniId = ID_ANI_KOOPA_WING_WALKING_LEFT;
+			}
+			else
+			{
+				aniId = ID_ANI_KOOPA_WING_WALKING_RIGHT;
+			}
 		}
 	}
+
 	// koopa doesn't have a die animation yet
 	//if (state == KOOPA_STATE_DIE)
 	//{
 	//	aniId = ID_ANI_KOOPA_DIE;
 	//}
-
-	if (state == KOOPA_STATE_SHELL)
-	{
-		aniId = ID_ANI_KOOPA_SHELL;
-	}
-	else if (state == KOOPA_STATE_SHELL_MOVING)
-	{
-		aniId = ID_ANI_KOOPA_SHELL_MOVING;
-	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
@@ -266,11 +295,18 @@ void CWingKoopa::SetState(int state)
 	switch (state)
 	{
 	case KOOPA_STATE_DIE:
+		float mx, my;
+		mario->GetPosition(mx, my);
 		die_start = GetTickCount64();
-		y += (KOOPA_BBOX_HEIGHT - KOOPA_BBOX_HEIGHT_SHELL) / 2;
-		vx = 0;
-		vy = 0;
-		ay = 0;
+		if (this->x > mx)
+		{
+			vx = 0.02f;
+		}
+		else
+		{
+			vx = -0.02f;
+		}
+		vy = -GOOMBA_JUMP_DEFLECT_SPEED;
 		break;
 	case KOOPA_STATE_WALKING:
 		y -= (KOOPA_BBOX_HEIGHT - KOOPA_BBOX_HEIGHT_SHELL + 10) / 2;
@@ -292,6 +328,7 @@ void CWingKoopa::SetState(int state)
 		break;
 	case KOOPA_STATE_SHELL_MOVING:
 		y -= (KOOPA_BBOX_HEIGHT - KOOPA_BBOX_HEIGHT_SHELL) / 2;
+		mario->GetPosition(mx, my);
 		if (mx < x)
 		{
 			vx = KOOPA_SHELL_SPEED;

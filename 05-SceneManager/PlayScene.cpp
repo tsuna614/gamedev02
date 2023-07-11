@@ -390,7 +390,10 @@ void CPlayScene::Update(DWORD dt)
 	if (cx < 0) cx = 0;
 	if (cy > 0) cy = 0;
 
-	CGame::GetInstance()->SetCamPos(cx, cy /*cy*/);
+	CMario* mario = mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+
+	if (mario->GetLevel() == MARIO_LEVEL_TANOOKI) CGame::GetInstance()->SetCamPos(cx, cy);
+	else CGame::GetInstance()->SetCamPos(cx, 0 /*cy*/);
 
 	PurgeDeletedObjects();
 }

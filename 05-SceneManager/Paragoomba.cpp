@@ -4,6 +4,7 @@
 #include "Mushroom.h"
 #include "Pipe.h"
 #include "Brick.h"
+#include "PlayScene.h"
 
 extern vector<LPGAMEOBJECT> objects;
 
@@ -18,6 +19,7 @@ CParaGoomba::CParaGoomba(float x, float y) : CGameObject(x, y)
 	SetState(PARAGOOMBA_STATE_WALKING);
 
 	this->isFreezable = 1;
+	this->mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 }
 
 void CParaGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -155,6 +157,10 @@ void CParaGoomba::Render()
 	{
 		aniId = ID_ANI_PARAGOOMBA_DIE;
 	}
+	else if (state == GOOMBA_STATE_DIE_2)
+	{
+		aniId = ID_ANI_GOOMBA_DIE_2;
+	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
@@ -172,6 +178,22 @@ void CParaGoomba::SetState(int state)
 		vy = 0;
 		ay = 0;
 		break;
+	case GOOMBA_STATE_DIE_2:
+	{
+		float mx, my;
+		mario->GetPosition(mx, my);
+		die_start = GetTickCount64();
+		if (this->x > mx)
+		{
+			vx = 0.02f;
+		}
+		else
+		{
+			vx = -0.02f;
+		}
+		vy = -GOOMBA_JUMP_DEFLECT_SPEED;
+		break;
+	}
 	case PARAGOOMBA_STATE_WALKING:
 		vx = -PARAGOOMBA_WALKING_SPEED;
 		break;

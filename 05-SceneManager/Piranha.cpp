@@ -142,7 +142,7 @@ void CPiranha::SetState(int state)
 	{
 	case PIRANHA_STATE_DIE:
 		die_start = GetTickCount64();
-		y += (PIRANHA_BBOX_HEIGHT - PIRANHA_BBOX_HEIGHT_DIE) / 2;
+		//y += (PIRANHA_BBOX_HEIGHT - PIRANHA_BBOX_HEIGHT_DIE) / 2;
 		vx = 0;
 		vy = 0;
 		ay = 0;

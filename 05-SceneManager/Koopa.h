@@ -11,7 +11,7 @@
 #define KOOPA_BBOX_HEIGHT 24
 #define KOOPA_BBOX_HEIGHT_SHELL 14
 
-#define KOOPA_DIE_TIMEOUT 500
+#define KOOPA_DIE_TIMEOUT 2000
 #define KOOPA_SHELL_TIMEOUT 10000
 
 #define KOOPA_STATE_WALKING 100
@@ -23,6 +23,7 @@
 #define ID_ANI_KOOPA_WALKING_RIGHT 5021
 #define ID_ANI_KOOPA_SHELL 5022
 #define ID_ANI_KOOPA_SHELL_MOVING 5023
+#define ID_ANI_KOOPA_DIE 5033
 
 class CKoopa : public CGameObject
 {
@@ -44,7 +45,7 @@ protected:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 
-	virtual int IsCollidable() { return 1; };
+	virtual int IsCollidable() { return (state != KOOPA_STATE_DIE); };
 	virtual int IsBlocking() { return 0; }
 	virtual void OnNoCollision(DWORD dt);
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "Goomba.h"
 
 #define PARAGOOMBA_GRAVITY 0.002f
 #define PARAGOOMBA_WALKING_SPEED 0.05f
@@ -39,11 +40,13 @@ protected:
 	ULONGLONG die_start;
 	ULONGLONG walk_start;
 
+	CMario* mario;
+
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 
-	virtual int IsCollidable() { return 1; };
+	virtual int IsCollidable() { return (state != GOOMBA_STATE_DIE_2); };
 	virtual int IsBlocking() { return 0; }
 	virtual void OnNoCollision(DWORD dt);
 

@@ -12,7 +12,7 @@
 #define KOOPA_BBOX_HEIGHT 24
 #define KOOPA_BBOX_HEIGHT_SHELL 14
 
-#define KOOPA_DIE_TIMEOUT 500
+#define KOOPA_DIE_TIMEOUT 2000
 #define KOOPA_SHELL_TIMEOUT 10000
 
 #define KOOPA_STATE_WALKING 100
@@ -20,12 +20,13 @@
 #define KOOPA_STATE_SHELL 300
 #define KOOPA_STATE_SHELL_MOVING 400
 
-#define ID_ANI_KOOPA_WALKING_LEFT 5026
-#define ID_ANI_KOOPA_WALKING_RIGHT 5027
-#define ID_ANI_KOOPA_SHELL 5028
-#define ID_ANI_KOOPA_SHELL_MOVING 5029
+#define ID_ANI_KOOPA_WING_WALKING_LEFT 5026
+#define ID_ANI_KOOPA_WING_WALKING_RIGHT 5027
+#define ID_ANI_KOOPA_WING_SHELL 5028
+#define ID_ANI_KOOPA_WING_SHELL_MOVING 5029
 #define ID_ANI_KOOPA_WING_LEFT 5024
 #define ID_ANI_KOOPA_WING_RIGHT 5025
+#define ID_ANI_KOOPA_WING_DIE 5034
 
 #define KOOPA_LEVEL_SMALL 1
 #define KOOPA_LEVEL_BIG 2
@@ -53,7 +54,7 @@ protected:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 
-	virtual int IsCollidable() { return 1; };
+	virtual int IsCollidable() { return (state != KOOPA_STATE_DIE); };
 	virtual int IsBlocking() { return 0; }
 	virtual void OnNoCollision(DWORD dt);
 

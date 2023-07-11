@@ -4,6 +4,9 @@
 #include "Pipe.h"
 #include "Brick.h"
 #include "Goomba.h"
+#include "WingKoopa.h"
+#include "Paragoomba.h"
+#include "Piranha.h"
 #include "PlayScene.h"
 
 CKoopa::CKoopa(float x, float y) : CGameObject(x, y)
@@ -51,49 +54,67 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		vx = -vx;
 	}
-	if (dynamic_cast<CGoomba*>(e->obj))
+	if (GetState() == KOOPA_STATE_SHELL_MOVING)
 	{
-		CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-		if (GetState() == KOOPA_STATE_SHELL_MOVING)
+		if (dynamic_cast<CGoomba*>(e->obj))
 		{
-			goomba->SetState(GOOMBA_STATE_DIE);
+			CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+			goomba->SetState(GOOMBA_STATE_DIE_2);
 		}
-		else return;
+		if (dynamic_cast<CParaGoomba*>(e->obj))
+		{
+			CParaGoomba* goomba = dynamic_cast<CParaGoomba*>(e->obj);
+			goomba->SetState(GOOMBA_STATE_DIE_2);
+		}
+		if (dynamic_cast<CWingKoopa*>(e->obj))
+		{
+			CWingKoopa* koopa = dynamic_cast<CWingKoopa*>(e->obj);
+			koopa->SetState(KOOPA_STATE_DIE);
+		}
+		if (dynamic_cast<CKoopa*>(e->obj))
+		{
+			CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+			koopa->SetState(KOOPA_STATE_DIE);
+		}
+		if (dynamic_cast<CPiranha*>(e->obj))
+		{
+			CPiranha* piranha = dynamic_cast<CPiranha*>(e->obj);
+			piranha->SetState(PIRANHA_STATE_DIE);
+		}
+		if ((dynamic_cast<CMysteryBlock*>(e->obj) || dynamic_cast<CCoinBlock*>(e->obj)))
+		{
+			if (e->nx != 0)
+			{
+				if (e->obj->GetState() == MYSTERYBLOCK_STATE_NOT_ACTIVATED)
+				{
+					float x, y;
+					e->obj->GetPosition(x, y);
+					if (mario->GetLevel() == MARIO_LEVEL_SMALL)
+					{
+						CGameObject* obj = new CMushroom(x, y);
+						objects.push_back(obj);
+					}
+					else if (mario->GetLevel() == MARIO_LEVEL_BIG || mario->GetLevel() == MARIO_LEVEL_TANOOKI)
+					{
+						CGameObject* obj = new CLeaf(x, y);
+						objects.push_back(obj);
+					}
+					e->obj->SetState(MYSTERYBLOCK_STATE_MOVING_UP);
+				}
+			}
+		}
+		if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CGlassBrick*>(e->obj))
+		{
+			if (GetState() == KOOPA_STATE_SHELL_MOVING && e->ny == 0)
+			{
+				e->obj->Delete();
+			}
+		}
 	}
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CKoopa*>(e->obj)) return;
 	if (dynamic_cast<CMario*>(e->obj)) return;
 	if (dynamic_cast<CMushroom*>(e->obj)) return;
-	if (dynamic_cast<CMysteryBlock*>(e->obj) || dynamic_cast<CCoinBlock*>(e->obj))
-	{
-		if (e->nx != 0 && GetState() == KOOPA_STATE_SHELL_MOVING)
-		{
-			if (e->obj->GetState() == MYSTERYBLOCK_STATE_NOT_ACTIVATED)
-			{
-				float x, y;
-				e->obj->GetPosition(x, y);
-				//CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-				if (mario->GetLevel() == MARIO_LEVEL_SMALL)
-				{
-					CGameObject* obj = new CMushroom(x, y);
-					objects.push_back(obj);
-				}
-				else if (mario->GetLevel() == MARIO_LEVEL_BIG || mario->GetLevel() == MARIO_LEVEL_TANOOKI)
-				{
-					CGameObject* obj = new CLeaf(x, y);
-					objects.push_back(obj);
-				}
-				e->obj->SetState(MYSTERYBLOCK_STATE_MOVING_UP);
-			}
-		}
-	}
-	if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CGlassBrick*>(e->obj))
-	{
-		if (GetState() == KOOPA_STATE_SHELL_MOVING && e->ny == 0)
-		{
-			e->obj->Delete();
-		}
-	}
 
 	if (e->ny != 0)
 	{
