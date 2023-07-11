@@ -112,13 +112,14 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
-	if (mario->isPressingA == 0)
-	{
-		// check again if mario is still pressing A, if not, is not being held anymore
-		isBeingHeld = false;
-		ay = KOOPA_GRAVITY;
-	}
-	else if (mario->isPressingA && isBeingHeld)
+	//if (mario->isPressingA == 0)
+	//{
+	//	// check again if mario is still pressing A, if not, is not being held anymore
+	//	isBeingHeld = false;
+	//	ay = KOOPA_GRAVITY;
+	//}
+
+	if (mario->isPressingA && isBeingHeld)
 	{
 		// if is still pressing A AND being held, set ay = 0;
 		ay = 0;
@@ -129,7 +130,7 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float mvx, mvy; // mario vx and vy
 	mario->GetSpeed(mvx, mvy);
 
-	if (state == KOOPA_STATE_SHELL && isBeingHeld == true)
+	if (state == KOOPA_STATE_SHELL && isBeingHeld == true && mario->isPressingA == 1)
 	{
 		if (mvx < 0)
 		{
@@ -143,7 +144,7 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else if (mario->GetLevel() == MARIO_LEVEL_TANOOKI)
 			{
-				x = mx - 15;
+				x = mx - 12;
 			}
 		}
 		else if (mvx > 0)
@@ -167,6 +168,13 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			y = my - 1;
 		else
 			y = my;
+	}
+	else if (state == KOOPA_STATE_SHELL && isBeingHeld == true && mario->isPressingA == 0)
+	{
+		isBeingHeld = false;
+		ay = KOOPA_GRAVITY;
+		SetState(KOOPA_STATE_SHELL_MOVING);
+		mario->StartKicking();
 	}
 
 	if ((state == KOOPA_STATE_DIE) && (GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT))

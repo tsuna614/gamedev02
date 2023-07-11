@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "Mario.h"
 
 #define KOOPA_GRAVITY 0.001f
 #define KOOPA_WALKING_SPEED 0.05f
@@ -12,7 +13,7 @@
 #define KOOPA_BBOX_HEIGHT_SHELL 14
 
 #define KOOPA_DIE_TIMEOUT 500
-#define KOOPA_SHELL_TIMEOUT 5000
+#define KOOPA_SHELL_TIMEOUT 10000
 
 #define KOOPA_STATE_WALKING 100
 #define KOOPA_STATE_DIE 200
@@ -41,6 +42,8 @@ protected:
 
 	float px; // save the direction Koopa was moving before turning into the shell
 
+	CMario* mario;
+
 	int koopaLevel;
 
 	ULONGLONG die_start;
@@ -57,9 +60,10 @@ protected:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public:
+	int isBeingHeld;
+
 	CWingKoopa(float x, float y);
 	virtual void SetState(int state);
-	void GetMarioPosition(float x, float y) { this->mx = x, this->my = y; }
 	int GetLevel() { return this->koopaLevel; }
 	void SetLevelSmall() { this->koopaLevel = KOOPA_LEVEL_SMALL; }
 };

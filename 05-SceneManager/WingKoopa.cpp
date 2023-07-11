@@ -19,6 +19,9 @@ CWingKoopa::CWingKoopa(float x, float y) : CGameObject(x, y)
 	die_start = -1;
 	this->koopaLevel = 2;
 	SetState(KOOPA_STATE_WALKING);
+
+	this->isBeingHeld = false;
+	this->mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 }
 
 void CWingKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -119,22 +122,13 @@ void CWingKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
+	mario->GetPosition(mx, my);
+	float mvx, mvy; // mario vx and vy
+	mario->GetSpeed(mvx, mvy);
+
 	// follows mario if level == big
 	if (koopaLevel == KOOPA_LEVEL_BIG)
 	{
-		CMario* mario = dynamic_cast<CMario*>(objects[0]);
-
-		for (size_t i = 0; i < objects.size(); i++)
-		{
-			if (dynamic_cast<CMario*>(objects[i]))
-			{
-				mario = dynamic_cast<CMario*>(objects[i]);
-			}
-		} // look through objects to find Mario
-
-		float mx, my;
-		mario->GetPosition(mx, my);
-
 		if (this->x > mx)
 		{
 			vx = -KOOPA_WALKING_SPEED;
@@ -150,6 +144,59 @@ void CWingKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		} // koopa only moves when mario is close
 	}
 
+	// logic for mario holds koopa shell
+	if (mario->isPressingA && isBeingHeld)
+	{
+		// if is still pressing A AND being held, set ay = 0;
+		ay = 0;
+	}
+	if (state == KOOPA_STATE_SHELL && isBeingHeld == true && mario->isPressingA == 1)
+	{
+		if (mvx < 0)
+		{
+			if (mario->GetLevel() == MARIO_LEVEL_SMALL)
+			{
+				x = mx - 15;
+			}
+			else if (mario->GetLevel() == MARIO_LEVEL_BIG)
+			{
+				x = mx - 12;
+			}
+			else if (mario->GetLevel() == MARIO_LEVEL_TANOOKI)
+			{
+				x = mx - 12;
+			}
+		}
+		else if (mvx > 0)
+		{
+			if (mario->GetLevel() == MARIO_LEVEL_SMALL)
+			{
+				x = mx + 15;
+			}
+			else if (mario->GetLevel() == MARIO_LEVEL_BIG)
+			{
+				x = mx + 12;
+			}
+			else if (mario->GetLevel() == MARIO_LEVEL_TANOOKI)
+			{
+				x = mx + 15;
+			}
+		}
+
+		//x = mx;
+		if (mario->GetLevel() == MARIO_LEVEL_SMALL)
+			y = my - 1;
+		else
+			y = my;
+	}
+	else if (state == KOOPA_STATE_SHELL && isBeingHeld == true && mario->isPressingA == 0)
+	{
+		isBeingHeld = false;
+		ay = KOOPA_GRAVITY;
+		SetState(KOOPA_STATE_SHELL_MOVING);
+		mario->StartKicking();
+	}
+
 	if ((state == KOOPA_STATE_DIE) && (GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT))
 	{
 		isDeleted = true;
@@ -158,6 +205,8 @@ void CWingKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else if ((state == KOOPA_STATE_SHELL) && (GetTickCount64() - shell_start > KOOPA_SHELL_TIMEOUT))
 	{
 		this->SetState(KOOPA_STATE_WALKING);
+		ay = KOOPA_GRAVITY;
+		isBeingHeld = false;
 	}
 
 	CGameObject::Update(dt, coObjects);

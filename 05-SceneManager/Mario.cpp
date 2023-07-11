@@ -240,16 +240,19 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 				//	koopa->isBeingHeld = true;
 				//}
 
-				if (this->isPressingA == 1)
+				if (this->isPressingA == 1 && isHoldingKoopa != 1)
 				{
 					isHoldingKoopa = 1;
 					koopa->isBeingHeld = true;
 				}
 				else
 				{
-					//koopa->GetMarioPosition(this->x, this->y);
-					StartKicking();
-					koopa->SetState(KOOPA_STATE_SHELL_MOVING);
+					if (isHoldingKoopa != 1)
+					{
+						//koopa->GetMarioPosition(this->x, this->y);
+						StartKicking();
+						koopa->SetState(KOOPA_STATE_SHELL_MOVING);
+					}
 				}
 			}
 		}
@@ -277,7 +280,6 @@ void CMario::OnCollisionWithWingKoopa(LPCOLLISIONEVENT e)
 			}
 			else if (koopa->GetState() == KOOPA_STATE_SHELL)
 			{
-				koopa->GetMarioPosition(this->x, this->y);
 				koopa->SetState(KOOPA_STATE_SHELL_MOVING);
 			}
 		}
@@ -302,19 +304,19 @@ void CMario::OnCollisionWithWingKoopa(LPCOLLISIONEVENT e)
 			}
 			else if (koopa->GetState() == KOOPA_STATE_SHELL)
 			{
-				if (this->GetState() == MARIO_STATE_RUNNING_LEFT)
+				if (this->isPressingA == 1 && isHoldingKoopa != 1)
 				{
-					koopa->SetPosition(this->x - 15, this->y);
-				}
-				else if (this->GetState() == MARIO_STATE_RUNNING_RIGHT)
-				{
-					koopa->SetPosition(this->x + 15, this->y);
+					isHoldingKoopa = 1;
+					koopa->isBeingHeld = true;
 				}
 				else
 				{
-					koopa->GetMarioPosition(this->x, this->y);
-					StartKicking();
-					koopa->SetState(KOOPA_STATE_SHELL_MOVING);
+					if (isHoldingKoopa != 1)
+					{
+						//koopa->GetMarioPosition(this->x, this->y);
+						StartKicking();
+						koopa->SetState(KOOPA_STATE_SHELL_MOVING);
+					}
 				}
 			}
 		}
