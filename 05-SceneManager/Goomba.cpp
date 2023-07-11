@@ -3,6 +3,7 @@
 #include "Mushroom.h"
 #include "Pipe.h"
 #include "Brick.h"
+#include "PlayScene.h"
 
 CGoomba::CGoomba(float x, float y) : CGameObject(x, y)
 {
@@ -12,6 +13,7 @@ CGoomba::CGoomba(float x, float y) : CGameObject(x, y)
 	SetState(GOOMBA_STATE_WALKING);
 
 	this->isFreezable = 1;
+	this->mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 }
 
 void CGoomba::GetBoundingBox(float &left, float &top, float &right, float &bottom)
@@ -49,7 +51,7 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CMario*>(e->obj)) return;
 	if (dynamic_cast<CMushroom*>(e->obj)) return;
 
-	if (e->ny != 0 )
+	if (e->ny != 0)
 	{
 		vy = 0;
 	}
@@ -70,6 +72,12 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		return;
 	}
 
+	if ((state == GOOMBA_STATE_DIE_2) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT_2))
+	{
+		isDeleted = true;
+		return;
+	}
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -81,6 +89,11 @@ void CGoomba::Render()
 	if (state == GOOMBA_STATE_DIE) 
 	{
 		aniId = ID_ANI_GOOMBA_DIE;
+	}
+
+	if (state == GOOMBA_STATE_DIE_2)
+	{
+		aniId = ID_ANI_GOOMBA_DIE_2;
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x,y);
@@ -99,6 +112,22 @@ void CGoomba::SetState(int state)
 			vy = 0;
 			ay = 0; 
 			break;
+		case GOOMBA_STATE_DIE_2:
+		{
+			float mx, my;
+			mario->GetPosition(mx, my);
+			die_start = GetTickCount64();
+			if (this->x > mx)
+			{
+				vx = 0.02f;
+			}
+			else
+			{
+				vx = -0.02f;
+			}
+			vy = -GOOMBA_JUMP_DEFLECT_SPEED;
+			break;
+		}
 		case GOOMBA_STATE_WALKING: 
 			vx = -GOOMBA_WALKING_SPEED;
 			break;

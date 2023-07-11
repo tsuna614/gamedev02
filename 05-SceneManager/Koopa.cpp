@@ -6,8 +6,6 @@
 #include "Goomba.h"
 #include "PlayScene.h"
 
-extern vector<LPGAMEOBJECT> objects;
-
 CKoopa::CKoopa(float x, float y) : CGameObject(x, y)
 {
 	this->ax = 0;
