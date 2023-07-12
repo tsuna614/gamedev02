@@ -277,7 +277,7 @@ public:
 	int isPressingA = 0;
 	int isHoldingKoopa = 0;
 
-	CMario(float x, float y) : CAliveGameObject(x, y)
+	CMario(float x, float y, int marioLevel) : CAliveGameObject(x, y)
 	{
 		this->x = x;
 		this->y = y;
@@ -286,7 +286,7 @@ public:
 		ax = 0.0f;
 		ay = MARIO_GRAVITY;
 
-		level = MARIO_LEVEL_SMALL;
+		level = marioLevel;
 
 		untouchable = 0;
 		untouchable_start = -1;
