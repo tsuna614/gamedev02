@@ -114,6 +114,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithWingKoopa(e);
 	else if (dynamic_cast<CWarpPipe*>(e->obj))
 		OnCollisionWithWarpPipe(e);
+	else if (dynamic_cast<CBlackPipe*>(e->obj))
+		OnCollisionWithBlackPipe(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -459,6 +461,17 @@ void CMario::OnCollisionWithWarpPipe(LPCOLLISIONEVENT e)
 		if (isSitting)
 		{
 			CGame::GetInstance()->InitiateSwitchScene(5);
+		}
+	}
+}
+
+void CMario::OnCollisionWithBlackPipe(LPCOLLISIONEVENT e)
+{
+	if (e->ny > 0)
+	{
+		if (isPressingUp)
+		{
+			CGame::GetInstance()->InitiateSwitchScene(3);
 		}
 	}
 }

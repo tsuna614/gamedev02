@@ -48,6 +48,9 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		}
 		mario->SetState(MARIO_STATE_SIT);
 		break;
+	case DIK_UP:
+		mario->isPressingUp = 1;
+		break;
 	case DIK_S:
 		mario->SetState(MARIO_STATE_JUMP);
 		break;
@@ -102,6 +105,9 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 			}
 			break;
 		}
+	case DIK_UP:
+		mario->isPressingUp = 0;
+		break;
 	}
 }
 

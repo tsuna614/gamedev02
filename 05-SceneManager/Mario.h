@@ -268,6 +268,7 @@ class CMario : public CAliveGameObject
 	void OnCollisionWithParaGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithWingKoopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithWarpPipe(LPCOLLISIONEVENT e);
+	void OnCollisionWithBlackPipe(LPCOLLISIONEVENT e);
 
 	int GetAniIdTanooki();
 	int GetAniIdTanookiTail();
@@ -278,6 +279,7 @@ public:
 	static CMario* __instance;
 
 	int isPressingA = 0;
+	int isPressingUp = 0;
 	int isHoldingKoopa = 0;
 
 	CMario(float x, float y, int marioLevel) : CAliveGameObject(x, y)
