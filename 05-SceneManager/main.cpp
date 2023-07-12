@@ -49,11 +49,12 @@ HOW TO INSTALL Microsoft.DXSDK.D3DX
 
 //#define BACKGROUND_COLOR D3DXCOLOR(200.0f/255, 200.0f/255, 255.0f/255, 0.0f)
 #define BACKGROUND_COLOR D3DXCOLOR(214.0f/255, 253.0f/255, 255.0f/255, 0.0f)
+#define BACKGROUND_COLOR_2 D3DXCOLOR(0.0f/255, 0.0f/255, 0.0f/255, 0.0f)
 
 //#define SCREEN_WIDTH 320
 //#define SCREEN_HEIGHT 240
 
-#define SCREEN_WIDTH 520
+#define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
 
 vector<LPGAMEOBJECT> objects;
@@ -92,7 +93,11 @@ void Render()
 	ID3D10RenderTargetView* pRenderTargetView = g->GetRenderTargetView();
 	ID3DX10Sprite* spriteHandler = g->GetSpriteHandler();
 
-	pD3DDevice->ClearRenderTargetView(pRenderTargetView, BACKGROUND_COLOR);
+	if (CGame::GetInstance()->GetCurrentSceneId() == 5)
+	{
+		pD3DDevice->ClearRenderTargetView(pRenderTargetView, BACKGROUND_COLOR_2);
+	}
+	else pD3DDevice->ClearRenderTargetView(pRenderTargetView, BACKGROUND_COLOR);
 
 	spriteHandler->Begin(D3DX10_SPRITE_SORT_TEXTURE);
 

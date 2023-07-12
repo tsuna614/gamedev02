@@ -112,7 +112,8 @@ public:
 	void InitiateSwitchScene(int scene_id);
 
 	void _ParseSection_TEXTURES(string line);
-
+	
+	int GetCurrentSceneId() { return current_scene; }
 
 	~CGame();
 };

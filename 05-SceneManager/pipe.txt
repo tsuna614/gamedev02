@@ -5,11 +5,16 @@
 #20011	5	28	37	76	30
 20011	352	368	383	415	40
 
+# black pipe
+20012	2095	433	2126	464	40
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 
 # pipe
 12000	20011	1000
+
+# black pipe
+12001	20012	1000
 
 ### sprites id doesnt matter, animations id does ###

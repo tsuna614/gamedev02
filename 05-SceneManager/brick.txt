@@ -28,6 +28,9 @@
 20014	22	75	37	98	90
 20015	22	75	37	100	90
 
+# bluex brick
+20017	1967	433	1982	448	40
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 
@@ -45,5 +48,8 @@
 
 # striped brick
 10004	20016	1000
+
+# bluex brick
+10005	20017	1000
 
 ### sprites id doesnt matter, animations id does ###

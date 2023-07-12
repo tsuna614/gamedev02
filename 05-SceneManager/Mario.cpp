@@ -111,6 +111,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithParaGoomba(e);
 	else if (dynamic_cast<CWingKoopa*>(e->obj))
 		OnCollisionWithWingKoopa(e);
+	else if (dynamic_cast<CWarpPipe*>(e->obj))
+		OnCollisionWithWarpPipe(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -441,6 +443,17 @@ void CMario::OnCollisionWithCoinBlock(LPCOLLISIONEVENT e)
 			//objects.push_back(obj);
 			coin++;
 			e->obj->SetState(MYSTERYBLOCK_STATE_MOVING_UP);
+		}
+	}
+}
+
+void CMario::OnCollisionWithWarpPipe(LPCOLLISIONEVENT e)
+{
+	if (e->ny < 0)
+	{
+		if (isSitting)
+		{
+			CGame::GetInstance()->InitiateSwitchScene(5);
 		}
 	}
 }
@@ -1089,6 +1102,10 @@ void CMario::SetState(int state)
 
 	case MARIO_STATE_RELEASE_JUMP:
 		if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
+		if (level == MARIO_LEVEL_TANOOKI)
+		{
+			ay = MARIO_GRAVITY;
+		}
 		break;
 
 	case MARIO_STATE_SIT:

@@ -135,6 +135,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y); break;
 	case OBJECT_TYPE_PIPE: obj = new CPipe(x, y); break;
+	case OBJECT_TYPE_WARPPIPE: obj = new CWarpPipe(x, y); break;
 	case OBJECT_TYPE_PIRANHA: obj = new CPiranha(x, y); break;
 	case OBJECT_TYPE_COINBLOCK: obj = new CCoinBlock(x, y); break;
 	case OBJECT_TYPE_KOOPA: obj = new CKoopa(x, y); break;
@@ -143,6 +144,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_STRIPED_BRICK: obj = new CStripedBrick(x, y); break;
 	case OBJECT_TYPE_PARAGOOMBA: obj = new CParaGoomba(x, y); break;
 	case OBJECT_TYPE_WINGKOOPA: obj = new CWingKoopa(x, y); break;
+	case OBJECT_TYPE_BLUEX_BRICK: obj = new CBlueXBrick(x, y); break;
+	case OBJECT_TYPE_BLACK_PIPE: obj = new CBlackPipe(x, y); break;
 
 	case OBJECT_TYPE_BUSH:
 	{

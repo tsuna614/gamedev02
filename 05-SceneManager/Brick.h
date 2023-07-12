@@ -11,6 +11,7 @@
 #define ID_ANI_MYSTERYBLOCK 10002
 #define ID_ANI_MYSTERYBLOCK_ACTIVATED 10003
 #define ID_ANI_STRIPED_BRICK 10004
+#define ID_ANI_BLUEX_BRICK 10005
 
 #define MYSTERYBLOCK_STATE_ACTIVATED 100
 #define MYSTERYBLOCK_STATE_MOVING_UP 200
@@ -32,6 +33,14 @@ public:
 class CStripedBrick : public CGameObject {
 public:
 	CStripedBrick(float x, float y) : CGameObject(x, y) {}
+	void Render();
+	void Update(DWORD dt) {}
+	void GetBoundingBox(float& l, float& t, float& r, float& b);
+};
+
+class CBlueXBrick : public CGameObject {
+public:
+	CBlueXBrick(float x, float y) : CGameObject(x, y) {}
 	void Render();
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
