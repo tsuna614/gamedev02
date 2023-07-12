@@ -7,6 +7,8 @@
 #include "Koopa.h"
 #include "Paragoomba.h"
 #include "Piranha.h"
+#include "CoinAnimation.h"
+
 #include "PlayScene.h"
 
 extern vector<LPGAMEOBJECT> objects;
@@ -86,7 +88,7 @@ void CWingKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 			CPiranha* piranha = dynamic_cast<CPiranha*>(e->obj);
 			piranha->SetState(PIRANHA_STATE_DIE);
 		}
-		if ((dynamic_cast<CMysteryBlock*>(e->obj) || dynamic_cast<CCoinBlock*>(e->obj)))
+		if (dynamic_cast<CMysteryBlock*>(e->obj))
 		{
 			if (e->nx != 0)
 			{
@@ -107,6 +109,14 @@ void CWingKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 					e->obj->SetState(MYSTERYBLOCK_STATE_MOVING_UP);
 				}
 			}
+		}
+		if (dynamic_cast<CCoinBlock*>(e->obj))
+		{
+			float x, y;
+			e->obj->GetPosition(x, y);
+			CGameObject* obj = new CCoinAnimation(x, y);
+			objects.push_back(obj);
+			e->obj->SetState(MYSTERYBLOCK_STATE_MOVING_UP);
 		}
 		if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CGlassBrick*>(e->obj))
 		{
@@ -152,19 +162,23 @@ void CWingKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// follows mario if level == big
 	if (koopaLevel == KOOPA_LEVEL_BIG)
 	{
-		if (this->x > mx)
-		{
-			vx = -KOOPA_WALKING_SPEED;
-		}
-		else
-		{
-			vx = KOOPA_WALKING_SPEED;
-		}
+		//if (this->x > mx)
+		//{
+		//	vx = -KOOPA_WALKING_SPEED;
+		//}
+		//else
+		//{
+		//	vx = KOOPA_WALKING_SPEED;
+		//}
 
 		if (this->x - mx > 300)
 		{
 			vx = 0;
 		} // koopa only moves when mario is close
+		else
+		{
+			vx = -KOOPA_WALKING_SPEED;
+		}
 	}
 
 	// logic for mario holds koopa shell

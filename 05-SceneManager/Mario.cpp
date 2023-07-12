@@ -16,6 +16,7 @@
 #include "Fireball.h"
 #include "Paragoomba.h"
 #include "WingKoopa.h"
+#include "CoinAnimation.h"
 
 #include "Collision.h"
 
@@ -441,6 +442,10 @@ void CMario::OnCollisionWithCoinBlock(LPCOLLISIONEVENT e)
 			//e->obj->GetPosition(x, y);
 			//CGameObject* obj = new CMushroom(x, y - 15);
 			//objects.push_back(obj);
+			float x, y;
+			e->obj->GetPosition(x, y);
+			CGameObject* obj = new CCoinAnimation(x, y);
+			objects.push_back(obj);
 			coin++;
 			e->obj->SetState(MYSTERYBLOCK_STATE_MOVING_UP);
 		}
