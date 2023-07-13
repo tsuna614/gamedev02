@@ -30,6 +30,7 @@
 #define MARIO_STATE_JUMP			300
 #define MARIO_STATE_RELEASE_JUMP    301
 #define MARIO_STATE_GLIDE			302
+#define MARIO_STATE_FLYING			303
 
 #define MARIO_STATE_RUNNING_RIGHT	400
 #define MARIO_STATE_RUNNING_LEFT	500
@@ -332,7 +333,7 @@ public:
 		}
 		else
 		{
-			ay = -MARIO_REVERSED_GRAVITY;
+			ay = MARIO_LOW_GRAVITY;
 		}
 		low_gravity_start = GetTickCount64(); 
 	}

@@ -27,3 +27,4 @@ height	240
 80	textures\enemies-2.png
 90	textures\enemies-2-reversed.png
 100	textures\enemies-2-upsidedown.png
+100	textures\overworld-maps.png

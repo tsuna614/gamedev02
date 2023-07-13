@@ -1097,27 +1097,33 @@ void CMario::SetState(int state)
 			else
 				vy = -MARIO_JUMP_SPEED_Y;
 		}
-		if (level == MARIO_LEVEL_TANOOKI)
+		break;
+	case MARIO_STATE_FLYING:
+		if (isSitting) break;
+		if (isOnPlatform)
 		{
-			if (!isOnPlatform)
+			if (abs(this->vx) == MARIO_RUNNING_SPEED)
+				vy = -MARIO_JUMP_RUN_SPEED_Y;
+			else
+				vy = -MARIO_JUMP_SPEED_Y;
+		}
+		if (!isOnPlatform)
+		{
+			if (isPressingA == 1)
 			{
-				if (isPressingA == 1)
-				{
-					vy = -0.2;
-					ay = 0;
-					//SetState(MARIO_STATE_GLIDE);
-					//StartLowGravity();
-				}
-				else
-				{
-					vy = 0;
-					SetState(MARIO_STATE_GLIDE);
-					StartLowGravity();
-				}
+				vy = -0.25;
+				//ay = 0;
+				SetState(MARIO_STATE_GLIDE);
+				StartLowGravity();
+			}
+			else
+			{
+				vy = 0;
+				SetState(MARIO_STATE_GLIDE);
+				StartLowGravity();
 			}
 		}
 		break;
-
 	case MARIO_STATE_RELEASE_JUMP:
 		if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
 		if (level == MARIO_LEVEL_TANOOKI)

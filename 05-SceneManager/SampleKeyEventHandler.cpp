@@ -52,7 +52,11 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		mario->isPressingUp = 1;
 		break;
 	case DIK_S:
-		mario->SetState(MARIO_STATE_JUMP);
+		if (mario->GetLevel() == MARIO_LEVEL_TANOOKI)
+		{
+			mario->SetState(MARIO_STATE_FLYING);
+		}
+		else mario->SetState(MARIO_STATE_JUMP);
 		break;
 	case DIK_1:
 		mario->SetLevel(MARIO_LEVEL_SMALL);
