@@ -42,16 +42,51 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		mario->isPressingA = 1;
 		break;
 	case DIK_DOWN:
-		if (mario->GetState() != MARIO_STATE_IDLE || mario->isHoldingKoopa == 1)
+		if (mario->GetLevel() == MARIO_LEVEL_MAP)
 		{
-			break;
+			if (mario->isMapMoving) break;
+			mario->SetState(MARIO_STATE_MAP_MOVING_DOWN);
 		}
-		mario->SetState(MARIO_STATE_SIT);
+		else
+		{
+			if (mario->GetState() != MARIO_STATE_IDLE || mario->isHoldingKoopa == 1)
+			{
+				break;
+			}
+			mario->SetState(MARIO_STATE_SIT);
+		}
+		break;
+	case DIK_LEFT:
+		if (mario->GetLevel() == MARIO_LEVEL_MAP)
+		{
+			if (mario->isMapMoving) break;
+			mario->SetState(MARIO_STATE_MAP_MOVING_LEFT);
+		}
+		break;
+	case DIK_RIGHT:
+		if (mario->GetLevel() == MARIO_LEVEL_MAP)
+		{
+			if (mario->isMapMoving) break;
+			mario->SetState(MARIO_STATE_MAP_MOVING_RIGHT);
+		}
 		break;
 	case DIK_UP:
-		mario->isPressingUp = 1;
+		if (mario->GetLevel() == MARIO_LEVEL_MAP)
+		{
+			if (mario->isMapMoving) break;
+			mario->SetState(MARIO_STATE_MAP_MOVING_UP);
+		}
+		else mario->isPressingUp = 1;
 		break;
 	case DIK_S:
+		if (CGame::GetInstance()->GetCurrentSceneId() == 2)
+		{
+			if (mario->onMapRight == 1 && mario->onMapTop == 1)
+			{
+				CGame::GetInstance()->InitiateSwitchScene(4);
+			}
+			break;
+		}
 		if (mario->GetLevel() == MARIO_LEVEL_TANOOKI)
 		{
 			mario->SetState(MARIO_STATE_FLYING);
@@ -157,6 +192,9 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	}
 	else
 	{
-		mario->SetState(MARIO_STATE_IDLE);
+		if (mario->isMapMoving != 1)
+		{
+			mario->SetState(MARIO_STATE_MAP_IDLE);
+		}
 	}
 }

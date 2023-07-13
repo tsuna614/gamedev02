@@ -41,6 +41,12 @@
 #define MARIO_STATE_ATTACK			700
 #define MARIO_STATE_DESCENDING			800
 
+#define MARIO_STATE_MAP_MOVING_UP			900
+#define MARIO_STATE_MAP_MOVING_DOWN			901
+#define MARIO_STATE_MAP_MOVING_LEFT			902
+#define MARIO_STATE_MAP_MOVING_RIGHT		903
+#define MARIO_STATE_MAP_IDLE				904
+
 
 #pragma region ANIMATION_ID
 
@@ -287,6 +293,12 @@ public:
 	int isPressingUp = 0;
 	int isHoldingKoopa = 0;
 
+	int isMapMoving = 0;
+	ULONGLONG map_moving_start = -1;
+
+	int onMapTop = 0;
+	int onMapRight = 0;
+
 	CMario(float x, float y, int marioLevel) : CAliveGameObject(x, y)
 	{
 		this->x = x;
@@ -314,14 +326,6 @@ public:
 
 		this->isFreezable = 1;
 
-		if (level == MARIO_LEVEL_MAP)
-		{
-			DebugOut(L"------");
-			vx = 0;
-			vy = 0;
-			ax = 0;
-			ay = 0;
-		}
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -329,10 +333,10 @@ public:
 
 	int IsCollidable()
 	{ 
-		return (state != MARIO_STATE_DIE); 
+		return (state != MARIO_STATE_DIE && level != MARIO_LEVEL_MAP); 
 	}
 
-	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0); }
+	int IsBlocking() { return (state != MARIO_STATE_DIE && level != MARIO_LEVEL_MAP && untouchable==0); }
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
@@ -357,6 +361,10 @@ public:
 	void StartKicking() {
 		isKicking = 1;
 		kicking_start = GetTickCount64();
+	}
+	void StartMapMoving() {
+		isMapMoving = 1;
+		map_moving_start = GetTickCount64();
 	}
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);

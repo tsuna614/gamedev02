@@ -56,6 +56,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		kicking_start = -1;
 	}
 
+	// reset map moving timer
+	if (GetTickCount64() - map_moving_start > 1000 && this->map_moving_start != -1)
+	{
+		isMapMoving = 0;
+		map_moving_start = -1;
+		SetState(MARIO_STATE_MAP_IDLE);
+	}
+
 	isOnPlatform = false;
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -1168,6 +1176,48 @@ void CMario::SetState(int state)
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 		vx = 0;
 		ax = 0;
+		break;
+
+	case MARIO_STATE_MAP_IDLE:
+		vx = 0;
+		vy = 0;
+		ax = 0;
+		ay = 0;
+		break;
+
+	case MARIO_STATE_MAP_MOVING_UP:
+		if (onMapTop == 0 && onMapRight == 1)
+		{
+			onMapTop = 1;
+			StartMapMoving();
+			vy = -0.03f;
+		}
+		break;
+	case MARIO_STATE_MAP_MOVING_DOWN:
+		if (onMapTop == 1)
+		{
+			onMapTop = 0;
+			StartMapMoving();
+			vy = 0.03f;
+		}
+		break;
+	case MARIO_STATE_MAP_MOVING_LEFT:
+		if (onMapRight == 1 && onMapTop == 0)
+		{
+			onMapRight = 0;
+			StartMapMoving();
+			maxVx = -0.035f;
+			vx = -0.035f;
+		}
+		break;
+	case MARIO_STATE_MAP_MOVING_RIGHT:
+		if (onMapRight == 0)
+		{
+			onMapRight = 1;
+			StartMapMoving();
+			maxVx = 0.035f;
+			vx = 0.035f;
+		}
 		break;
 
 	//case MARIO_STATE_ATTACK:
