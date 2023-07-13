@@ -199,6 +199,9 @@
 #define ID_ANI_MARIO_TANOOKI_KICK_LEFT 2415
 #define ID_ANI_MARIO_TANOOKI_KICK_RIGHT 2416
 
+// WORLD MAP MARIO
+#define ID_ANI_MARIO_MAP 2600
+
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -209,6 +212,7 @@
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
 #define	MARIO_LEVEL_TANOOKI		3
+#define	MARIO_LEVEL_MAP		4
 
 #define MARIO_BIG_BBOX_WIDTH  14
 #define MARIO_BIG_BBOX_HEIGHT 24
@@ -309,6 +313,15 @@ public:
 		coin = 0;
 
 		this->isFreezable = 1;
+
+		if (level == MARIO_LEVEL_MAP)
+		{
+			DebugOut(L"------");
+			vx = 0;
+			vy = 0;
+			ax = 0;
+			ay = 0;
+		}
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();

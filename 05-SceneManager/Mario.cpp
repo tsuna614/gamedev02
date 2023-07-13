@@ -66,6 +66,12 @@ void CMario::OnNoCollision(DWORD dt)
 	x += vx * dt;
 	y += vy * dt;
 
+	if (level == MARIO_LEVEL_MAP)
+	{
+		ax = 0;
+		ay = 0;
+	}
+
 	if (y > 200) SetState(MARIO_STATE_DIE);
 }
 
@@ -981,6 +987,8 @@ void CMario::Render()
 		aniId = GetAniIdSmall();
 	else if (level == MARIO_LEVEL_TANOOKI)
 		aniId = GetAniIdTanooki();
+	else if (level == MARIO_LEVEL_MAP)
+		aniId = ID_ANI_MARIO_MAP;
 
 	animations->Get(aniId)->Render(x, y);
 	if (level == MARIO_LEVEL_TANOOKI && isAttacking == 0 && state != MARIO_STATE_DIE)
@@ -1126,7 +1134,7 @@ void CMario::SetState(int state)
 		break;
 	case MARIO_STATE_RELEASE_JUMP:
 		if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
-		if (level == MARIO_LEVEL_TANOOKI)
+		if (level == MARIO_LEVEL_TANOOKI && level != MARIO_LEVEL_MAP)
 		{
 			ay = MARIO_GRAVITY;
 		}

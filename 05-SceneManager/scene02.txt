@@ -1,35 +1,23 @@
 # list of object assets to load in this scene
 [ASSETS]
 mario.txt
-coin.txt
-misc.txt
 brick.txt
+coin.txt
+enemy.txt
+misc.txt
+mushroom.txt
+pipe.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # See OBJECT_TYPE constants in AssetIDs.h
 
+# MAP
+23	150	85
+
+# BOTTOM BAR
+24	150	185
+
 # MARIO
-0	120	10
-
-#COIN
-4	100	120
-4	120	120
-4	140	120
-4	160	120
-4	180	120
-
-
-4	100	100
-4	120	100
-4	140	100
-4	160	100
-4	180	100
-
-#Platform
-5	100	180	16	15	32	20000	52000	20000
-
-#Portal 
-50	200	160	216	180	1
-
+0	62	50	4

@@ -93,7 +93,7 @@ void Render()
 	ID3D10RenderTargetView* pRenderTargetView = g->GetRenderTargetView();
 	ID3DX10Sprite* spriteHandler = g->GetSpriteHandler();
 
-	if (CGame::GetInstance()->GetCurrentSceneId() == 5)
+	if (CGame::GetInstance()->GetCurrentSceneId() == 5 || CGame::GetInstance()->GetCurrentSceneId() == 1 || CGame::GetInstance()->GetCurrentSceneId() == 2)
 	{
 		pD3DDevice->ClearRenderTargetView(pRenderTargetView, BACKGROUND_COLOR_2);
 	}

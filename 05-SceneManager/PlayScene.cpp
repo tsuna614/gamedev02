@@ -149,6 +149,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_WINGKOOPA: obj = new CWingKoopa(x, y); break;
 	case OBJECT_TYPE_BLUEX_BRICK: obj = new CBlueXBrick(x, y); break;
 	case OBJECT_TYPE_BLACK_PIPE: obj = new CBlackPipe(x, y); break;
+	case OBJECT_TYPE_OVERWORLD_MAP: obj = new COverworldMap(x, y); break;
+	case OBJECT_TYPE_BOTTOM_BAR: obj = new CBottomBar(x, y); break;
+	case OBJECT_TYPE_TITLE_SCREEN: obj = new CTitleScreen(x, y); break;
 
 	case OBJECT_TYPE_BUSH:
 	{
@@ -399,6 +402,7 @@ void CPlayScene::Update(DWORD dt)
 	CMario* mario = mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
 	if ((mario->GetLevel() == MARIO_LEVEL_TANOOKI || mario->GetLevel() == MARIO_LEVEL_BIG) && CGame::GetInstance()->GetCurrentSceneId() != 5) CGame::GetInstance()->SetCamPos(cx, cy);
+	else if (mario->GetLevel() == MARIO_LEVEL_MAP) CGame::GetInstance()->SetCamPos(0, 0 /*cy*/);
 	else CGame::GetInstance()->SetCamPos(cx, 0 /*cy*/);
 
 	PurgeDeletedObjects();

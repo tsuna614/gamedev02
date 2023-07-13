@@ -73,6 +73,12 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_R: // reset
 		//Reload();
 		break;
+	case DIK_W:
+		if (CGame::GetInstance()->GetCurrentSceneId() == 1)
+		{
+			CGame::GetInstance()->InitiateSwitchScene(2);
+		}
+		break;
 	}
 }
 
@@ -120,30 +126,37 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	LPGAME game = CGame::GetInstance();
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
-	if (game->IsKeyDown(DIK_RIGHT))
+	if (mario->GetLevel() != MARIO_LEVEL_MAP)
 	{
-		if (game->IsKeyDown(DIK_A))
-			mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+		if (game->IsKeyDown(DIK_RIGHT))
+		{
+			if (game->IsKeyDown(DIK_A))
+				mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+			else
+				mario->SetState(MARIO_STATE_WALKING_RIGHT);
+		}
+		else if (game->IsKeyDown(DIK_LEFT))
+		{
+			if (game->IsKeyDown(DIK_A))
+				mario->SetState(MARIO_STATE_RUNNING_LEFT);
+			else
+				mario->SetState(MARIO_STATE_WALKING_LEFT);
+		}
+		//else if (game->IsKeyDown(DIK_A))
+		//{
+		//	mario->SetState(MARIO_STATE_ATTACK);
+		//}
 		else
-			mario->SetState(MARIO_STATE_WALKING_RIGHT);
+		{
+			/*if (mario->IsMarioAttacking() != 1)
+			{
+				mario->SetState(MARIO_STATE_IDLE);
+			}*/
+			mario->SetState(MARIO_STATE_IDLE);
+		}
 	}
-	else if (game->IsKeyDown(DIK_LEFT))
-	{
-		if (game->IsKeyDown(DIK_A))
-			mario->SetState(MARIO_STATE_RUNNING_LEFT);
-		else
-			mario->SetState(MARIO_STATE_WALKING_LEFT);
-	}
-	//else if (game->IsKeyDown(DIK_A))
-	//{
-	//	mario->SetState(MARIO_STATE_ATTACK);
-	//}
 	else
 	{
-		/*if (mario->IsMarioAttacking() != 1)
-		{
-			mario->SetState(MARIO_STATE_IDLE);
-		}*/
 		mario->SetState(MARIO_STATE_IDLE);
 	}
 }
