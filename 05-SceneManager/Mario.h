@@ -40,6 +40,7 @@
 
 #define MARIO_STATE_ATTACK			700
 #define MARIO_STATE_DESCENDING			800
+#define MARIO_STATE_ASCENDING			801
 
 #define MARIO_STATE_MAP_MOVING_UP			900
 #define MARIO_STATE_MAP_MOVING_DOWN			901
@@ -261,6 +262,9 @@ class CMario : public CAliveGameObject
 	int isKicking;
 	ULONGLONG kicking_start;
 
+	int isDescending;
+	ULONGLONG descending_start;
+
 	BOOLEAN isOnPlatform;
 	int coin; 
 
@@ -321,6 +325,9 @@ public:
 		isKicking = 0;
 		kicking_start = -1;
 
+		isDescending = 0;
+		descending_start = -1;
+
 		isOnPlatform = false;
 		coin = 0;
 
@@ -365,6 +372,10 @@ public:
 	void StartMapMoving() {
 		isMapMoving = 1;
 		map_moving_start = GetTickCount64();
+	}
+	void StartDescending() {
+		isDescending = 1;
+		descending_start = GetTickCount64();
 	}
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);

@@ -181,6 +181,7 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 		//{
 		//	mario->SetState(MARIO_STATE_ATTACK);
 		//}
+		else if (mario->GetState() == MARIO_STATE_ASCENDING || mario->GetState() == MARIO_STATE_DESCENDING) {}
 		else
 		{
 			/*if (mario->IsMarioAttacking() != 1)

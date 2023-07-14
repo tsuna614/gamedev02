@@ -64,6 +64,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		SetState(MARIO_STATE_MAP_IDLE);
 	}
 
+	if (GetTickCount64() - descending_start > 2000 && this->descending_start != -1)
+	{
+		isDescending = 0;
+		descending_start = -1;
+		CGame::GetInstance()->InitiateSwitchScene(5);
+	}
+
 	isOnPlatform = false;
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -941,6 +948,8 @@ void CMario::Render()
 
 	if (state == MARIO_STATE_DIE)
 		aniId = ID_ANI_MARIO_DIE;
+	else if (state == MARIO_STATE_DESCENDING || state == MARIO_STATE_ASCENDING)
+		aniId = ID_ANI_MARIO_TANOOKI_IDLE_FRONT;
 	else if (isAttacking == 1)
 	{
 		if (nx < 0)

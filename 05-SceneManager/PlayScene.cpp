@@ -131,6 +131,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	}
+
+	case OBJECT_TYPE_PIRANHA:
+	{
+		int type = atoi(tokens[3].c_str());
+		obj = new CPiranha(x, y, type);
+		break;
+	}
+
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
 	case OBJECT_TYPE_GLASSBRICK: obj = new CGlassBrick(x, y); break;
@@ -139,7 +147,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y); break;
 	case OBJECT_TYPE_PIPE: obj = new CPipe(x, y); break;
 	case OBJECT_TYPE_WARPPIPE: obj = new CWarpPipe(x, y); break;
-	case OBJECT_TYPE_PIRANHA: obj = new CPiranha(x, y); break;
 	case OBJECT_TYPE_COINBLOCK: obj = new CCoinBlock(x, y); break;
 	case OBJECT_TYPE_KOOPA: obj = new CKoopa(x, y); break;
 	case OBJECT_TYPE_HILL: obj = new CHill(x, y); break;

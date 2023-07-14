@@ -7,13 +7,15 @@
 
 extern vector<LPGAMEOBJECT> objects;
 
-CPiranha::CPiranha(float x, float y) :CGameObject(x, y)
+CPiranha::CPiranha(float x, float y, int type) :CGameObject(x, y)
 {
 	this->ax = 0;
 	this->ay = 0;
 	this->isMovingUp = true;
 	die_start = -1;
 	SetState(PIRANHA_STATE_STAYING);
+
+	this->piranhaType = type;
 
 	//this->isFreezable = 1;
 }
@@ -131,7 +133,13 @@ void CPiranha::Render()
 		aniId = ID_ANI_PIRANHA_DIE;
 	}
 
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	if (piranhaType == PIRANHA_TYPE_GREEN_VERTICAL)
+	{
+		aniId = ID_ANI_PIRANHA_VERTICAL;
+	}
+
+	if (piranhaType == PIRANHA_TYPE_GREEN_VERTICAL) CAnimations::GetInstance()->Get(aniId)->Render(x, y + 3);
+	else CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
 }
 
@@ -155,8 +163,11 @@ void CPiranha::SetState(int state)
 		}
 		else
 		{
-			CGameObject* obj = new CFireball(x, y);
-			objects.push_back(obj);
+			if (piranhaType == PIRANHA_TYPE_RED_FIRE)
+			{
+				CGameObject* obj = new CFireball(x, y);
+				objects.push_back(obj);
+			}
 			vy = PIRANHA_MOVING_SPEED;
 		}
 		isMovingUp = !isMovingUp;

@@ -23,6 +23,10 @@
 #define ID_ANI_PIRANHA_BOTTOM_LEFT 5012
 #define ID_ANI_PIRANHA_BOTTOM_RIGHT 5013
 #define ID_ANI_PIRANHA_DIE 5014
+#define ID_ANI_PIRANHA_VERTICAL 5015
+
+#define PIRANHA_TYPE_RED_FIRE 1
+#define PIRANHA_TYPE_GREEN_VERTICAL 2
 
 class CPiranha : public CGameObject
 {
@@ -31,6 +35,8 @@ protected:
 	float ay;
 
 	bool isMovingUp;
+
+	int piranhaType;
 
 	ULONGLONG die_start;
 	ULONGLONG moving_start;
@@ -47,6 +53,6 @@ protected:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public:
-	CPiranha(float x, float y);
+	CPiranha(float x, float y, int type);
 	virtual void SetState(int state);
 };
