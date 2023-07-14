@@ -17,6 +17,7 @@
 #include "Paragoomba.h"
 #include "WingKoopa.h"
 #include "CoinAnimation.h"
+#include "PButton.h"
 
 #include "Collision.h"
 
@@ -139,6 +140,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithBlackPipe(e);
 	else if (dynamic_cast<CGlassMysteryBrick*>(e->obj))
 		OnCollisionWithGlassMysteryBrick(e);
+	else if (dynamic_cast<CPButton*>(e->obj))
+		OnCollisionWithPButton(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -446,6 +449,22 @@ void CMario::OnCollisionWithGlassMysteryBrick(LPCOLLISIONEVENT e)
 			objects.push_back(obj);
 			e->obj->SetState(MYSTERYBLOCK_STATE_MOVING_UP);
 		}
+		else if (e->obj->GetState() == MYSTERYBLOCK_STATE_NOT_ACTIVATED_2)
+		{
+			float x, y;
+			e->obj->GetPosition(x, y);
+			CGameObject* obj = new CPButton(x, y - 15);
+			objects.push_back(obj);
+			e->obj->SetState(MYSTERYBLOCK_STATE_ACTIVATED);
+		}
+	}
+}
+
+void CMario::OnCollisionWithPButton(LPCOLLISIONEVENT e)
+{
+	if (e->ny < 0)
+	{
+		e->obj->SetState(PBUTTON_STATE_ACTIVATED);
 	}
 }
 

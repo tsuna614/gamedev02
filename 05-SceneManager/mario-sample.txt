@@ -30,3 +30,4 @@ height	240
 110	textures\overworld-maps.png
 120	textures\title-screen.png
 130	textures\mario-2.png
+140	textures\misc-3.png

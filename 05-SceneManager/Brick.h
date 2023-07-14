@@ -17,6 +17,7 @@
 #define MYSTERYBLOCK_STATE_MOVING_UP 200
 #define MYSTERYBLOCK_STATE_MOVING_DOWN 300
 #define MYSTERYBLOCK_STATE_NOT_ACTIVATED 400
+#define MYSTERYBLOCK_STATE_NOT_ACTIVATED_2 401
 
 #define BRICK_WIDTH 16
 #define BRICK_BBOX_WIDTH 16
@@ -68,10 +69,17 @@ public:
 class CGlassMysteryBrick : public CGameObject {
 	ULONGLONG timer_start;
 public:
-	CGlassMysteryBrick(float x, float y) : CGameObject(x, y) 
+	CGlassMysteryBrick(float x, float y, int type) : CGameObject(x, y) 
 	{
 		timer_start = -1;
-		this->SetState(MYSTERYBLOCK_STATE_NOT_ACTIVATED);
+		if (type == 1)
+		{
+			this->SetState(MYSTERYBLOCK_STATE_NOT_ACTIVATED);
+		}
+		else if (type == 2)
+		{
+			this->SetState(MYSTERYBLOCK_STATE_NOT_ACTIVATED_2);
+		}
 	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
