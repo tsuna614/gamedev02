@@ -285,6 +285,7 @@ void CKoopa::SetState(int state)
 		vy = 0;
 		break;
 	case KOOPA_STATE_SHELL_MOVING:
+		ay = KOOPA_GRAVITY;
 		y -= (KOOPA_BBOX_HEIGHT - KOOPA_BBOX_HEIGHT_SHELL) / 2;
 		if (mx < x)
 		{

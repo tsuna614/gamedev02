@@ -147,6 +147,7 @@ CLeaf::CLeaf(float x, float y) : CGameObject(x, y)
 	this->ay = 0;
 	this->vx = 0;
 	this->vy = 0;
+	timer_start = -1;
 	die_start = -1;
 	SetState(MUSHROOM_STATE_MOVING_UP);
 	this->isFreezable = 1;
@@ -194,12 +195,23 @@ void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//	return;
 	//}
 
-	if ((state == MUSHROOM_STATE_MOVING_UP) && (GetTickCount64() - timer_start > MUSHROOM_MOVING_TIMEOUT))
+	if ((state == LEAF_STATE_MOVING_UP) && (GetTickCount64() - timer_start > LEAF_MOVING_TIMEOUT) && timer_start != -1)
 	{
-		SetState(MUSHROOM_STATE_WALKING);
+		timer_start = -1;
+		SetState(LEAF_STATE_FALL_RIGHT);
+	}
+	else if ((state == LEAF_STATE_FALL_RIGHT) && (GetTickCount64() - timer_start > LEAF_MOVING_TIMEOUT) && timer_start != -1)
+	{
+		timer_start = -1;
+		SetState(LEAF_STATE_FALL_LEFT);
+	}
+	else if ((state == LEAF_STATE_FALL_LEFT) && (GetTickCount64() - timer_start > LEAF_MOVING_TIMEOUT) && timer_start != -1)
+	{
+		timer_start = -1;
+		SetState(LEAF_STATE_FALL_RIGHT);
 	}
 
-	if (state == MUSHROOM_STATE_DIE)
+	if (state == LEAF_STATE_DIE)
 	{
 		//this->Delete();
 		isDeleted = true;
@@ -224,22 +236,38 @@ void CLeaf::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case MUSHROOM_STATE_MOVING_UP:
-		vy = -MUSHROOM_MOVING_UP_SPEED;
-		StartTimer();
-		break;
-	case MUSHROOM_STATE_DIE:
-		//die_start = GetTickCount64();
-		//y += (MUSHROOM_BBOX_HEIGHT - MUSHROOM_BBOX_HEIGHT_DIE) / 2;
-		vx = 0;
-		vy = 0;
-		ay = 0;
-		break;
-	case MUSHROOM_STATE_WALKING:
-	{
-		vy = 0;
-		ay = MUSHROOM_GRAVITY;
-		break;
-	}
+		case LEAF_STATE_MOVING_UP:
+			vy = -LEAF_MOVING_UP_SPEED;
+			StartTimer();
+			break;
+		case LEAF_STATE_DIE:
+			//die_start = GetTickCount64();
+			//y += (LEAF_BBOX_HEIGHT - LEAF_BBOX_HEIGHT_DIE) / 2;
+			vx = 0;
+			vy = 0;
+			ay = 0;
+			break;
+		case LEAF_STATE_WALKING:
+		{
+			vy = 0.02f;
+			//ay = LEAF_GRAVITY;
+			break;
+		}
+		case LEAF_STATE_FALL_RIGHT:
+		{
+			ay = -LEAF_GRAVITY;
+			vy = 0.03f;
+			vx = 0.03f;
+			StartTimer();
+			break;
+		}
+		case LEAF_STATE_FALL_LEFT:
+		{
+			ay = -LEAF_GRAVITY;
+			vy = 0.03f;
+			vx = -0.03f;
+			StartTimer();
+			break;
+		}
 	}
 }
