@@ -286,6 +286,7 @@ class CMario : public CAliveGameObject
 	void OnCollisionWithBlackPipe(LPCOLLISIONEVENT e);
 	void OnCollisionWithGlassMysteryBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithPButton(LPCOLLISIONEVENT e);
+	void OnCollisionWithGoal(LPCOLLISIONEVENT e);
 
 	int GetAniIdTanooki();
 	int GetAniIdTanookiTail();
@@ -294,6 +295,8 @@ class CMario : public CAliveGameObject
 
 public:
 	static CMario* __instance;
+
+	int isLevelCompleted = 0;
 
 	int isPressingA = 0;
 	int isPressingUp = 0;

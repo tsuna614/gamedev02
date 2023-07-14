@@ -16,6 +16,8 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	CMario* mario = (CMario *)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer(); 
 	CGameObject* tail = new CTail(-100, -100);
 
+	if (mario->isLevelCompleted == 1) return;
+
 	switch (KeyCode)
 	{
 	case DIK_A:
@@ -122,6 +124,9 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	//DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
 	LPGAME game = CGame::GetInstance();
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+
+	if (mario->isLevelCompleted == 1) return;
+
 	switch (KeyCode)
 	{
 	case DIK_A:
@@ -160,6 +165,8 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 {
 	LPGAME game = CGame::GetInstance();
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+
+	if (mario->isLevelCompleted == 1) return;
 
 	if (mario->GetLevel() != MARIO_LEVEL_MAP)
 	{

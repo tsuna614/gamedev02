@@ -19,6 +19,7 @@
 #include "Bush.h"
 #include "Paragoomba.h"
 #include "WingKoopa.h"
+#include "Goal.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -167,6 +168,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BOTTOM_BAR: obj = new CBottomBar(x, y); break;
 	case OBJECT_TYPE_TITLE_SCREEN: obj = new CTitleScreen(x, y); break;
 	case OBJECT_TYPE_LEVEL_END: obj = new CLevelEnd(x, y); break;
+	case OBJECT_TYPE_GOAL: obj = new CGoal(x, y); break;
 
 	case OBJECT_TYPE_BUSH:
 	{

@@ -18,6 +18,7 @@
 #include "WingKoopa.h"
 #include "CoinAnimation.h"
 #include "PButton.h"
+#include "Goal.h"
 
 #include "Collision.h"
 
@@ -142,6 +143,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithGlassMysteryBrick(e);
 	else if (dynamic_cast<CPButton*>(e->obj))
 		OnCollisionWithPButton(e);
+	else if (dynamic_cast<CGoal*>(e->obj))
+		OnCollisionWithGoal(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -466,6 +469,13 @@ void CMario::OnCollisionWithPButton(LPCOLLISIONEVENT e)
 	{
 		e->obj->SetState(PBUTTON_STATE_ACTIVATED);
 	}
+}
+
+void CMario::OnCollisionWithGoal(LPCOLLISIONEVENT e)
+{
+	e->obj->Delete();
+	isLevelCompleted = 1;
+	SetState(MARIO_STATE_WALKING_RIGHT);
 }
 
 void CMario::OnCollisionWithMysteryBlock(LPCOLLISIONEVENT e)
