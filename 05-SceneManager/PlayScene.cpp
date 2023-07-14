@@ -166,6 +166,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_OVERWORLD_MAP: obj = new COverworldMap(x, y); break;
 	case OBJECT_TYPE_BOTTOM_BAR: obj = new CBottomBar(x, y); break;
 	case OBJECT_TYPE_TITLE_SCREEN: obj = new CTitleScreen(x, y); break;
+	case OBJECT_TYPE_LEVEL_END: obj = new CLevelEnd(x, y); break;
 
 	case OBJECT_TYPE_BUSH:
 	{
@@ -411,6 +412,7 @@ void CPlayScene::Update(DWORD dt)
 	cy -= game->GetBackBufferHeight() / 2;
 
 	if (cx < 0) cx = 0;
+	if (cx > 2563) cx = 2563;
 	if (cy > 0) cy = 0;
 
 	CMario* mario = mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();

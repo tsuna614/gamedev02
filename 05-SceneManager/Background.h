@@ -8,6 +8,7 @@
 #define ID_ANI_OVERWORLD_MAP 11235
 #define ID_ANI_BOTTOM_BAR 11236
 #define ID_ANI_TITLE_SCREEN 11237
+#define ID_ANI_LEVEL_END 11238
 
 #define HILL_WIDTH 127
 #define HILL_BBOX_WIDTH 127
@@ -49,6 +50,17 @@ public:
 class CTitleScreen : public CGameObject {
 public:
 	CTitleScreen(float x, float y) : CGameObject(x, y) {}
+	void Render();
+	void Update(DWORD dt) {}
+	void GetBoundingBox(float& l, float& t, float& r, float& b);
+
+	virtual int IsCollidable() { return 0; };
+	virtual int IsBlocking() { return 0; }
+};
+
+class CLevelEnd : public CGameObject {
+public:
+	CLevelEnd(float x, float y) : CGameObject(x, y) {}
 	void Render();
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
