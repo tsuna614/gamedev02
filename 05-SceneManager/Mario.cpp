@@ -462,7 +462,7 @@ void CMario::OnCollisionWithGlassMysteryBrick(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithPButton(LPCOLLISIONEVENT e)
 {
-	if (e->ny < 0)
+	if (e->ny < 0 && e->obj->GetState() != PBUTTON_STATE_ACTIVATED)
 	{
 		e->obj->SetState(PBUTTON_STATE_ACTIVATED);
 	}
