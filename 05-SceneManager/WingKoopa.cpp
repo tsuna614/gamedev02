@@ -98,7 +98,7 @@ void CWingKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 					e->obj->GetPosition(x, y);
 					if (mario->GetLevel() == MARIO_LEVEL_SMALL)
 					{
-						CGameObject* obj = new CMushroom(x, y);
+						CGameObject* obj = new CMushroom(x, y, 1);
 						objects.push_back(obj);
 					}
 					else if (mario->GetLevel() == MARIO_LEVEL_BIG || mario->GetLevel() == MARIO_LEVEL_TANOOKI)

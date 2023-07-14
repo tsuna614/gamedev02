@@ -7,7 +7,7 @@ extern vector<LPGAMEOBJECT> objects;
 
 /**************** MUSHROOM *****************/
 
-CMushroom::CMushroom(float x, float y) : CGameObject(x, y)
+CMushroom::CMushroom(float x, float y, int type) : CGameObject(x, y)
 {
 	this->ax = 0;
 	this->ay = 0;
@@ -16,6 +16,8 @@ CMushroom::CMushroom(float x, float y) : CGameObject(x, y)
 	die_start = -1;
 	SetState(MUSHROOM_STATE_MOVING_UP);
 	this->isFreezable = 1;
+
+	mushroomType = type;
 }
 
 void CMushroom::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -81,6 +83,11 @@ void CMushroom::Render()
 {
 	int aniId = ID_ANI_MUSHROOM;
 
+	if (mushroomType == MUSHROOM_TYPE_LIFE)
+	{
+		aniId = ID_ANI_MUSHROOM_LIFE;
+	}
+
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
 }
@@ -132,7 +139,7 @@ void CMushroom::SetState(int state)
 }
 
 
-/**************** MUSHROOM *****************/
+/**************** LEAF *****************/
 
 CLeaf::CLeaf(float x, float y) : CGameObject(x, y)
 {

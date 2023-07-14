@@ -1,13 +1,21 @@
 # id	left	top	right	bottom	texture_id
 [SPRITES]
-#WALK
+# MUSHROOM BIG
 33000	300	189	315	204	20
+
+# MUSHROOM LIFE
+33002	318	189	333	204	20
+
+# LEAF
 33001	300	208	315	221	20
-
-### LEAF ###
-
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
+# MUSHROOM BIG
 6000	33000	100
+
+# MUSHROOM LIFE
+6002	33002	100
+
+# LEAF
 6001	33001	100

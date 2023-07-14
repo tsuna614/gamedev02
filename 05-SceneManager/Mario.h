@@ -284,6 +284,7 @@ class CMario : public CAliveGameObject
 	void OnCollisionWithWingKoopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithWarpPipe(LPCOLLISIONEVENT e);
 	void OnCollisionWithBlackPipe(LPCOLLISIONEVENT e);
+	void OnCollisionWithGlassMysteryBrick(LPCOLLISIONEVENT e);
 
 	int GetAniIdTanooki();
 	int GetAniIdTanookiTail();

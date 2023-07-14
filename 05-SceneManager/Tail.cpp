@@ -81,7 +81,7 @@ void CTail::OnCollisionWith(LPCOLLISIONEVENT e)
 			CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 			if (mario->GetLevel() == MARIO_LEVEL_SMALL)
 			{
-				CGameObject* obj = new CMushroom(x, y);
+				CGameObject* obj = new CMushroom(x, y, 1);
 				objects.push_back(obj);
 			}
 			else if (mario->GetLevel() == MARIO_LEVEL_BIG || mario->GetLevel() == MARIO_LEVEL_TANOOKI)

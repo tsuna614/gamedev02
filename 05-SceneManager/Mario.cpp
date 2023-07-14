@@ -137,6 +137,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithWarpPipe(e);
 	else if (dynamic_cast<CBlackPipe*>(e->obj))
 		OnCollisionWithBlackPipe(e);
+	else if (dynamic_cast<CGlassMysteryBrick*>(e->obj))
+		OnCollisionWithGlassMysteryBrick(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -432,6 +434,21 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 	}
 }
 
+void CMario::OnCollisionWithGlassMysteryBrick(LPCOLLISIONEVENT e)
+{
+	if (e->ny > 0)
+	{
+		if (e->obj->GetState() == MYSTERYBLOCK_STATE_NOT_ACTIVATED)
+		{
+			float x, y;
+			e->obj->GetPosition(x, y);
+			CGameObject* obj = new CMushroom(x, y, 2);
+			objects.push_back(obj);
+			e->obj->SetState(MYSTERYBLOCK_STATE_MOVING_UP);
+		}
+	}
+}
+
 void CMario::OnCollisionWithMysteryBlock(LPCOLLISIONEVENT e)
 {
 	if (e->ny > 0)
@@ -442,7 +459,7 @@ void CMario::OnCollisionWithMysteryBlock(LPCOLLISIONEVENT e)
 			e->obj->GetPosition(x, y);
 			if (level == MARIO_LEVEL_SMALL)
 			{
-				CGameObject* obj = new CMushroom(x, y);
+				CGameObject* obj = new CMushroom(x, y, 1);
 				objects.push_back(obj);
 			}
 			else if (level == MARIO_LEVEL_BIG || level == MARIO_LEVEL_TANOOKI)

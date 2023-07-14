@@ -20,6 +20,10 @@
 
 #define ID_ANI_MUSHROOM 6000
 #define ID_ANI_LEAF 6001
+#define ID_ANI_MUSHROOM_LIFE 6002
+
+#define MUSHROOM_TYPE_BIG 1
+#define MUSHROOM_TYPE_LIFE 2
 
 /************* MUSHROOM *****************/
 
@@ -28,6 +32,8 @@ class CMushroom : public CGameObject
 protected:
 	float ax;
 	float ay;
+
+	int mushroomType;
 
 	ULONGLONG die_start;
 	ULONGLONG timer_start;
@@ -43,7 +49,7 @@ protected:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public:
-	CMushroom(float x, float y);
+	CMushroom(float x, float y, int type);
 	virtual void SetState(int state);
 	void StartTimer() { timer_start = GetTickCount64(); }
 };

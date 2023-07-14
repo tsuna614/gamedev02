@@ -65,6 +65,21 @@ public:
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 };
 
+class CGlassMysteryBrick : public CGameObject {
+	ULONGLONG timer_start;
+public:
+	CGlassMysteryBrick(float x, float y) : CGameObject(x, y) 
+	{
+		timer_start = -1;
+		this->SetState(MYSTERYBLOCK_STATE_NOT_ACTIVATED);
+	}
+	void Render();
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	void GetBoundingBox(float& l, float& t, float& r, float& b);
+	virtual void SetState(int state);
+	void StartTimer() { timer_start = GetTickCount64(); }
+};
+
 class CMysteryBlock : public CGameObject {
 	ULONGLONG timer_start;
 public:
