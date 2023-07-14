@@ -7,6 +7,7 @@
 #include "Koopa.h"
 #include "Paragoomba.h"
 #include "Piranha.h"
+#include "ScoreNumber.h"
 #include "CoinAnimation.h"
 
 #include "PlayScene.h"
@@ -126,6 +127,59 @@ void CWingKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 			}
 		}
 	}
+	if (state == KOOPA_STATE_SHELL && isBeingHeld == true)
+	{
+		if (dynamic_cast<CGoomba*>(e->obj))
+		{
+			DebugOut(L"-------");
+			CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+			goomba->SetState(GOOMBA_STATE_DIE_2);
+			this->SetState(KOOPA_STATE_DIE);
+			ay = KOOPA_GRAVITY;
+			isBeingHeld = false;
+			mario->isHoldingKoopa = 0;
+		}
+		if (dynamic_cast<CParaGoomba*>(e->obj))
+		{
+			DebugOut(L"-------");
+			CParaGoomba* goomba = dynamic_cast<CParaGoomba*>(e->obj);
+			goomba->SetState(GOOMBA_STATE_DIE_2);
+			this->SetState(KOOPA_STATE_DIE);
+			ay = KOOPA_GRAVITY;
+			isBeingHeld = false;
+			mario->isHoldingKoopa = 0;
+		}
+		if (dynamic_cast<CWingKoopa*>(e->obj))
+		{
+			DebugOut(L"-------");
+			CWingKoopa* koopa = dynamic_cast<CWingKoopa*>(e->obj);
+			koopa->SetState(KOOPA_STATE_DIE);
+			this->SetState(KOOPA_STATE_DIE);
+			ay = KOOPA_GRAVITY;
+			isBeingHeld = false;
+			mario->isHoldingKoopa = 0;
+		}
+		if (dynamic_cast<CKoopa*>(e->obj))
+		{
+			DebugOut(L"-------");
+			CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+			koopa->SetState(KOOPA_STATE_DIE);
+			this->SetState(KOOPA_STATE_DIE);
+			ay = KOOPA_GRAVITY;
+			isBeingHeld = false;
+			mario->isHoldingKoopa = 0;
+		}
+		if (dynamic_cast<CPiranha*>(e->obj))
+		{
+			DebugOut(L"-------");
+			CPiranha* piranha = dynamic_cast<CPiranha*>(e->obj);
+			piranha->SetState(PIRANHA_STATE_DIE);
+			this->SetState(KOOPA_STATE_DIE);
+			ay = KOOPA_GRAVITY;
+			isBeingHeld = false;
+			mario->isHoldingKoopa = 0;
+		}
+	}
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CWingKoopa*>(e->obj)) return;
 	if (dynamic_cast<CMario*>(e->obj)) return;
@@ -197,11 +251,11 @@ void CWingKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else if (mario->GetLevel() == MARIO_LEVEL_BIG)
 			{
-				x = mx - 12;
+				x = mx - 15;
 			}
 			else if (mario->GetLevel() == MARIO_LEVEL_TANOOKI)
 			{
-				x = mx - 12;
+				x = mx - 15;
 			}
 		}
 		else if (mvx > 0)
@@ -212,7 +266,7 @@ void CWingKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else if (mario->GetLevel() == MARIO_LEVEL_BIG)
 			{
-				x = mx + 12;
+				x = mx + 15;
 			}
 			else if (mario->GetLevel() == MARIO_LEVEL_TANOOKI)
 			{
@@ -306,9 +360,12 @@ void CWingKoopa::Render()
 void CWingKoopa::SetState(int state)
 {
 	CGameObject::SetState(state);
+	CGameObject* obj;
 	switch (state)
 	{
 	case KOOPA_STATE_DIE:
+		obj = new CNumber100(x, y);
+		objects.push_back(obj);
 		float mx, my;
 		mario->GetPosition(mx, my);
 		die_start = GetTickCount64();
@@ -321,6 +378,7 @@ void CWingKoopa::SetState(int state)
 			vx = -0.02f;
 		}
 		vy = -GOOMBA_JUMP_DEFLECT_SPEED;
+		ay = KOOPA_GRAVITY;
 		break;
 	case KOOPA_STATE_WALKING:
 		y -= (KOOPA_BBOX_HEIGHT - KOOPA_BBOX_HEIGHT_SHELL + 10) / 2;

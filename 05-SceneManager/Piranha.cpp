@@ -4,6 +4,7 @@
 #include "Pipe.h"
 #include "Collision.h"
 #include "Fireball.h"
+#include "ScoreNumber.h"
 
 extern vector<LPGAMEOBJECT> objects;
 
@@ -146,9 +147,12 @@ void CPiranha::Render()
 void CPiranha::SetState(int state)
 {
 	CGameObject::SetState(state);
+	CGameObject* obj;
 	switch (state)
 	{
 	case PIRANHA_STATE_DIE:
+		obj = new CNumber100(x, y);
+		objects.push_back(obj);
 		die_start = GetTickCount64();
 		//y += (PIRANHA_BBOX_HEIGHT - PIRANHA_BBOX_HEIGHT_DIE) / 2;
 		vx = 0;

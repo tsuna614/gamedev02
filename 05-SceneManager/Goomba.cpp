@@ -3,6 +3,7 @@
 #include "Mushroom.h"
 #include "Pipe.h"
 #include "Brick.h"
+#include "ScoreNumber.h"
 #include "PlayScene.h"
 
 CGoomba::CGoomba(float x, float y) : CGameObject(x, y)
@@ -103,9 +104,12 @@ void CGoomba::Render()
 void CGoomba::SetState(int state)
 {
 	CGameObject::SetState(state);
+	CGameObject* obj;
 	switch (state)
 	{
 		case GOOMBA_STATE_DIE:
+			obj = new CNumber100(x, y);
+			objects.push_back(obj);
 			die_start = GetTickCount64();
 			y += (GOOMBA_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE)/2;
 			vx = 0;
@@ -114,6 +118,8 @@ void CGoomba::SetState(int state)
 			break;
 		case GOOMBA_STATE_DIE_2:
 		{
+			obj = new CNumber100(x, y);
+			objects.push_back(obj);
 			float mx, my;
 			mario->GetPosition(mx, my);
 			die_start = GetTickCount64();
